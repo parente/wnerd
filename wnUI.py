@@ -72,8 +72,11 @@ class wnFrame(wxFrame):
     '''Show the new tournament wizard.'''
     builder = wnBuilder()
     
+    #create and configure the wizard
     wiz = wnNewTournamentWizard(self)
     wiz.SetAvailableLayouts(builder.GetTournaments())
+    
+    #if the wizard completes successfully
     if wiz.RunWizard():
       name = wiz.GetName()
       weights = wiz.GetWeights()
@@ -86,16 +89,24 @@ class wnFrame(wxFrame):
       #reset the GUI
       self.ResetAfterNew()
       
+      self.filename = None
+      
   def OnSave(self, event):
     '''Save the current tournament to disk by pickling it.'''
-    dlg = wxFileDialog(self, 'Save tournament', wildcard='Wrestling Nerd files (*.wnd)|*.wnd',
-                       style=wxSAVE|wxOVERWRITE_PROMPT)
-    
-    if dlg.ShowModal() == wxID_OK:
-      f = file(dlg.GetPath(), 'wb')
+    if self.filename is None:
+      dlg = wxFileDialog(self, 'Save tournament', wildcard='Wrestling Nerd files (*.wnd)|*.wnd',
+                         style=wxSAVE|wxOVERWRITE_PROMPT)
+      
+      if dlg.ShowModal() == wxID_OK:
+        f = file(dlg.GetPath(), 'wb')
+        cPickle.dump(self.tournament, f, True)
+        f.close()
+        self.ChangeMenuState('on save')
+        self.filename = dlg.GetPath()
+    else:
+      f = file(self.filename, 'wb')
       cPickle.dump(self.tournament, f, True)
       f.close()
-      self.ChangeMenuState('on save')
       
   def OnOpen(self, event):
     '''Open a tournament from disk.'''
@@ -107,6 +118,7 @@ class wnFrame(wxFrame):
       self.tournament = cPickle.load(f)
       f.close()
       self.ResetAfterNew()
+      self.filename = dlg.GetPath()
       
   def OnSelectWeight(self, event):
     '''Refresh the canvas to show the new weight.'''
@@ -135,22 +147,29 @@ class wnFrame(wxFrame):
       
   def ResetAfterNew(self):
     '''Reset the GUI after a tournament has been created or opened.'''
-      
+
+    #add the weights to the weight drop-down      
     self.weights.Clear()
-    #add the weights to the weight drop-down
     for w in self.tournament.Weights:
       self.weights.Append(w)
     self.weights.SetSelection(0)
     
     #add the teams to the team list
     self.RefreshScores()
+
+    #show the tournament name in the window titlebar
+    self.SetTitle('Wrestling Nerd - '+self.tournament.name)
     
     #change menu item state
     self.ChangeMenuState('on new')
     
+    #clean out the bracket panel
+    self.canvas.CreatePainter()    
+    self.canvas.DestroyChildren()
+    
     #draw the bracket
     self.canvas.Refresh()
-      
+     
   def ChangeMenuState(self, action):
     mb = self.GetMenuBar()
     if action == 'on start':
@@ -173,19 +192,24 @@ class wnBracketCanvas(wxScrolledWindow):
   def __init__(self, parent):
     wxScrolledWindow.__init__(self, parent, -1)
     self.parent = parent
-    self.painter = wnPainter(self)
+    self.painter = None
     
     EVT_PAINT(self, self.OnPaint)
+    
+  def CreatePainter(self):
+    '''Create a new painter object.'''
+    self.Scroll(0,0)
+    self.painter = wnPainter(self)
     
   def OnPaint(self, event):
     dc = wxPaintDC(self)
     self.PrepareDC(dc)
     dc.BeginDrawing()
 
-    t = self.parent.GetTournament()
-    w = self.parent.GetCurrentWeight()
-    if t is not None and w is not None:
-      self.painter.SetDC(dc)
+    if self.painter is not None:#t is not None and w is not None:
+      self.painter.SetDC(dc)      
+      t = self.parent.GetTournament()
+      w = self.parent.GetCurrentWeight()
       xmax, ymax = t.Paint(self.painter, w)
       self.painter.SetDC(None)
       

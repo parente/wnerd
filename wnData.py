@@ -2,6 +2,7 @@
 The data module defines the classes that store tournament data. These objects are also responsible
 for rendering themselves using a draw object and a print object.
 '''
+from wnEvents import wnEventReceivable
 
 class wnTournament(object):
   '''The tournament class is responsible for holding weight classes and teams.'''
@@ -51,11 +52,6 @@ class wnTournament(object):
       
     return wc.Paint(painter, (0, 20), step)
   
-  def GetWeights(self):
-    '''Return a list of all the weight classes in ascending order.'''
-    k = self.weight_classes.keys()
-    k.sort()
-    return k
   
   def GetScores(self):
     '''Calculate all the scores across this tournament.'''
@@ -65,9 +61,19 @@ class wnTournament(object):
       d[name] = 0.0
       
     return d
-      
+
+  def GetWeights(self):
+    '''Return a list of all the weight classes in ascending order.'''
+    k = self.weight_classes.keys()
+    k.sort()
+    return k
+  
+  def GetName(self):
+    '''Return the tournament name.'''
+    return self.name
   
   Weights = property(fget=GetWeights)
+  Name = property(fget=GetName)
   
 class wnWeightClass(object):
   '''The weight class is responsible for holding rounds.'''
@@ -215,7 +221,7 @@ class wnRound(object):
     
     return new_start, max_x, max_y
       
-class wnEntry(object):
+class wnEntry(object, wnEventReceivable):
   '''The entry class holds individual match results.'''
   def __init__(self, name, round):
     self.name = name
@@ -229,14 +235,21 @@ class wnEntry(object):
   def Paint(self, painter, pos, length, type):
     '''Paint all of the text controls, static or editable depending on the given flag.'''
     if type == 'static':
-      if self.wrestler is None: text = ''
-      else: pass
+      if self.wrestler is None: text = str(self.name)
+      else: text = self.wrestler.Name
       
-      painter.DrawStaticTextControl(text, pos[0]+5, pos[1], length-10,
-                                    (self.name, self.round.Name), None)
+      painter.DrawStaticTextControl(text, pos[0]+3, pos[1], length-6, self.ID, self)
       
     elif type == 'dynamic':
       pass
+    
+  def GetID(self):
+    '''Return the ID of this entry. This ID must be exactly the same as the ID of similar entries
+    in other weight classes since it is used to construct text controls by the painter. If the ID
+    is exactly the same, then the controls can be reused across weight classes.'''
+    return (self.name, self.round.Name)
+  
+  ID = property(fget=GetID)
     
 class wnPoints(object):
   def __init__(self, adv_pts=0, place_pts=0):
@@ -295,6 +308,11 @@ class wnWrestler(object):
     self.is_scoring = True
     
     self.team = None
+    
+  def GetName(self):
+    return self.name
+  
+  Name = property(fget=GetName)
     
 if __name__ == '__main__':
   pass
