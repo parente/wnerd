@@ -23,6 +23,12 @@ class wnTeam(object):
       s += i
     return s
   
+  def SetPointAdjust(self, value):
+    self.point_adjust = value
+    
+  def GetPointAdjust(self):
+    return self.point_adjust
+  
   def SetWeightScore(self, weight_name, value):
     '''Set the score for a weight to a certain value.'''
     self.points[weight_name] = value
@@ -51,7 +57,8 @@ class wnTeam(object):
         break
       
   Name = property(fget=GetName)  
-  Score = property(fget=GetTotalScore)      
+  Score = property(fget=GetTotalScore)
+  PointAdjust = property(fget=GetPointAdjust, fset=SetPointAdjust)
       
 class wnWrestler(object):
   '''The wrestler class holds information about individuals in a tournament.'''
@@ -59,10 +66,23 @@ class wnWrestler(object):
     self.name = name
     self.weight = weight
     self.team = team
-    self.is_scoring = is_scoring
     
   def __repr__(self):
     return '<Wrestler Name: %s Weight: %s Team: %s>' % (self.name, self.weight, self.team.Name)
+  
+  def __eq__(self, w):
+    '''Compare the properties of a wrestler, not just its ID.'''
+    try:
+      return (self.name == w.name and self.team == w.team)
+    except:
+      return False
+      
+  def __ne__(self, w):
+    '''Compare the properties of a wrestler, not just its ID.'''
+    try:
+      return (self.name != w.name or self.team != w.team)
+    except:
+      return False
     
   def GetFormattedName(self):
     n_fill = wnSettings.max_name_length - len(self.name)

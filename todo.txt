@@ -1,16 +1,9 @@
 Todo
 
 UI
-- delete and move up in seeds
-- swapping wrestler seeds
-- insert and move down in seeds
-- support non-scoring wrestlers
-- point adjustment dialog
-- printing dialog
 
 Data
 - test scoring algorithm
-- support non-scoring wrestlers
 - fast fall
 - number of bouts
 

@@ -11,13 +11,18 @@ from wxPython.grid import *
 
 # Custom source
 ID_DELETE_MATCH_MENU = wxNewId()
+
 ID_DELETE_SEED_MENU = wxNewId()
+ID_DELETEMOVEUP_SEED_MENU = wxNewId()
+ID_INSERTMOVEDOWN_SEED_MENU = wxNewId()
+ID_SETLAST_SEED_MENU = wxNewId()
+ID_SWAPUP_SEED_MENU = wxNewId()
+ID_SWAPDOWN_SEED_MENU = wxNewId()
 
 # Window functions
 
 ID_WEIGHTS_CHOICE = 10000
 ID_TEAMS_LIST = 10001
-ID_TEAM_DEBUG = 10002
 
 def CreateScoreFrame( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -38,9 +43,6 @@ def CreateScoreFrame( parent, call_fit = True, set_sizer = True ):
 
     item0.AddSizer( item4, 0, wxALIGN_CENTER|wxALL, 5 )
 
-    item7 = wxButton( parent, ID_TEAM_DEBUG, "Print Teams", wxDefaultPosition, wxDefaultSize, 0 )
-    item0.AddWindow( item7, 0, wxALIGN_CENTER|wxALL, 5 )
-
     if set_sizer == True:
         parent.SetAutoLayout( True )
         parent.SetSizer( item0 )
@@ -50,9 +52,9 @@ def CreateScoreFrame( parent, call_fit = True, set_sizer = True ):
     
     return item0
 
-ID_TEXT = 10003
-ID_START_CAPTION = 10004
-ID_LINE = 10005
+ID_TEXT = 10002
+ID_START_CAPTION = 10003
+ID_LINE = 10004
 
 def WizardStartPanel( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -76,8 +78,8 @@ def WizardStartPanel( parent, call_fit = True, set_sizer = True ):
     
     return item0
 
-ID_NAME_CAPTION = 10006
-ID_NAME_TEXT = 10007
+ID_NAME_CAPTION = 10005
+ID_NAME_TEXT = 10006
 
 def WizardNamePanel( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -107,10 +109,10 @@ def WizardNamePanel( parent, call_fit = True, set_sizer = True ):
     
     return item0
 
-ID_TEAMS_CAPTION = 10008
-ID_TEAMS_COMBO = 10009
-ID_ADD_TEAM = 10010
-ID_REMOVE_TEAM = 10011
+ID_TEAMS_CAPTION = 10007
+ID_TEAMS_COMBO = 10008
+ID_ADD_TEAM = 10009
+ID_REMOVE_TEAM = 10010
 
 def WizardTeamsPanel( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -151,11 +153,11 @@ def WizardTeamsPanel( parent, call_fit = True, set_sizer = True ):
     
     return item0
 
-ID_WEIGHTS_CAPTION = 10012
-ID_WEIGHTS_COMBO = 10013
-ID_ADD_WEIGHT = 10014
-ID_REMOVE_WEIGHT = 10015
-ID_ADD_STANDARD_WEIGHTS = 10016
+ID_WEIGHTS_CAPTION = 10011
+ID_WEIGHTS_COMBO = 10012
+ID_ADD_WEIGHT = 10013
+ID_REMOVE_WEIGHT = 10014
+ID_ADD_STANDARD_WEIGHTS = 10015
 
 def WizardWeightsPanel( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -199,9 +201,9 @@ def WizardWeightsPanel( parent, call_fit = True, set_sizer = True ):
     
     return item0
 
-ID_LAYOUT_CAPTION = 10017
-ID_LAYOUT_LIST = 10018
-ID_LAYOUT_TEXT = 10019
+ID_LAYOUT_CAPTION = 10016
+ID_LAYOUT_LIST = 10017
+ID_LAYOUT_TEXT = 10018
 
 def WizardLayoutPanel( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -245,7 +247,7 @@ def WizardLayoutPanel( parent, call_fit = True, set_sizer = True ):
     
     return item0
 
-ID_FINISHED_CAPTION = 10020
+ID_FINISHED_CAPTION = 10019
 
 def WizardFinishedPanel( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -269,7 +271,8 @@ def WizardFinishedPanel( parent, call_fit = True, set_sizer = True ):
     
     return item0
 
-ID_WINNER_CHOICE = 10021
+ID_WINNER_CHOICE = 10020
+ID_SCOREPOINTS_CHECK = 10021
 ID_RESULT_TYPE_RADIO = 10022
 ID_RESULT_PANEL = 10023
 
@@ -282,15 +285,14 @@ def CreateMatchDialog( parent, call_fit = True, set_sizer = True ):
     item3 = wxChoice( parent, ID_WINNER_CHOICE, wxDefaultPosition, wxSize(150,-1), [], 0 )
     item1.AddWindow( item3, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
+    item4 = wxCheckBox( parent, ID_SCOREPOINTS_CHECK, "Score team points", wxDefaultPosition, wxDefaultSize, 0 )
+    item1.AddWindow( item4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
     item0.AddSizer( item1, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
-    item4 = wxBoxSizer( wxVERTICAL )
-    
     item5 = wxRadioBox( parent, ID_RESULT_TYPE_RADIO, "Win type", wxDefaultPosition, wxDefaultSize, 
         ["None","Decision","Pin","Default","Bye"] , 2, wxRA_SPECIFY_ROWS )
-    item4.AddWindow( item5, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-
-    item0.AddSizer( item4, 0, wxALIGN_CENTER|wxALL, 5 )
+    item0.AddWindow( item5, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     item7 = wxStaticBox( parent, -1, "Result" )
     item6 = wxStaticBoxSizer( item7, wxVERTICAL )
@@ -321,49 +323,9 @@ def CreateMatchDialog( parent, call_fit = True, set_sizer = True ):
     
     return item0
 
-ID_TIME_TEXT = 10024
-
-def PinResultPanel( parent, call_fit = True, set_sizer = True ):
-    item0 = wxBoxSizer( wxHORIZONTAL )
-    
-    item1 = wxStaticText( parent, ID_TEXT, "Time", wxDefaultPosition, wxDefaultSize, 0 )
-    item0.AddWindow( item1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-
-    item2 = wxTextCtrl( parent, ID_TIME_TEXT, "", wxDefaultPosition, wxSize(80,-1), 0 )
-    item0.AddWindow( item2, 0, wxALIGN_CENTER|wxALL, 5 )
-
-    if set_sizer == True:
-        parent.SetAutoLayout( True )
-        parent.SetSizer( item0 )
-        if call_fit == True:
-            item0.Fit( parent )
-            item0.SetSizeHints( parent )
-    
-    return item0
-
-ID_SCORE_TEXT = 10025
-
-def DecisionResultPanel( parent, call_fit = True, set_sizer = True ):
-    item0 = wxBoxSizer( wxHORIZONTAL )
-    
-    item1 = wxStaticText( parent, ID_TEXT, "Score", wxDefaultPosition, wxDefaultSize, 0 )
-    item0.AddWindow( item1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-
-    item2 = wxTextCtrl( parent, ID_SCORE_TEXT, "", wxDefaultPosition, wxSize(80,-1), 0 )
-    item0.AddWindow( item2, 0, wxALIGN_CENTER|wxALL, 5 )
-
-    if set_sizer == True:
-        parent.SetAutoLayout( True )
-        parent.SetSizer( item0 )
-        if call_fit == True:
-            item0.Fit( parent )
-            item0.SetSizeHints( parent )
-    
-    return item0
-
-ID_TYPE_RADIOBOX = 10026
-ID_WEIGHTS_LIST = 10027
-ID_ROUNDS_LIST = 10028
+ID_TYPE_RADIOBOX = 10024
+ID_WEIGHTS_LIST = 10025
+ID_ROUNDS_LIST = 10026
 
 def CreatePrintDialog( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -403,6 +365,45 @@ def CreatePrintDialog( parent, call_fit = True, set_sizer = True ):
     item9.AddWindow( item11, 0, wxALIGN_CENTER|wxALL, 5 )
 
     item0.AddSizer( item9, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
+        parent.SetSizer( item0 )
+        if call_fit == True:
+            item0.Fit( parent )
+            item0.SetSizeHints( parent )
+    
+    return item0
+
+ID_POINTADJUST_TEXT = 10027
+ID_POINTADJUST_SPIN = 10028
+
+def CreateTeamDialog( parent, call_fit = True, set_sizer = True ):
+    item0 = wxBoxSizer( wxVERTICAL )
+    
+    item2 = wxStaticBox( parent, -1, "Point adjustment" )
+    item1 = wxStaticBoxSizer( item2, wxHORIZONTAL )
+    
+    item3 = wxTextCtrl( parent, ID_POINTADJUST_TEXT, "", wxDefaultPosition, wxSize(40,-1), wxTE_READONLY )
+    item1.AddWindow( item3, 0, wxALIGN_CENTER|wxLEFT|wxTOP|wxBOTTOM, 5 )
+
+    item4 = wxSpinButton( parent, ID_POINTADJUST_SPIN, wxDefaultPosition, wxSize(-1,22), wxSP_WRAP )
+    item4.SetRange( 0, 100 )
+    item4.SetValue( 0 )
+    item1.AddWindow( item4, 0, wxALIGN_CENTER|wxRIGHT|wxTOP|wxBOTTOM, 5 )
+
+    item0.AddSizer( item1, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    item5 = wxBoxSizer( wxHORIZONTAL )
+    
+    item6 = wxButton( parent, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize, 0 )
+    item6.SetDefault()
+    item5.AddWindow( item6, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item7 = wxButton( parent, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize, 0 )
+    item5.AddWindow( item7, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item0.AddSizer( item5, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     if set_sizer == True:
         parent.SetAutoLayout( True )

@@ -43,7 +43,6 @@ class wnTournament(wnNode):
     self.teams[name] = t
     
     return t
-
  
   def GetWeightClass(self, name):
     return self.weight_classes.get(name)
@@ -184,14 +183,15 @@ class wnRound(wnNode):
     wnNode.__init__(self, parent, name)
     self.points = points    
     self.entries = []
+    self.ordered_entries = []
     self.next_win = None
     self.next_lose = None
-    
+        
   def GetNumberOfEntries(self):
     return len(self.entries)
   
   def GetEntries(self):
-    return self.entries
+    return self.ordered_entries
   
   def GetRoundPoints(self):
     return self.points
@@ -200,14 +200,18 @@ class wnRound(wnNode):
     #check if we're making new entries based on an order defined in a list
     #if the order is defined, these must be seeds
     if type(number) == list or type(number) == tuple:
+      self.ordered_entries = range(len(number))
       for i in number:
-        self.entries.append(wnSeedEntry(i, self))
+        e = wnSeedEntry(i, self)
+        self.entries.append(e)
+        self.ordered_entries[i-1] = e
     
     #otherwise, define them in order
     #if a number is given, these must be matches
     else:
       for i in range(number):
         self.entries.append(wnMatchEntry(i, self))
+      self.ordered_entries = self.entries
       
   def SetNextWinRound(self, round, to_map):
     if len(to_map) != self.NumEntries:
@@ -316,6 +320,7 @@ class wnEntry(wnNode):
     self.next_lose = None
     self.previous = []
     self.result = None
+    self.is_scoring = True
     
   def GetID(self):
     '''Return the ID of this entry. This ID must be exactly the same as the ID of similar entries
@@ -369,12 +374,16 @@ class wnEntry(wnNode):
       result = self.next_win.CalcScores()
       
       # prepend the result of this entry to the growing list
-      result.insert(0, (self.result, self.parent.RoundPoints))
+      if self.is_scoring:
+        result.insert(0, (self.result, self.parent.RoundPoints))
       return result
       
     else:
       # return the result of this entry
-      return [(self.result, self.parent.RoundPoints)]
+      if self.is_scoring:
+        return [(self.result, self.parent.RoundPoints)]
+      else:
+        return []
 
   ID = property(fget=GetID)
   NextLose = property(fget=GetNextLose, fset=SetNextLose)
@@ -430,10 +439,10 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
     
     #show the results dialog, providing the wrestlers and current results
     opponents = [entry.Wrestler for entry in self.previous if entry.Wrestler is not None]
-    result = event.Painter.ShowMatchDialog(opponents, self.result)
+    result = event.Painter.ShowMatchDialog(opponents, self.result, self.is_scoring)
     
     if result is not None:
-      winner, loser, result_type, result_value = result
+      winner, loser, result_type, result_value, self.is_scoring = result
     
       #store the information
       self.result = wnResultFactory.Create(result_type, result_value)
@@ -459,17 +468,19 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
     self.result = None
     event.Control.SetLabel('')
     event.Control.HidePopup()
-    event.Control.RefreshParent()
+    event.Control.RefreshScores()
         
 class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSeedMenuReceivable):
   '''The seed entry class holds information about seeded wrestlers.'''
   def __init__(self, name, parent):
     wnEntry.__init__(self, name, parent)
+    self.is_last = False
     
-  def Paint(self, painter, pos, length, refresh_labels):
+  def Paint(self, painter, pos=(0,0), length=100, refresh_labels=False, full=True):
     '''Paint all of the text controls.'''
-    #draw the seed number
-    painter.DrawText(str(self.name), pos[0], pos[1]-wnSettings.seed_height)
+    if full:
+      #draw the seed number
+      painter.DrawText(str(self.name), pos[0], pos[1]-wnSettings.seed_height)
  
     #draw the text control
     if refresh_labels:
@@ -487,7 +498,7 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
     
   def OnRightUp(self, event):
     '''Show the popup menu.'''
-    event.Control.ShowMenu(event.Position)
+    event.Control.ShowMenu(self.is_last, event.Position)
     
   def OnDelete(self, event):
     '''Delete the wrestler in this entry.'''
@@ -495,13 +506,107 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
       self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
     self.wrestler = None
     event.Control.ClearValue()
-    event.Control.RefreshParent()
+    event.Control.RefreshScores()
+    
+  def OnSwapUp(self, event):
+    '''Swap the wrestler here with the wrestler one seed above.'''
+    # get a ref to the previous entry
+    e = self.parent.Entries[int(self.name)-2]
+    
+    # do the swap and redraw
+    self.Swap(e, event.Painter)
+        
+    # change the focus
+    event.Painter.SetFocus(e.ID)
+    
+  def OnSwapDown(self, event):
+    '''Swap the wrestler here with the wrestler one seed below.'''
+    # get a ref to the next entry
+    e = self.parent.Entries[int(self.name)%self.Parent.NumEntries]
+    
+    # do the swap and redraw
+    self.Swap(e, event.Painter) 
+    
+    # change the focus
+    event.Painter.SetFocus(e.ID)
+    
+  def OnSetLastSeed(self, event):
+    '''Set this seed as the last seed that should be moved in case of a delete and move up.'''
+    self.is_last = True
+    
+    # make sure none of the other seeds are last
+    for e in self.parent.Entries:
+      if e.IsLast and e is not self:
+        e.IsLast = False
+        break
+
+  def OnDeleteMoveUp(self, event):
+    '''Delete this seed and move all others up until the last seed or a blank seed is encountered.'''
+    # first kill this wrestler
+    if self.wrestler is not None and self.wrestler.Team is not None:
+      self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
+    self.wrestler = None
+    event.Control.ClearValue()
+        
+    # make sure we weren't the last seed
+    if self.is_last:
+      # refresh the scores
+      event.Control.RefreshScores()
+      return
+
+    # now move all the other wrestlers
+    for i in range(int(self.name)-1, self.parent.NumEntries-1):
+      e_this = self.parent.Entries[i]
+      e_next = self.parent.Entries[i+1]
+      
+      # make sure the next entry is not None
+      if e_next.Wrestler is None: break
+      
+      # do the swap and redraw
+      e_this.Swap(e_next, event.Painter)
+      
+      # make sure this is not the last seed
+      if e_this.is_last: break
+    
+    # refresh the scores
+    event.Control.RefreshScores()
+    
+  def OnInsertMoveDown(self, event):
+    '''Insert a new blank entry at this location, pushing down all wrestlers past this point. If
+    there are wrestlers all the way to the last location, then the last wrestler will be lost.'''
+    # build a dummy entry to hold temp data
+    temp = wnSeedEntry(None, None)
+    temp.Wrestler = None
+    temp.IsLast = False
+    temp.Paint = lambda painter, refresh_labels, full: full
+    
+    # go through the list and swap wrestlers down
+    for i in range(int(self.name)-1, self.parent.NumEntries-1):
+      self.parent.Entries[i].Swap(temp, event.Painter)
+      
+      # stop when the wrestler is none
+      if temp.Wrestler is None: break
   
   def OnKillFocus(self, event):
     '''Store the entered value if it is valid. Give the next seed the focus, wrapping around at
     the first and last seeds.'''
     self.updateData(event)
     self.updateFocus(event)
+    event.Control.RefreshScores()    
+    
+  def Swap(self, entry, painter):
+    '''Swap this entry's values with another one.'''
+    # store the entry values
+    w1 = self.wrestler, self.is_last
+    w2 = entry.Wrestler, entry.IsLast
+
+    # swap the entry data
+    entry.Wrestler, entry.IsLast = w1
+    self.wrestler, self.is_last = w2
+
+    # redraw the text controls    
+    self.Paint(painter, refresh_labels=True, full=False)
+    entry.Paint(painter, refresh_labels=True, full=False)
       
   def updateData(self, event):
     '''Figure out what needs to be done to store the wrestler properly.'''
@@ -550,11 +655,19 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
       #focus on the next entry
       if next_id[1] != self.ID[1]:
         if self.name == 1:
-          event.Painter.SetFocus(self.Parent.Entries[1].ID)
+          event.Painter.SetFocus(self.Parent.Entries[self.Parent.NumEntries-1].ID)
         elif self.name == self.Parent.NumEntries:
           event.Painter.SetFocus(self.Parent.Entries[0].ID)
       else:
         event.Painter.SetFocus(next_id)
+        
+  def GetIsLast(self):
+    return self.is_last
+  
+  def SetIsLast(self, value):
+    self.is_last = value
+    
+  IsLast = property(fget=GetIsLast, fset=SetIsLast)
 
 if __name__ == '__main__':
   pass

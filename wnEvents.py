@@ -48,6 +48,21 @@ class wnSeedMenuReceivable:
   seed popup menu.'''
   def OnDelete(self, event):
     pass
+  
+  def OnDeleteMoveUp(self, event):
+    pass
+  
+  def OnInsertMoveDown(self, event):
+    pass
+  
+  def OnSetLastSeed(self, event):
+    pass
+  
+  def OnSwapUp(self, event):
+    pass
+  
+  def OnSwapDown(self, event):
+    pass
 
 class wnMatchMenuReceivable:
   '''Defines an interface that must be implemented for an object to receive menu events from the
@@ -80,6 +95,11 @@ class wnEventManager(wxEvtHandler):
     
   def RegisterSeedMenuEvents(self, frame):
     EVT_MENU(frame, GUI.ID_DELETE_SEED_MENU, self.OnMenuEvent)
+    EVT_MENU(frame, GUI.ID_DELETEMOVEUP_SEED_MENU, self.OnMenuEvent)
+    EVT_MENU(frame, GUI.ID_INSERTMOVEDOWN_SEED_MENU, self.OnMenuEvent)
+    EVT_MENU(frame, GUI.ID_SWAPUP_SEED_MENU, self.OnMenuEvent)
+    EVT_MENU(frame, GUI.ID_SWAPDOWN_SEED_MENU, self.OnMenuEvent)
+    EVT_MENU(frame, GUI.ID_SETLAST_SEED_MENU, self.OnMenuEvent)
     
   def RegisterEventHandler(self, id, handler):
     '''Register an event handler to receive callbacks from user actions on the given control.'''    
@@ -119,13 +139,25 @@ class wnEventManager(wxEvtHandler):
     
   def OnMenuEvent(self, event):
     '''Dispatch to the proper object and function based on the event object id.'''
-    dispatch = {GUI.ID_DELETE_SEED_MENU : 'OnDelete', GUI.ID_DELETE_MATCH_MENU : 'OnDelete'}
+    dispatch = {GUI.ID_DELETE_SEED_MENU : 'OnDelete', GUI.ID_DELETE_MATCH_MENU : 'OnDelete',
+                GUI.ID_DELETEMOVEUP_SEED_MENU : 'OnDeleteMoveUp',
+                GUI.ID_INSERTMOVEDOWN_SEED_MENU : 'OnInsertMoveDown',
+                GUI.ID_SETLAST_SEED_MENU : 'OnSetLastSeed', GUI.ID_SWAPDOWN_SEED_MENU : 'OnSwapDown',
+                GUI.ID_SWAPUP_SEED_MENU : 'OnSwapUp'}
     
     obj = event.GetEventObject()
-    i = obj.Control.GetId()
+    
+    # the object could be a menu or the control itself
+    try:
+      control = obj.Control
+      i = obj.Control.GetId()
+    except:
+      control = obj
+      i = obj.GetId()
+      
     handler = self.handlers.get(i)
     if handler is not None:
-      e = wnEvent(Painter=self.painter, Control=obj.Control)
+      e = wnEvent(Painter=self.painter, Control=control)
       func_name = dispatch[event.GetId()]
       func = getattr(handler, func_name)
       func(e)

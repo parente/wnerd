@@ -60,7 +60,7 @@ class wnStaticText(wxPanel):
   def ShowMenu(self, pos):
     self.PopupMenu(wnMatchMenu(self), pos)
   
-  def RefreshParent(self):
+  def RefreshScores(self):
     wxCallAfter(self.parent.RefreshScores)
 
 class wnDynamicText(wxMaskedTextCtrl):
@@ -69,14 +69,21 @@ class wnDynamicText(wxMaskedTextCtrl):
     bg_color = self.parent.GetBackgroundColour()
     mask = 'X{%d} | X{%d}' % (wnSettings.max_name_length, wnSettings.max_team_length)
     wxMaskedTextCtrl.__init__(self, parent, -1, '', formatcodes='VF_><S',  mask=mask,
-                              pos=pos, size=size, validBackgroundColor=bg_color,
-                              emptyBackgroundColor=bg_color,
+                              pos=pos, size=size, validBackgroundColour=bg_color,
+                              emptyBackgroundColour=bg_color,
                               fields = {0 : Field(validRegex='^\S+'),
                                         1 : Field(choices=choices, choiceRequired=True, autoSelect=True)
                               },
                               style = wxNO_BORDER, retainFieldValidation = True
                              )
     self.SetValue(text)
+    
+    # make an accelerator table that allows short cuts for some seed operations
+    ae = [wxAcceleratorEntry(wxACCEL_CTRL, WXK_PRIOR, GUI.ID_SWAPUP_SEED_MENU),
+          wxAcceleratorEntry(wxACCEL_CTRL, WXK_NEXT, GUI.ID_SWAPDOWN_SEED_MENU),
+          wxAcceleratorEntry(wxACCEL_CTRL, ord('l'), GUI.ID_SETLAST_SEED_MENU),
+          wxAcceleratorEntry(wxACCEL_CTRL, ord('L'), GUI.ID_SETLAST_SEED_MENU)]
+    self.SetAcceleratorTable(wxAcceleratorTable(ae))
 
     EVT_RIGHT_UP(self, lambda e: None)
 
@@ -90,11 +97,11 @@ class wnDynamicText(wxMaskedTextCtrl):
     if y < sy or y > sy+h:
       self.parent.Scroll(0, sy+y/py)
       
-  def ShowMenu(self, pos):
-    self.PopupMenu(wnSeedMenu(self), pos)
+  def ShowMenu(self, is_last, pos):
+    self.PopupMenu(wnSeedMenu(self, is_last), pos)
   
-  def RefreshParent(self):
-    wxCallAfter(self.parent.RefreshScores)    
+  def RefreshScores(self):
+    wxCallAfter(self.parent.RefreshScores)
                                      
 class wnPopup(wxPopupWindow):
   def __init__(self, parent, text, pos, size):
@@ -119,14 +126,23 @@ class wnMatchMenu(wxMenu):
     self.Control = ctrl
 
 class wnSeedMenu(wxMenu):
-  def __init__(self, ctrl):
+  def __init__(self, ctrl, is_last):
     wxMenu.__init__(self)
+    self.AppendCheckItem(GUI.ID_SETLAST_SEED_MENU, 'Last seed\tCtrl-L')
+    self.AppendSeparator()
+    self.Append(GUI.ID_SWAPUP_SEED_MENU, 'Swap up\tCtrl-Page Up')
+    self.Append(GUI.ID_SWAPDOWN_SEED_MENU, 'Swap down\tCtrl-Page Down')
+    self.AppendSeparator()
     self.Append(GUI.ID_DELETE_SEED_MENU, 'Delete')
+    self.Append(GUI.ID_DELETEMOVEUP_SEED_MENU, 'Delete / Move up')
+    self.Append(GUI.ID_INSERTMOVEDOWN_SEED_MENU, 'Insert / Move down')    
+    self.Check(GUI.ID_SETLAST_SEED_MENU, is_last)
+    
     self.Control = ctrl
     
 class wnMatchDialog(wxDialog):
   '''Class that creates a dialog box that allows users to enter match results.'''
-  def __init__(self, parent, wrestlers, result):
+  def __init__(self, parent, wrestlers, result, is_scoring):
     wxDialog.__init__(self, parent, -1, 'Match results')
     GUI.CreateMatchDialog(self)
 
@@ -134,11 +150,15 @@ class wnMatchDialog(wxDialog):
     self.winner = wxPyTypeCast(self.FindWindowById(GUI.ID_WINNER_CHOICE), 'wxChoice')
     self.result_type = wxPyTypeCast(self.FindWindowById(GUI.ID_RESULT_TYPE_RADIO), 'wxRadioBox')
     self.result_panel = wxPyTypeCast(self.FindWindowById(GUI.ID_RESULT_PANEL), 'wxPanel')
+    self.scoring_check = wxPyTypeCast(self.FindWindowById(GUI.ID_SCOREPOINTS_CHECK), 'wxCheckBox')
     
     #store the references
     self.parent = parent
     self.wrestlers = wrestlers
     self.result_value = None
+  
+    # set the scoring check box to the passed value  
+    self.scoring_check.SetValue(is_scoring)
     
     #list the wrestlers
     for w in self.wrestlers:
@@ -159,7 +179,8 @@ class wnMatchDialog(wxDialog):
     self.winner.SetSelection(0)
     
     EVT_RADIOBOX(self, GUI.ID_RESULT_TYPE_RADIO, self.OnChooseResult)
-    EVT_BUTTON(self, GUI.wxID_OK, self.OnOK)
+    EVT_CHOICE(self, GUI.ID_WINNER_CHOICE, self.OnChooseWinner) 
+    EVT_BUTTON(self, GUI.wxID_OK, self.OnOK)    
     
   def OnOK(self, event):
     '''Make sure all values are filled in properly.'''
@@ -171,6 +192,14 @@ class wnMatchDialog(wxDialog):
       # instruct the parent to update its scores
       wxCallAfter(self.parent.RefreshScores)
       self.EndModal(wxID_OK)
+    
+  def OnChooseWinner(self, event):
+    '''Set if the match is scoring or not based on the winner name. If it contains the non-scoring
+    prefix, then don't score the match by default.'''
+    if self.GetWinner().Name.find(wnSettings.no_scoring_prefix) == 0:
+      self.scoring_check.SetValue(False)
+    else:
+      self.scoring_check.SetValue(True)
     
   def OnChooseResult(self, event):
     '''Show the proper panel for the selected result type.'''    
@@ -218,3 +247,6 @@ class wnMatchDialog(wxDialog):
       scores.sort()
       scores.reverse()
       return scores
+
+  def GetIsScoring(self):
+    return self.scoring_check.IsChecked()

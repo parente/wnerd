@@ -14,8 +14,7 @@ class wnFrame(wxFrame):
   '''Class that creates and manages the main WN window.'''
   
   def __init__(self):
-    '''Initialize.
-    '''
+    '''Initialize the frame.'''
     wxFrame.__init__(self, None, -1, 'Wrestling Nerd',
                      style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN)
   
@@ -67,14 +66,15 @@ class wnFrame(wxFrame):
     EVT_MENU(self, GUI.ID_OPEN_MENU, self.OnOpen)
     EVT_MENU(self, GUI.ID_PRINT_MENU, self.OnPrint)
     EVT_CHOICE(self, GUI.ID_WEIGHTS_CHOICE, self.OnSelectWeight)
+    EVT_LIST_ITEM_ACTIVATED(self, GUI.ID_TEAMS_LIST, self.OnSelectTeam)
     
-    EVT_BUTTON(self, GUI.ID_TEAM_DEBUG, self.OnTeamDebug)
+    #EVT_BUTTON(self, GUI.ID_TEAM_DEBUG, self.OnTeamDebug)
     
-  def OnTeamDebug(self, event):
-    for t in self.tournament.teams.values():
-      print t.Name
-      print t.wrestlers
-      print
+  #def OnTeamDebug(self, event):
+  #  for t in self.tournament.teams.values():
+  #    print t.Name
+  #    print t.wrestlers
+  #    print
     
   def OnClose(self, event):
     '''Handle a window close event.'''
@@ -153,6 +153,18 @@ class wnFrame(wxFrame):
   def OnSelectWeight(self, event):
     '''Refresh the canvas to show the new weight.'''
     self.canvas.Refresh()
+    
+  def OnSelectTeam(self, event):
+    '''Show a dialog box containing properties of a team.'''
+    name = event.GetText()
+    dlg = wnTeamDialog(self, self.tournament.Teams[name])
+    dlg.CentreOnScreen()
+    
+    # check if the user wants to make changes to the team score
+    if dlg.ShowModal() == wxID_OK:
+      self.RefreshScores()
+      
+    dlg.Destroy()
     
   def GetTournament(self):
     return self.tournament
@@ -436,11 +448,19 @@ class wnPrintDialog(wxDialog):
     self.rounds.SetSelection(0)
     
     # watch for events to enable or disable the rounds control
-    EVT_RADIOBOX(self, GUI.ID_TYPE_RADIOBOX, self.OnTypeChange) 
+    EVT_RADIOBOX(self, GUI.ID_TYPE_RADIOBOX, self.OnTypeChange)
+    EVT_BUTTON(self, wxID_OK, self.OnOK)
     
   def OnOK(self, event):
-    '''Make sure the selections are valid.'''
-    return wxID_OK
+    '''Make sure the selections are valid before closing the dialog.'''
+    if len(self.weights.GetSelections()) == 0:
+      wxMessageDialog(self, 'You must select at least one weight class.', 'Select a weight class', wxOK).ShowModal()
+      return False
+    if self.type.GetStringSelection() == 'Bouts' and len(self.rounds.GetSelections()) == 0:
+      wxMessageDialog(self, 'You must select at least one round to print bouts.', 'Select a round', wxOK).ShowModal()
+      return False
+    
+    self.EndModal(wxID_OK) 
   
   def OnTypeChange(self, event):
     '''Enable or disable the rounds box based on what's selected.'''
@@ -448,6 +468,34 @@ class wnPrintDialog(wxDialog):
   
   def GetSelection(self):
     return []
+  
+class wnTeamDialog(wxDialog):
+  '''Class that creates a dialog box that shows team info.'''
+  def __init__(self, parent, team):
+    wxDialog.__init__(self, parent, -1, 'Team Properties: '+team.Name)
+    GUI.CreateTeamDialog(self)
+    
+    # get important references
+    self.pa_text = wxPyTypeCast(self.FindWindowById(GUI.ID_POINTADJUST_TEXT), 'wxTextCtrl')
+    self.team = team
+    
+    # set the point value
+    self.pa_text.SetValue(str(self.team.PointAdjust))
+    
+    # set events
+    EVT_SPIN_UP(self, GUI.ID_POINTADJUST_SPIN, self.OnPointUp)
+    EVT_SPIN_DOWN(self, GUI.ID_POINTADJUST_SPIN, self.OnPointDown)
+    EVT_BUTTON(self, wxID_OK, self.OnOK)
+    
+  def OnOK(self, event):
+    self.team.PointAdjust = float(self.pa_text.GetValue())
+    self.EndModal(wxID_OK)
+    
+  def OnPointUp(self, event):
+    self.pa_text.SetValue(str(float(self.pa_text.GetValue()) + 0.5))
+  
+  def OnPointDown(self, event):
+    self.pa_text.SetValue(str(float(self.pa_text.GetValue()) - 0.5))
 
 class wnScoreWindow(wxFrame):
   '''Class the creates a standalone frame for displaying team scores. Teams scroll past at a regular
