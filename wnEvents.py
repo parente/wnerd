@@ -54,10 +54,6 @@ class wnEventManager(wxEvtHandler):
     EVT_SET_FOCUS(ctrl, self.OnFocusEvent)
     EVT_KILL_FOCUS(ctrl, self.OnFocusEvent)
     
-  def RegisterTextEvents(self, ctrl):
-    '''Begin watching for text events on the given control.'''
-    pass
-    
   def RegisterEventHandler(self, id, handler):
     '''Register an event handler to receive callbacks from user actions on the given control.'''    
     #reference the handler function by the ID of the control for which it handles events

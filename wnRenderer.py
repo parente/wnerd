@@ -90,7 +90,7 @@ class wnPainter(wnRenderer):
       #hook the event manager
       self.event_man.RegisterEventHandler(ctrl.GetId(), handler)
       #set the current text
-      #ctrl.SetLabel(text)
+      ctrl.SetLabel(text)
    
   def DrawSeedTextControl(self, text, x, y, length, height, choices, id, handler):
     '''Draw a dynamic text control that let's the user enter text directly into it. Register the new
@@ -141,8 +141,16 @@ class wnPainter(wnRenderer):
     
   def ShowMatchDialog(self, wrestlers, result):
     '''Show a dialog box that let's the user enter match results. Initialize the box to the values
-    provided by the entry.'''
-    pass
+    provided by the entry. Return the winner and result entered by the user.'''
+    dlg = wnMatchDialog(self.frame, wrestlers, result)
+    if dlg.ShowModal() == wxID_OK:
+      winner = dlg.GetWinner()
+      result_type = dlg.GetResultType()
+      dlg.Destroy()
+      return winner, result_type
+    else:
+      dlg.Destroy()
+      return None
     
                              
 class wnPrinter(wnRenderer):

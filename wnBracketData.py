@@ -325,10 +325,23 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
         enabled = True
         break
     
+    #quit now if the dialog isn't enabled
     if not enabled: return
     
-    event.Painter.
+    #show the results dialog, providing the wrestlers and current results
+    wrestlers = [entry.Wrestler for entry in self.previous if entry.Wrestler is not None]
+    result = event.Painter.ShowMatchDialog(wrestlers, self.result)
     
+    if result is not None:
+      winner, result_type = result
+    
+      #store the information
+      self.result = wnResultFactory.Create(result_type)
+      self.wrestler = winner
+      
+      #show the new winner name
+      event.Control.SetLabel(self.wrestler.Name)
+        
 class wnSeedEntry(wnEntry, wnFocusEventReceivable):
   '''The seed entry class holds information about seeded wrestlers.'''
   def __init__(self, name, parent):

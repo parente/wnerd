@@ -262,8 +262,8 @@ def WizardFinishedPanel( parent, call_fit = true, set_sizer = true ):
     
     return item0
 
-ID_WINNER = 10021
-ID_WIN_TYPE_RADIO = 10022
+ID_WINNER_CHOICE = 10021
+ID_RESULT_TYPE_RADIO = 10022
 
 def CreateMatchDialog( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -271,14 +271,14 @@ def CreateMatchDialog( parent, call_fit = true, set_sizer = true ):
     item2 = wxStaticBox( parent, -1, "Winner" )
     item1 = wxStaticBoxSizer( item2, wxVERTICAL )
     
-    item3 = wxChoice( parent, ID_WINNER, wxDefaultPosition, wxSize(150,-1), [], 0 )
+    item3 = wxChoice( parent, ID_WINNER_CHOICE, wxDefaultPosition, wxSize(150,-1), [], 0 )
     item1.AddWindow( item3, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     item0.AddSizer( item1, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     item4 = wxBoxSizer( wxVERTICAL )
     
-    item5 = wxRadioBox( parent, ID_WIN_TYPE_RADIO, "Win type", wxDefaultPosition, wxDefaultSize, 
+    item5 = wxRadioBox( parent, ID_RESULT_TYPE_RADIO, "Win type", wxDefaultPosition, wxDefaultSize, 
         ["None","Decision","Pin","Default","Bye"] , 2, wxRA_SPECIFY_ROWS )
     item4.AddWindow( item5, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
@@ -289,6 +289,17 @@ def CreateMatchDialog( parent, call_fit = true, set_sizer = true ):
     parent.result_sizer = item6
     
     item0.AddSizer( item6, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    item8 = wxBoxSizer( wxHORIZONTAL )
+    
+    item9 = wxButton( parent, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize, 0 )
+    item9.SetDefault()
+    item8.AddWindow( item9, 0, wxALIGN_CENTRE|wxALL, 5 )
+
+    item10 = wxButton( parent, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize, 0 )
+    item8.AddWindow( item10, 0, wxALIGN_CENTRE|wxALL, 5 )
+
+    item0.AddSizer( item8, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     if set_sizer == true:
         parent.SetAutoLayout( true )

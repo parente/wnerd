@@ -3,7 +3,7 @@ seed_length = 350
 seed_height = 16
 seed_offset = 20
 
-entry_length = 120
+entry_length = 135
 entry_height = 18
 entry_offset = 3
 

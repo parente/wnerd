@@ -1,6 +1,7 @@
 from wxPython.wx import *
 from wxPython.lib.maskededit import Field, wxMaskedTextCtrl
 import wnSettings
+import WrestlingNerd_wdr as GUI
 
 class wnStaticText(wxPanel):
   def __init__(self, parent, id, text, pos=wxPoint(0,0), size=wxSize(100,20)):
@@ -12,7 +13,15 @@ class wnStaticText(wxPanel):
     #make the actual static text control
     self.ctrl = wxStaticText(self, -1, text, wxPoint(0,0), size,
                              style=wxST_NO_AUTORESIZE|wxALIGN_LEFT)
+    self.ctrl.SetFont(wxFont(8, wxMODERN, wxNORMAL, wxNORMAL))
     self.clear_color = self.ctrl.GetBackgroundColour()
+    
+    #register events on the text control
+    EVT_LEFT_DOWN(self.ctrl, self.OnLeftDown)
+    
+  def OnLeftDown(self, event):
+    event.SetEventObject(self)
+    wxPostEvent(self, event)
     
   def SetLabel(self, text):
     self.ctrl.SetLabel(text)
@@ -66,14 +75,46 @@ class wnDynamicText(wxMaskedTextCtrl):
 class wnPopup(wxPopupWindow):
   def __init__(self, parent, text, pos, size):
     wxPopupWindow.__init__(self, parent, wxSIMPLE_BORDER)
-    st = wxStaticText(self, -1, text, pos=wxPoint(10,10))
+    st = wxStaticText(self, -1, text, pos=wxPoint(5,5))
+    st.SetFont(wxFont(8, wxMODERN, wxNORMAL, wxNORMAL))
     
     #compute the best position and size
     sz = st.GetBestSize()
     p = wxPoint(pos.x, pos.y+size.GetHeight())
     self.SetPosition(p)
-    self.SetSize(wxSize(sz.width+20, sz.height+20))
+    self.SetSize(wxSize(sz.width+10, sz.height+10))
     
     #set the proper colors
     self.SetBackgroundColour(wnSettings.popup_color)
     st.SetBackgroundColour(wnSettings.popup_color)
+    
+class wnMatchDialog(wxDialog):
+  '''Class that creates a dialog box that allows users to enter match results.'''
+  def __init__(self, parent, wrestlers, result):
+    wxDialog.__init__(self, parent, -1, 'Match results')
+    GUI.CreateMatchDialog(self)
+
+    #store important references
+    self.winner = wxPyTypeCast(self.FindWindowById(GUI.ID_WINNER_CHOICE), 'wxChoice')
+    self.result_type = wxPyTypeCast(self.FindWindowById(GUI.ID_RESULT_TYPE_RADIO), 'wxRadioBox')
+    
+    #store the references
+    self.wrestlers = wrestlers
+    self.result = result
+    
+    #list the wrestlers
+    for w in self.wrestlers:
+      self.winner.Append(w.Name)
+      
+    #select the proper result type
+    if result is not None:
+      self.result_type.SetStringSelection(result.Name)
+    
+    #select the first wrestler
+    self.winner.SetSelection(0)
+    
+  def GetWinner(self):
+    return self.wrestlers[self.winner.GetSelection()]
+  
+  def GetResultType(self):
+    return self.result_type.GetStringSelection()

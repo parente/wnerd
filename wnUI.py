@@ -38,7 +38,7 @@ class wnFrame(wxFrame):
     
     #create a frame housing the layer components
     panel = wxPanel(self, -1)
-    score_frame = GUI.ScoreFrame(panel)
+    score_frame = GUI.CreateScoreFrame(panel)
     sizer.AddSizer(panel, 0, 5)
     
     #add the sizer to the window
@@ -394,18 +394,6 @@ class wnNewTournamentWizard(wxWizard):
   def GetLayout(self):
     i = self.layouts.GetSelection()
     return self.layouts.GetClientData(i)
-
-class wnMatchDialog(wxDialog):
-  '''Class that creates a dialog box that allows users to enter match results.'''
-  def __init__(self, parent, wrestlers, result):
-    wxDialog.__init__(self, parent, -1, 'Match results')
-    GUI.CreateMatchDialog(self)
-    
-    #set to the current values
-    
-    #store important references
-    
-    #register events
 
 class wnScoreWindow(wxFrame):
   '''Class the creates a standalone frame for displaying team scores. Teams scroll past at a regular
