@@ -15,6 +15,8 @@ class wnPainter(wnRenderer):
     self.team_scores = team_scores
     self.control_cache = {}
     
+    self.initial_id = None
+    
     self.dc = None
 
     self.controls = {}
@@ -42,6 +44,9 @@ class wnPainter(wnRenderer):
     else:
       self.dc.EndDrawing()
     self.dc = dc
+   
+  def SetInitialFocus(self):
+    self.SetFocus(self.initial_id)
    
   def SetFocus(self, id):
     '''Give the focus to the control associated with the given ID if possible.'''
@@ -119,6 +124,10 @@ class wnPainter(wnRenderer):
     
     keys = self.control_cache.keys()
     keys.sort()
+
+    #store the initial control so we can set the focus easily
+    self.initial_id = keys[0]
+    
     for id in keys:
       ctrl = apply(wnDynamicText, self.control_cache[id]['args'])
       self.controls[id] = ctrl
@@ -128,6 +137,7 @@ class wnPainter(wnRenderer):
       self.event_man.RegisterEventHandler(ctrl.GetId(), self.control_cache[id]['handler'])
       
     self.control_cache = {}
+    
 
 class wnPrinter(wnRenderer):
   pass

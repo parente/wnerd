@@ -3,28 +3,6 @@
 <project kpf_version="2" name="WrestlingNerd">
 <preference-set id="">
 </preference-set>
-<file name="wnData.py" url="wnData.py">
-<preference-set id="">
-<preference-set id="Invocations">
-<preference-set id="Python">
-  <string id="postparams"></string>
-  <string id="getparams"></string>
-  <boolean id="show-dialog">1</boolean>
-  <string id="mpostparams"></string>
-  <string id="filename">C:\Documents and Settings\Pete\My Documents\My Work\WrestlingNerd\wnData.py</string>
-  <string id="request-method">GET</string>
-  <string id="params"></string>
-  <string id="userCGIEnvironment"></string>
-  <string id="posttype">application/x-www-form-urlencoded</string>
-  <string id="documentRoot"></string>
-  <string id="cookieparams"></string>
-  <string id="userEnvironment"></string>
-  <boolean id="sim-cgi">0</boolean>
-  <string id="cwd"></string>
-</preference-set>
-</preference-set>
-</preference-set>
-</file>
 <file name="wnUI.py" url="wnUI.py">
 </file>
 <file name="wnRenderer.py" url="wnRenderer.py">
@@ -36,5 +14,13 @@
 <file name="wnControls.py" url="wnControls.py">
 </file>
 <file name="wnEvents.py" url="wnEvents.py">
+</file>
+<file name="wnScoreData.py" url="wnScoreData.py">
+</file>
+<file name="wnTeamData.py" url="wnTeamData.py">
+</file>
+<file name="wnBracketData.py" url="wnBracketData.py">
+</file>
+<file name="setup.py" url="setup.py">
 </file>
 </project>

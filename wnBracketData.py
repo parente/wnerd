@@ -55,7 +55,9 @@ class wnTournament(wnNode):
     except:
       return
       
-    return wc.Paint(painter, (0, wnSettings.seed_start), wnSettings.initial_step, refresh_labels)
+    result = wc.Paint(painter, (0, wnSettings.seed_start), wnSettings.initial_step, refresh_labels)    
+      
+    return result
   
   def CalcScores(self, painter):
     '''Calculate all the scores across this tournament.'''
@@ -332,6 +334,7 @@ class wnSeedEntry(wnEntry, wnFocusEventReceivable):
         event.Painter.SetFocus(self.Parent.Entries[1].ID)
       elif self.name == self.Parent.NumEntries:
         event.Painter.SetFocus(self.Parent.Entries[0].ID)        
+
 
 if __name__ == '__main__':
   pass

@@ -48,12 +48,11 @@ class wnDynamicText(wxMaskedTextCtrl):
   def __init__(self, parent, id, text, choices, pos=wxPoint(0,0), size=wxSize(-1,-1)):
     self.parent = parent
     self.bg_color = self.parent.GetBackgroundColour()
-    wxMaskedTextCtrl.__init__(self, parent, -1, '', formatcodes='VF_',  mask='N{18} | N{18}',
+    wxMaskedTextCtrl.__init__(self, parent, -1, '', formatcodes='VF_<S',  mask='N{18} | N{18}',
                               pos=pos, size=size, emptyBackgroundColor=self.bg_color,
                               validBackgroundColor=self.bg_color,
-                              fields = {0 : Field(validRegex='[a-zA-Z]+'),
-                                        1 : Field(choices=['Bristol Central', 'Maloney'],
-                                         choiceRequired=True)
+                              fields = {0 : Field(validRegex='[a-zA-Z0-9]+'),
+                                        1 : Field(choices=choices, choiceRequired=True)
                               },
                               style = wxNO_BORDER, retainFieldValidation = True
                              )

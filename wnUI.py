@@ -214,15 +214,19 @@ class wnBracketCanvas(wxScrolledWindow):
     w = self.parent.GetCurrentWeight()
 
     if t is not None and w is not None:
+      refresh = (w != self.old_weight)
+      
       p = self.parent.GetPainter()    
       p.SetDC(dc)      
-      xmax, ymax = t.Paint(p, w, w != self.old_weight)
+      xmax, ymax = t.Paint(p, w, refresh)
       p.Flush()
       p.SetDC(None)
-        
+
       self.old_weight = w
       self.SetVirtualSize(wxSize(xmax, ymax))
       self.SetScrollRate(5,5)      
+
+      if refresh: p.SetInitialFocus()        
    
 class wnNewTournamentWizard(wxWizard):
   '''Class that creates a wizard that assists users in setting up new
