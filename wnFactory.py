@@ -8,26 +8,44 @@ class wnFactory:
   
 class wnFactoryCTChamps(wnFactory):
   def Create(cls, weights, teams):
-    t = wnTournament()
-    t.name = 'Bristol Central Invitational'
-    t.description = 'The bracket format used in the Bristol Central Invitational tournaments. The outbracket has 32 seed slots, and double-elimination begins in the quarter finals.'
-    t.teams = teams
+    name = 'Bristol Central Invitational'
+    description = 'The bracket format used in the Bristol Central Invitational tournaments. The outbracket has 32 seed slots, and double-elimination begins in the quarter finals.'
+    tourn = wnTournament(name, description)
+    
+    #add the teams
+    for t in teams:
+      tourn.NewTeam(t)
     
     #build the rounds
-    rounds = ['Rat-Tails', 'Sixteen Champion', 'Quarter-Finals Champion', 'Semi-Finals Champion',
-              'Finals Champion', 'Champion', 'Quarter-Finals Consolation',
-              'Semi-Finals Consolation', 'Finals Consolation', 'Third Place', 'Finals Fifth',
-              'Fifth Place']    
+    #round name, points (adv, place), entries
+    rounds = [('Rat-Tails', wnPoints(0,0), 32),
+              ('Sixteen Champion', wnPoints(2,0), 16),
+              ('Quarter-Finals Champion', wnPoints(2,0), 8),
+              ('Semi-Finals Champion', wnPoints(2,0), 4),
+              ('Finals Champion', wnPoints(2,0), 2),
+              ('First Place', wnPoints(0,0), 1),
+              ('Quarter-Finals Consolation', wnPoints(1,0), 4),
+              ('Semi-Finals Consolation', wnPoints(1,0), 4),
+              ('Finals Consolation', wnPoints(1,0), 2),
+              ('Third Place', wnPoints(0,0), 1),
+              ('Finals Fifth', wnPoints(0,0), 2),
+              ('Fifth Place', wnPoints(0,0), 1)]
   
     #build the weights
     for w_name in weights:
-      w = t.NewWeightClass(w_name)
+      w = tourn.NewWeightClass(w_name)
 
       #build the rounds
-      for r_name in rounds:
-        r = w.NewRound(r_name)
+      for r_name, points, num_entries in rounds:
+        r = w.NewRound(r_name, points)
+        
+        #build the entries
+        r.NewEntries(num_entries)
+        
+    #connect the rounds
+        
     
-    return t
+    return tourn
   
   Create = classmethod(Create)
   
@@ -38,7 +56,7 @@ class wnFactoryBCInvite(wnFactory):
   Create = classmethod(Create)
   
 if __name__ == '__main__':
-  t = wnFactoryCTChamps.Create(['95', '103', '112'], ['Bristol Central', 'Bristol Eastern',
-                                                      'Southington'])
+  t = wnFactoryCTChamps.Create(['95', '103', '112'],
+                               ['Bristol Central', 'Bristol Eastern', 'Southington'])
   print vars(t)
   
