@@ -30,6 +30,10 @@
     and used according to the terms of the <a href="license.html">license</a>.</p>
 
     <h1><a name="news"></a>News</h1>
+   	<h3>12/14/04</h3>
+   	<p>The 3.2 release of Wrestling Nerd had a slight bug in it where some team names could not be entered on the bracket.
+   	Please re-download 3.2 if you are experiencing this problem.</p>
+    
     <h3>12/12/04</h3>
     <p>Wrestling Nerd 3.2 is now available for download. See the post from 12/9 below for a list of improvements. I've
     updated the <a href="#doc">documentation</a> to describe the new features since version 3.0, but I still have to
