@@ -18,6 +18,13 @@ class wnTournament(object):
     self.teams[str(name)] = t
     
     return t
+
+  def GetTeam(self, name):
+    return self.teams.get(name)
+  
+  def GetWeightClass(self, name):
+    return self.weight_classes.get(name)
+    
   
 class wnWeightClass(object):
   def __init__(self, name):
@@ -33,6 +40,9 @@ class wnWeightClass(object):
     
     return r
   
+  def GetRound(self, name):
+    return self.rounds.get(name)
+  
 class wnRound(object):
   def __init__(self, name, points):
     self.name = name
@@ -46,7 +56,11 @@ class wnRound(object):
   def getNumberOfEntries(self):
     return len(self.entries)
   
+  def getEntries(self):
+    return self.entries
+  
   NumEntries = property(fget=getNumberOfEntries)
+  Entries = property(fget=getEntries)
         
   def NewEntries(self, number):
     for i in range(number):
@@ -134,7 +148,7 @@ class wnResultDefault(wnResult):
 class wnTeam(object):
   def __init__(self, name):
     self.name = name    
-    self.wrestlers = []
+    self.wrestlers = {}
     self.point_adjust = 0
     
     self.tournament = None
@@ -142,7 +156,7 @@ class wnTeam(object):
   def NewWrestler(self, name, weight):
     w = wnWrestler(str(name), str(weight))
     w.team = self
-    self.wrestlers.append(w)
+    self.wrestlers[str(weight)] = w
     
     return w
       
