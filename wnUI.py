@@ -56,13 +56,18 @@ class wnFrame(wxFrame):
     
   def OnNew(self, event):
     '''Show the new tournament wizard.'''
-    #wiz = wnNewTournamentWizard(self)
-    #wiz.RunWizard()
     factory = wnFactory()
-    options = factory.GetTournaments()
-    self.tournament = factory.Create(options[0], 'Test Tournament',
-                                     [95,103,112], ['BC', 'BE', 'WI'])
-    self.canvas.Refresh()
+    
+    wiz = wnNewTournamentWizard(self)
+    wiz.SetAvailableLayouts(factory.GetTournaments())
+    if wiz.RunWizard():
+      name = wiz.GetName()
+      weights = wiz.GetWeights()
+      teams = wiz.GetTeams()
+      layout = wiz.GetLayout()
+    
+      self.tournament = factory.Create(layout, name, weights, teams)
+      self.canvas.Refresh()
     
   def GetTournament(self):
     return self.tournament
@@ -106,32 +111,120 @@ class wnNewTournamentWizard(wxWizard):
     wxWizard.__init__(self, parent, -1, 'New tournament')
     
     #create the pages of the wizard
-    self.start = wxWizardPageSimple(self)
-    GUI.WizardStartPanel(self.start)
-    name  = wxWizardPageSimple(self)
-    GUI.WizardNamePanel(name)
-    teams = wxWizardPageSimple(self)
-    GUI.WizardTeamsPanel(teams)
-    weights = wxWizardPageSimple(self)
-    GUI.WizardWeightsPanel(weights)
-    layout = wxWizardPageSimple(self)
-    GUI.WizardLayoutPanel(layout)
-    finished = wxWizardPageSimple(self)
-    GUI.WizardFinishedPanel(finished)
+    self.start_page = wxWizardPageSimple(self)
+    GUI.WizardStartPanel(self.start_page)
+    self.name_page  = wxWizardPageSimple(self)
+    GUI.WizardNamePanel(self.name_page)
+    self.teams_page = wxWizardPageSimple(self)
+    GUI.WizardTeamsPanel(self.teams_page)
+    self.weights_page = wxWizardPageSimple(self)
+    GUI.WizardWeightsPanel(self.weights_page)
+    self.layout_page = wxWizardPageSimple(self)
+    GUI.WizardLayoutPanel(self.layout_page)
+    self.finished_page = wxWizardPageSimple(self)
+    GUI.WizardFinishedPanel(self.finished_page)
     
     #order the pages
-    wxWizardPageSimple_Chain(self.start, name)
-    wxWizardPageSimple_Chain(name, teams)
-    wxWizardPageSimple_Chain(teams, weights)
-    wxWizardPageSimple_Chain(weights, layout)
-    wxWizardPageSimple_Chain(layout, finished)
+    wxWizardPageSimple_Chain(self.start_page, self.name_page)
+    wxWizardPageSimple_Chain(self.name_page, self.teams_page)
+    wxWizardPageSimple_Chain(self.teams_page, self.weights_page)
+    wxWizardPageSimple_Chain(self.weights_page, self.layout_page)
+    wxWizardPageSimple_Chain(self.layout_page, self.finished_page)
     
     #size the wizard appropriately
-    self.FitToPage(self.start)
+    self.FitToPage(self.start_page)
     
+    #store important references
+    self.teams = wxPyTypeCast(self.FindWindowById(GUI.ID_TEAMS_COMBO), 'wxComboBox')
+    self.weights = wxPyTypeCast(self.FindWindowById(GUI.ID_WEIGHTS_COMBO), 'wxComboBox')
+    self.layouts = wxPyTypeCast(self.FindWindowById(GUI.ID_LAYOUT_LIST), 'wxListBox')
+    self.name = wxPyTypeCast(self.FindWindowById(GUI.ID_NAME_TEXT), 'wxTextCtrl')    
+        
+    #set event handlers
+    EVT_BUTTON(self, GUI.ID_ADD_TEAM, self.OnAddTeam)
+    EVT_BUTTON(self, GUI.ID_REMOVE_TEAM, self.OnRemoveTeam)
+    EVT_BUTTON(self, GUI.ID_ADD_WEIGHT, self.OnAddWeight)
+    EVT_BUTTON(self, GUI.ID_REMOVE_WEIGHT, self.OnRemoveWeight)
+    EVT_BUTTON(self, GUI.ID_ADD_STANDARD_WEIGHTS, self.OnAddStandardWeights)    
+    EVT_WIZARD_PAGE_CHANGED(self, self.GetId(), self.OnPageChanged)
+    
+  def OnPageChanged(self, event):
+    '''Change the accelerator table appropriately.'''
+    if event.GetPage() == self.teams_page:
+      table = wxAcceleratorTable([(wxACCEL_CTRL, WXK_RETURN, GUI.ID_ADD_TEAM)])
+    else:
+      table = wxAcceleratorTable([(wxACCEL_CTRL, WXK_RETURN, GUI.ID_ADD_WEIGHT)])
+    self.SetAcceleratorTable(table)
+                            
+  def OnAddTeam(self, event):
+    t = self.teams.GetValue()
+    if self.teams.FindString(t) != -1 or t == '': return
+    self.teams.Append(t)
+    self.teams.SetValue('')
+  
+  def OnRemoveTeam(self, event):
+    i = self.teams.GetSelection()
+    if i == -1: return    
+    self.teams.Delete(i)
+    
+    #select the next item in the teams list
+    c = self.teams.GetCount()
+    if i >= c:
+      i = c-1
+    if c > 0:
+      self.teams.SetSelection(i)
+      
+  def OnAddWeight(self, event):
+    w = self.weights.GetValue()
+    if self.weights.FindString(w) != -1 or w == '': return
+    self.weights.Append(w)
+    self.weights.SetValue('')
+    
+  def OnRemoveWeight(self, event):
+    i = self.weights.GetSelection()
+    if i == -1: return
+    self.weights.Delete(i)
+
+    #select the next item in the weights list
+    c = self.weights.GetCount()
+    if i >= c:
+      i = c-1
+    if c > 0:
+      self.weights.SetSelection(i)
+      
+  def OnAddStandardWeights(self, event):
+    ws = ['95', '103', '112', '119', '125', '130', '135', '140', '145', '152', '160', '171', '189',
+          '215', '275']
+    for w in ws:
+      self.weights.Append(w)
+        
   def RunWizard(self):
     '''Override the run method to automatically use the first page.'''
-    wxWizard.RunWizard(self, self.start)
+    return wxWizard.RunWizard(self, self.start_page)
+    
+  def SetAvailableLayouts(self, ts):
+    '''Set the available tournaments.'''
+    for c in ts:
+      self.layouts.Append(c.Name, c)
+      
+  def GetName(self):
+    return self.name.GetValue()
+  
+  def GetWeights(self):
+    ws = []
+    for i in range(self.weights.GetCount()):
+      ws.append(self.weights.GetString(i))
+    return ws
+  
+  def GetTeams(self):
+    ts = []
+    for i in range(self.teams.GetCount()):
+      ts.append(self.teams.GetString(i))
+    return ts
+  
+  def GetLayout(self):
+    i = self.layouts.GetSelection()
+    return self.layouts.GetClientData(i)
     
 if __name__ == '__main__':
   app = wxPySimpleApp(0)

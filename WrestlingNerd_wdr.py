@@ -85,8 +85,8 @@ def WizardNamePanel( parent, call_fit = true, set_sizer = true ):
 
 ID_TEAMS_CAPTION = 10006
 ID_TEAMS_COMBO = 10007
-ID_ADD_TEAM_BUT = 10008
-ID_REMOVE_TEAM_BUT = 10009
+ID_ADD_TEAM = 10008
+ID_REMOVE_TEAM = 10009
 
 def WizardTeamsPanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -108,10 +108,10 @@ def WizardTeamsPanel( parent, call_fit = true, set_sizer = true ):
 
     item6 = wxBoxSizer( wxVERTICAL )
     
-    item7 = wxButton( parent, ID_ADD_TEAM_BUT, "Add", wxDefaultPosition, wxDefaultSize, 0 )
+    item7 = wxButton( parent, ID_ADD_TEAM, "Add", wxDefaultPosition, wxDefaultSize, 0 )
     item6.AddWindow( item7, 0, wxALIGN_CENTRE|wxALL, 5 )
 
-    item8 = wxButton( parent, ID_REMOVE_TEAM_BUT, "Remove", wxDefaultPosition, wxDefaultSize, 0 )
+    item8 = wxButton( parent, ID_REMOVE_TEAM, "Remove", wxDefaultPosition, wxDefaultSize, 0 )
     item6.AddWindow( item8, 0, wxALIGN_CENTRE|wxALL, 5 )
 
     item4.AddSizer( item6, 0, wxGROW|wxALIGN_CENTER_HORIZONTAL|wxALL, 5 )
@@ -129,9 +129,9 @@ def WizardTeamsPanel( parent, call_fit = true, set_sizer = true ):
 
 ID_WEIGHTS_CAPTION = 10010
 ID_WEIGHTS_COMBO = 10011
-ID_ADD_WEIGHT_BUT = 10012
-ID_REMOVE_WEIGHT_BUT = 10013
-ID_ADD_STAND_WEIGHTS_BUT = 10014
+ID_ADD_WEIGHT = 10012
+ID_REMOVE_WEIGHT = 10013
+ID_ADD_STANDARD_WEIGHTS = 10014
 
 def WizardWeightsPanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -153,13 +153,13 @@ def WizardWeightsPanel( parent, call_fit = true, set_sizer = true ):
 
     item6 = wxBoxSizer( wxVERTICAL )
     
-    item7 = wxButton( parent, ID_ADD_WEIGHT_BUT, "Add", wxDefaultPosition, wxDefaultSize, 0 )
+    item7 = wxButton( parent, ID_ADD_WEIGHT, "Add", wxDefaultPosition, wxDefaultSize, 0 )
     item6.AddWindow( item7, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
-    item8 = wxButton( parent, ID_REMOVE_WEIGHT_BUT, "Remove", wxDefaultPosition, wxDefaultSize, 0 )
+    item8 = wxButton( parent, ID_REMOVE_WEIGHT, "Remove", wxDefaultPosition, wxDefaultSize, 0 )
     item6.AddWindow( item8, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
-    item9 = wxButton( parent, ID_ADD_STAND_WEIGHTS_BUT, "Add Standard", wxDefaultPosition, wxDefaultSize, 0 )
+    item9 = wxButton( parent, ID_ADD_STANDARD_WEIGHTS, "Add Standard", wxDefaultPosition, wxDefaultSize, 0 )
     item6.AddWindow( item9, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     item4.AddSizer( item6, 0, wxGROW|wxALIGN_CENTER_HORIZONTAL|wxALL, 5 )
@@ -177,7 +177,7 @@ def WizardWeightsPanel( parent, call_fit = true, set_sizer = true ):
 
 ID_LAYOUT_CAPTION = 10015
 ID_LAYOUT_LIST = 10016
-ID_TEXTCTRL = 10017
+ID_LAYOUT_TEXT = 10017
 
 def WizardLayoutPanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -205,7 +205,7 @@ def WizardLayoutPanel( parent, call_fit = true, set_sizer = true ):
     item9 = wxStaticBox( parent, -1, "Description" )
     item8 = wxStaticBoxSizer( item9, wxHORIZONTAL )
     
-    item10 = wxTextCtrl( parent, ID_TEXTCTRL, "", wxDefaultPosition, wxSize(250,40), wxTE_MULTILINE )
+    item10 = wxTextCtrl( parent, ID_LAYOUT_TEXT, "", wxDefaultPosition, wxSize(250,40), wxTE_MULTILINE|wxTE_READONLY )
     item10.Enable(false)
     item8.AddWindow( item10, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
