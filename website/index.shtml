@@ -31,7 +31,16 @@
     and used according to the terms of the <a href="license.html">license</a>.</p>
 
     <h1><a name="news"></a>News</h1>
-    <h3>1/6/03</h3>
+    <h3>2/16/04</h3>
+    <p>Wrestling Nerd 3.1.1 has been released. Crossbracketing has been changed so that it occurs in
+    the quarters instead of the semis for the CT State Championship and CT State Open tournaments.
+    </p>
+    
+    <h3>1/14/04</h3>
+    <p>Wrestling Nerd 3.1 has been released. See the <a href="https://sourceforge.net/project/shownotes.php?release_id=209944">change log</a> 
+    for a list of new features.</p>
+    
+    <h3>1/6/04</h3>
     <p>Wrestling Nerd 3.0 has been released. See the <a href="#download">Download</a> section on
     this page for more information.</p>
     
@@ -41,7 +50,7 @@
     shortly thereafter.</p>
 
     <h1><a name="features"></a>Features</h1>
-    <p>Wrestling Nerd 3.0 has the following features:</p>
+    <p>Wrestling Nerd 3.1 has the following features:</p>
 
     <ul>
       <li>Point-and-click wrestler advancement</li>
@@ -52,6 +61,7 @@
       <li>Unlimited teams and wrestlers</li>
       <li>Three built-in bracket types</li>
       <li>Tools for swapping, scratching, and moving seeds easily</li>
+      <li>Easy addition, removal, and changes to wrestlers and teams</li>
       <li>Support for user-defined brackets of any shape and size</li>
       <li>Support for user-defined scoring systems</li>
       <li>Export of tournament results to other file formats (just plain text for now)</li>
@@ -84,7 +94,7 @@
     <span><a href="shots/team.jpg"><img src="shots/team_small.jpg" alt="The team properties window" /></a></span>
     
     <h1><a name="download"></a>Download</h1>
-    <p>Wrestling Nerd 3.0 is available for download. Click the link for the version of Wrestling
+    <p>Wrestling Nerd 3.1.1 is available for download. Click the link for the version of Wrestling
     Nerd appropriate for your computer. Clicking the link will take you to the SourceForge download
     page. The download should start a few seconds after visiting the page.</p>
     
@@ -92,10 +102,21 @@
     Wrestling Nerd.</p>
     
     <ul>
-      <li><a href="http://prdownloads.sourceforge.net/wnerd/WrestlingNerd-3.0-win32.exe?download">
-      Download Wrestling Nerd 3.0 for Windows</a></li>
-      <li><a href="http://prdownloads.sourceforge.net/wnerd/WrestlingNerd-3.0-src.zip?download">
-      Download Wrestling Nerd 3.0 for other platforms (requires Python 2.2+ and wxPython 2.4.2.4)</a></li>
+      <li><a href="http://prdownloads.sourceforge.net/wnerd/WrestlingNerd-3.1.1-win32.exe?download">
+      Download Wrestling Nerd 3.1.1 for Windows</a></li>
+      <li><a href="http://prdownloads.sourceforge.net/wnerd/WrestlingNerd-3.1.1-src.zip?download">
+      Download Wrestling Nerd 3.1.1 for other platforms (requires Python 2.2+ and wxPython 2.4.2.4)</a></li>
+    </ul>
+    
+    <h2>Fixed Tournament Files</h2>
+    <p>The corrected tournament files for the Connecticut State Championship Class S, M, and L 
+    tournaments are also available for download below. These tournaments have been corrected so that
+    crossbracketing occurs in the quarters instead of in the semis.</p>
+    
+    <ul>
+      <li><a href="2004classS.wnd">2004 Class S</a></li>
+      <li><a href="2004classM.wnd">2004 Class M</a></li>
+      <li><a href="2004classL.wnd">2004 Class L</a></li>
     </ul>
 
     <h1><a name="doc"></a>Documentation</h1>

@@ -1,8 +1,10 @@
 import wnBracketData
 import cPickle
 
+fn = '2004 class M.wnd'
+
 # load the tournament
-f = file('2004 class L.wnd', 'rb')
+f = file(fn, 'rb')
 t = cPickle.load(f)
 f.close()
 
@@ -28,6 +30,8 @@ for w in t.weight_classes.values():
     r.Entries[i].NextLose = l[i]
     
 # write the tournament to disk
-f = file('2004 class L.wnd', 'wb')
+f = file(fn, 'wb')
 cPickle.dump(t,f,True)
 f.close()
+
+print 'Done'
