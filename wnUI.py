@@ -67,7 +67,15 @@ class wnFrame(wxFrame):
     EVT_MENU(self, GUI.ID_SAVEAS_MENU, self.OnSaveAs)
     EVT_MENU(self, GUI.ID_OPEN_MENU, self.OnOpen)
     
+    EVT_BUTTON(self, GUI.ID_TEAM_DEBUG, self.OnTeamDebug)
+    
     EVT_CHOICE(self, GUI.ID_WEIGHTS_CHOICE, self.OnSelectWeight)
+    
+  def OnTeamDebug(self, event):
+    for t in self.tournament.teams.values():
+      print t.Name
+      print t.wrestlers
+      print
     
   def OnClose(self, event):
     '''Handle a window close event.'''
@@ -167,8 +175,8 @@ class wnFrame(wxFrame):
     self.painter.ResetControls()
     self.canvas.DestroyChildren()
     
-    #draw the bracket
-    self.canvas.Scroll(0,0)
+    #reset and draw the bracket
+    self.canvas.Reset()
     self.canvas.Refresh()
      
   def ChangeMenuState(self, action):
@@ -203,9 +211,13 @@ class wnBracketCanvas(wxScrolledWindow):
   def __init__(self, parent):
     wxScrolledWindow.__init__(self, parent, -1, style=wxNO_FULL_REPAINT_ON_RESIZE)
     self.parent = parent
-    self.old_weight = ''
+    self.old_weight = None
     
     EVT_PAINT(self, self.OnPaint)
+    
+  def Reset(self):
+    self.Scroll(0,0)
+    self.old_weight = None
     
   def OnPaint(self, event):
     dc = wxPaintDC(self)

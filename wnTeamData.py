@@ -9,6 +9,9 @@ class wnTeam(object):
     self.name = name    
     self.wrestlers = {}
     self.point_adjust = 0
+    
+  def __repr__(self):
+    return '<Team Name: %s Wrestlers: %s>' % (self.name, self.wrestlers)
    
   def GetName(self):
     return self.name
@@ -17,17 +20,17 @@ class wnTeam(object):
   
   def NewWrestler(self, name, weight):
     '''Add a new wrestler to the team. Make the wrestler scoring if he is the first to be added.'''
-    w = wnWrestler(str(name), str(weight), self)
-    self.wrestlers.setdefault(str(weight), [])
-    self.wrestlers[str(weight)].append(w)
+    w = wnWrestler(name, weight, self)
+    self.wrestlers.setdefault(weight, [])
+    self.wrestlers[weight].append(w)
     
     return w
   
   def DeleteWrestler(self, name, weight):
     '''Delete a wrestler from the team.'''
-    w_list = self.wrestlers[str(weight)]
+    w_list = self.wrestlers[weight]
     for i in range(len(w_list)):
-      if w_list[i] == name:
+      if w_list[i].Name == name:
         del w_list[i]
         break
       
@@ -38,6 +41,9 @@ class wnWrestler(object):
     self.weight = weight
     self.team = team
     self.is_scoring = is_scoring
+    
+  def __repr__(self):
+    return '<Wrestler Name: %s Weight: %s Team: %s>' % (self.name, self.weight, self.team.Name)
     
   def GetFormattedName(self):
     n_fill = wnSettings.max_name_length - len(self.name)

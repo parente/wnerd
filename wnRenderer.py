@@ -108,7 +108,7 @@ class wnPainter(wnRenderer):
       #hook the event manager
       self.event_man.RegisterEventHandler(ctrl.GetId(), handler)
       #set the current text
-      #ctrl.SetValue(text)
+      ctrl.SetValue(text)
       
   def DrawTeamScores(self, items):
     self.team_scores.DeleteAllItems()

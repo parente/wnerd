@@ -10,6 +10,7 @@ from wxPython.wx import *
 
 ID_WEIGHTS_CHOICE = 10000
 ID_TEAMS_LIST = 10001
+ID_TEAM_DEBUG = 10002
 
 def ScoreFrame( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -30,6 +31,9 @@ def ScoreFrame( parent, call_fit = true, set_sizer = true ):
 
     item0.AddSizer( item4, 0, wxALIGN_CENTRE|wxALL, 5 )
 
+    item7 = wxButton( parent, ID_TEAM_DEBUG, "Print Teams", wxDefaultPosition, wxDefaultSize, 0 )
+    item0.AddWindow( item7, 0, wxALIGN_CENTRE|wxALL, 5 )
+
     if set_sizer == true:
         parent.SetAutoLayout( true )
         parent.SetSizer( item0 )
@@ -39,9 +43,9 @@ def ScoreFrame( parent, call_fit = true, set_sizer = true ):
     
     return item0
 
-ID_TEXT = 10002
-ID_START_CAPTION = 10003
-ID_LINE = 10004
+ID_TEXT = 10003
+ID_START_CAPTION = 10004
+ID_LINE = 10005
 
 def WizardStartPanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -65,8 +69,8 @@ def WizardStartPanel( parent, call_fit = true, set_sizer = true ):
     
     return item0
 
-ID_NAME_CAPTION = 10005
-ID_NAME_TEXT = 10006
+ID_NAME_CAPTION = 10006
+ID_NAME_TEXT = 10007
 
 def WizardNamePanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -96,10 +100,10 @@ def WizardNamePanel( parent, call_fit = true, set_sizer = true ):
     
     return item0
 
-ID_TEAMS_CAPTION = 10007
-ID_TEAMS_COMBO = 10008
-ID_ADD_TEAM = 10009
-ID_REMOVE_TEAM = 10010
+ID_TEAMS_CAPTION = 10008
+ID_TEAMS_COMBO = 10009
+ID_ADD_TEAM = 10010
+ID_REMOVE_TEAM = 10011
 
 def WizardTeamsPanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -140,11 +144,11 @@ def WizardTeamsPanel( parent, call_fit = true, set_sizer = true ):
     
     return item0
 
-ID_WEIGHTS_CAPTION = 10011
-ID_WEIGHTS_COMBO = 10012
-ID_ADD_WEIGHT = 10013
-ID_REMOVE_WEIGHT = 10014
-ID_ADD_STANDARD_WEIGHTS = 10015
+ID_WEIGHTS_CAPTION = 10012
+ID_WEIGHTS_COMBO = 10013
+ID_ADD_WEIGHT = 10014
+ID_REMOVE_WEIGHT = 10015
+ID_ADD_STANDARD_WEIGHTS = 10016
 
 def WizardWeightsPanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -188,9 +192,9 @@ def WizardWeightsPanel( parent, call_fit = true, set_sizer = true ):
     
     return item0
 
-ID_LAYOUT_CAPTION = 10016
-ID_LAYOUT_LIST = 10017
-ID_LAYOUT_TEXT = 10018
+ID_LAYOUT_CAPTION = 10017
+ID_LAYOUT_LIST = 10018
+ID_LAYOUT_TEXT = 10019
 
 def WizardLayoutPanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -234,7 +238,7 @@ def WizardLayoutPanel( parent, call_fit = true, set_sizer = true ):
     
     return item0
 
-ID_FINISHED_CAPTION = 10019
+ID_FINISHED_CAPTION = 10020
 
 def WizardFinishedPanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -260,16 +264,16 @@ def WizardFinishedPanel( parent, call_fit = true, set_sizer = true ):
 
 # Menubar functions
 
-ID_NEW_MENU = 10020
-ID_OPEN_MENU = 10021
-ID_MENU = 10022
-ID_SAVE_MENU = 10023
-ID_SAVEAS_MENU = 10024
-ID_EXIT_MENU = 10025
-ID_FILE_MENU = 10026
-ID_FASTFALL_MENU = 10027
-ID_NUMBOUTS_MENU = 10028
-ID_QUERY_MENU = 10029
+ID_NEW_MENU = 10021
+ID_OPEN_MENU = 10022
+ID_MENU = 10023
+ID_SAVE_MENU = 10024
+ID_SAVEAS_MENU = 10025
+ID_EXIT_MENU = 10026
+ID_FILE_MENU = 10027
+ID_FASTFALL_MENU = 10028
+ID_NUMBOUTS_MENU = 10029
+ID_QUERY_MENU = 10030
 
 def CreateMenuBar():
     item0 = wxMenuBar()

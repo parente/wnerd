@@ -32,15 +32,15 @@ class wnTournament(wnNode):
     self.weight_classes = {}
         
   def NewWeightClass(self, name):
-    wc = wnWeightClass(str(name), self)
-    self.weight_classes[str(name)] = wc
+    wc = wnWeightClass(name, self)
+    self.weight_classes[name] = wc
     
     return wc
   
   def NewTeam(self, name):
-    t = wnTeam(str(name))
+    t = wnTeam(name)
     t.tournament = self
-    self.teams[str(name)] = t
+    self.teams[name] = t
     
     return t
 
@@ -92,9 +92,9 @@ class wnWeightClass(wnNode):
     self.order = []
     
   def NewRound(self, name, points):
-    r = wnRound(str(name), points, self)
-    self.rounds[str(name)] = r
-    self.order.append(str(name))
+    r = wnRound(name, points, self)
+    self.rounds[name] = r
+    self.order.append(name)
     
     return r
   
@@ -315,7 +315,6 @@ class wnSeedEntry(wnEntry, wnFocusEventReceivable):
         text = ''
       else:
         text = self.wrestler.FormattedName
-        print text      
       
       #get the available teams from the round->weight->tournament
       teams = self.Teams.keys()      
@@ -338,13 +337,11 @@ class wnSeedEntry(wnEntry, wnFocusEventReceivable):
     #figure out our current state and to what state we're transitioning
     if self.wrestler is None and not event.Control.IsValid():
       #do nothing
-      print 'No change'
       return
     elif self.wrestler is not None and not event.Control.IsValid():
       #delete wrestler from its team
       self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
       self.wrestler = None
-      print 'Deleted wrestler'
       return
         
     #get the data from the control since it must be valid
@@ -355,20 +352,17 @@ class wnSeedEntry(wnEntry, wnFocusEventReceivable):
     if self.wrestler is None and event.Control.IsValid():
       #add wrestler to team and store it locally
       self.wrestler = self.Teams[t_name].NewWrestler(w_name, self.Weight)
-      print 'Added new wrestler'
 
     elif self.wrestler is not None and event.Control.IsValid():
       #if the held team is equal to the new team
       if self.wrestler.Team.Name == t_name:
         #just update the wrestler in the current team
         self.wrestler.Name = w_name
-        print 'Updated wrestler name'
       else:
         #otherwise, delete the current wrestler from the team
         self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
         #and make a new wrestler in the new team
         self.wrestler = self.Teams[t_name].NewWrestler(w_name, self.Weight)
-        print 'Deleted old wrestler and made a new wrestler in a new team'
       
   def updateFocus(self, event):
     '''Figure out where the focus should go next.'''
