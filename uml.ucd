@@ -1,0 +1,1229 @@
+title:
+Wrestling Nerd
+Version:
+1.13.1
+valuesFileName:
+
+Num.Elems:
+40
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+3
+ptul:
+460 345
+ptdr:
+567 371
+Num.Links:
+2
+link objId:
+9
+link objId:
+11
+name:
+wnWeightClass
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+1
+ptul:
+467 400
+ptdr:
+557 426
+Num.Links:
+3
+link objId:
+11
+link objId:
+12
+link objId:
+15
+name:
+wnRound
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+4
+ptul:
+469 459
+ptdr:
+559 485
+Num.Links:
+3
+link objId:
+12
+link objId:
+16
+link objId:
+49
+name:
+wnEntry
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+5
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+9
+Num.Pts:
+2
+510 295
+510 345
+objStartId:
+0
+objEndId:
+3
+roleAname:
+
+roleBname:
+
+roleAmult:
+
+roleBmult:
+
+composition:
+1
+type:
+5
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+11
+Num.Pts:
+2
+510 371
+510 400
+objStartId:
+3
+objEndId:
+1
+roleAname:
+
+roleBname:
+
+roleAmult:
+
+roleBmult:
+
+composition:
+1
+type:
+5
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+14
+Num.Pts:
+2
+362 370
+362 459
+objStartId:
+6
+objEndId:
+7
+roleAname:
+
+roleBname:
+
+roleAmult:
+
+roleBmult:
+
+composition:
+1
+type:
+3
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+16
+Num.Pts:
+2
+559 470
+621 470
+objStartId:
+4
+objEndId:
+2
+roleAname:
+
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+17
+ptul:
+150 23
+ptdr:
+240 49
+Num.Links:
+4
+link objId:
+19
+link objId:
+67
+link objId:
+75
+link objId:
+77
+name:
+wnFrame
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+5
+ptul:
+624 401
+ptdr:
+714 427
+Num.Links:
+1
+link objId:
+15
+name:
+wnPoints
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+2
+ptul:
+621 462
+ptdr:
+711 488
+Num.Links:
+1
+link objId:
+16
+name:
+wnResult
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+18
+ptul:
+8 23
+ptdr:
+98 49
+Num.Links:
+1
+link objId:
+19
+name:
+wnApp
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+3
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+19
+Num.Pts:
+2
+98 33
+150 33
+objStartId:
+18
+objEndId:
+17
+roleAname:
+
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+0
+ptul:
+459 269
+ptdr:
+565 295
+Num.Links:
+7
+link objId:
+9
+link objId:
+47
+link objId:
+58
+link objId:
+59
+link objId:
+78
+link objId:
+79
+link objId:
+81
+name:
+wnTournament
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+3
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+15
+Num.Pts:
+2
+557 410
+624 410
+objStartId:
+1
+objEndId:
+5
+roleAname:
+
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+6
+ptul:
+313 344
+ptdr:
+403 370
+Num.Links:
+2
+link objId:
+14
+link objId:
+47
+name:
+wnTeam
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+7
+ptul:
+314 459
+ptdr:
+404 485
+Num.Links:
+2
+link objId:
+14
+link objId:
+49
+name:
+wnWrestler
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+5
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+47
+Num.Pts:
+3
+459 281
+370 281
+370 344
+objStartId:
+0
+objEndId:
+6
+roleAname:
+
+roleBname:
+
+roleAmult:
+
+roleBmult:
+
+composition:
+0
+type:
+3
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+49
+Num.Pts:
+2
+469 476
+404 476
+objStartId:
+4
+objEndId:
+7
+roleAname:
+
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+51
+ptul:
+33 177
+ptdr:
+177 203
+Num.Links:
+2
+link objId:
+53
+link objId:
+58
+name:
+wnFactoryCTChamps
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+3
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+58
+Num.Pts:
+4
+106 203
+106 239
+511 239
+511 269
+objStartId:
+51
+objEndId:
+0
+roleAname:
+
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+52
+ptul:
+210 177
+ptdr:
+337 203
+Num.Links:
+2
+link objId:
+54
+link objId:
+59
+name:
+wnFactoryCTOpen
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+3
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+59
+Num.Pts:
+4
+275 203
+275 239
+511 239
+511 269
+objStartId:
+52
+objEndId:
+0
+roleAname:
+
+type:
+5
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+12
+Num.Pts:
+2
+510 426
+510 459
+objStartId:
+1
+objEndId:
+4
+roleAname:
+
+roleBname:
+
+roleAmult:
+
+roleBmult:
+
+composition:
+1
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+24
+ptul:
+114 87
+ptdr:
+267 113
+Num.Links:
+3
+link objId:
+53
+link objId:
+54
+link objId:
+67
+name:
+wnTournamentFactory
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+2
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+54
+Num.Pts:
+4
+273 177
+273 154
+191 154
+191 113
+objStartId:
+52
+objEndId:
+24
+type:
+2
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+53
+Num.Pts:
+4
+105 177
+105 154
+191 154
+191 113
+objStartId:
+51
+objEndId:
+24
+type:
+3
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+67
+Num.Pts:
+2
+188 49
+188 87
+objStartId:
+17
+objEndId:
+24
+roleAname:
+
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+61
+ptul:
+629 328
+ptdr:
+719 354
+Num.Links:
+2
+link objId:
+71
+link objId:
+79
+name:
+wnPrinter
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+60
+ptul:
+630 270
+ptdr:
+720 296
+Num.Links:
+2
+link objId:
+70
+link objId:
+78
+name:
+wnPainter
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+50
+ptul:
+806 298
+ptdr:
+896 324
+Num.Links:
+2
+link objId:
+70
+link objId:
+71
+name:
+wnRenderer
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+2
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+70
+Num.Pts:
+4
+720 283
+748 283
+748 311
+806 311
+objStartId:
+60
+objEndId:
+50
+type:
+2
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+71
+Num.Pts:
+4
+719 343
+748 343
+748 311
+806 311
+objStartId:
+61
+objEndId:
+50
+type:
+5
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+75
+Num.Pts:
+2
+240 37
+381 37
+objStartId:
+17
+objEndId:
+62
+roleAname:
+
+roleBname:
+
+roleAmult:
+
+roleBmult:
+
+composition:
+0
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+62
+ptul:
+381 23
+ptdr:
+495 49
+Num.Links:
+1
+link objId:
+75
+name:
+wnBracketPanel
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+76
+ptul:
+380 66
+ptdr:
+483 92
+Num.Links:
+1
+link objId:
+77
+name:
+wnScorePanel
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+5
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+77
+Num.Pts:
+4
+240 37
+330 37
+330 75
+380 75
+objStartId:
+17
+objEndId:
+76
+roleAname:
+
+roleBname:
+
+roleAmult:
+
+roleBmult:
+
+composition:
+0
+type:
+3
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+78
+Num.Pts:
+2
+565 283
+630 283
+objStartId:
+0
+objEndId:
+60
+roleAname:
+
+type:
+3
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+79
+Num.Pts:
+4
+565 283
+600 283
+600 337
+629 337
+objStartId:
+0
+objEndId:
+61
+roleAname:
+
+type:
+7
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+81
+Num.Pts:
+2
+533 269
+655 215
+objStartId:
+0
+objEndId:
+80
+type:
+6
+stereotype:
+
+constraint:
+
+shortDescrLen:
+95
+shortDescr:
+wnTournament shares wnPainter, wnPrinter
+with wnWeightClass, wnRound, wnEntry during
+rendering.
+bgrColor:
+255 255 128
+fgrColor:
+0 0 0
+objId:
+80
+ptul:
+539 155
+ptdr:
+819 215
+Num.Links:
+1
+link objId:
+81
