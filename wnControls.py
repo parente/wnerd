@@ -15,7 +15,7 @@ class wnStaticText(wxPanel):
                              style=wxST_NO_AUTORESIZE|wxALIGN_LEFT)
     self.ctrl.SetFont(wxFont(8, wxMODERN, wxNORMAL, wxNORMAL))
     self.clear_color = self.ctrl.GetBackgroundColour()
-    
+
     #register events on the text control
     EVT_LEFT_DOWN(self.ctrl, self.OnPassEvent)
     EVT_RIGHT_DOWN(self.ctrl, self.OnPassEvent)
@@ -59,13 +59,13 @@ class wnStaticText(wxPanel):
 
   def ShowMenu(self, pos):
     self.PopupMenu(wnMatchMenu(self), pos)
-      
+
 class wnDynamicText(wxMaskedTextCtrl):
   def __init__(self, parent, id, text, choices, pos=wxPoint(0,0), size=wxSize(-1,-1)):
     self.parent = parent
     bg_color = self.parent.GetBackgroundColour()
     mask = 'N{%d} | N{%d}' % (wnSettings.max_name_length, wnSettings.max_team_length)
-    wxMaskedTextCtrl.__init__(self, parent, -1, '', formatcodes='VF_<S',  mask=mask,
+    wxMaskedTextCtrl.__init__(self, parent, -1, '', formatcodes='VF_><S',  mask=mask,
                               pos=pos, size=size, emptyBackgroundColor=bg_color,
                               validBackgroundColor=bg_color,
                               fields = {0 : Field(validRegex='^[a-zA-Z0-9]+'),
@@ -74,11 +74,11 @@ class wnDynamicText(wxMaskedTextCtrl):
                               style = wxNO_BORDER, retainFieldValidation = True
                              )
     self.SetValue(text)
-    
+
     EVT_RIGHT_UP(self, lambda e: None)
-    
+
   def SetFocus(self):
-    wxMaskedTextCtrl.SetFocus(self)    
+    wxMaskedTextCtrl.SetFocus(self)
     x,y = self.GetPosition()
     px, py = self.parent.GetScrollPixelsPerUnit()
     sx, sy = self.parent.GetViewStart()
