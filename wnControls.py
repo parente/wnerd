@@ -137,9 +137,16 @@ class wnMatchDialog(wxDialog):
     for w in self.wrestlers:
       self.winner.Append(w.Name)
       
-    #select the proper result type
+    #select the proper result type and show the result
     if result is not None:
       self.result_type.SetStringSelection(result.Name)
+      self.OnChooseResult(None)      
+      if result.Name in ['Pin', 'Decision']:
+        try:
+          self.result_value.SetValue(result.TextValue)
+        except:
+          pass
+        self.result_value.SetFocus()
     
     #select the first wrestler
     self.winner.SetSelection(0)
@@ -158,17 +165,21 @@ class wnMatchDialog(wxDialog):
     
   def OnChooseResult(self, event):
     '''Show the proper panel for the selected result type.'''    
-    self.result_panel.DestroyChildren()    
+    self.result_panel.DestroyChildren()
+    self.result_value = None
+    
     if self.result_type.GetStringSelection() == 'Pin':
       bg_color = self.GetBackgroundColour()
-      self.result_value = wxMaskedTextCtrl(self.result_panel, -1, '', formatcodes='RrF',
-                                           mask='##:##', validRegex='[0-9 ][0-9]:[0-5][0-9]')
+      self.result_value = wxMaskedTextCtrl(self.result_panel, -1, '', formatcodes='RF',
+                                           mask='##:##', validRegex='[0-9 ][0-9]:[0-5][0-9]',
+                                           emptyInvalid = True)
       self.result_value.SetFocus()
 
     elif self.result_type.GetStringSelection() == 'Decision':
       bg_color = self.GetBackgroundColour()
       self.result_value = wxMaskedTextCtrl(self.result_panel, -1, '', formatcodes='RrF',
-                                           mask='##-##', validRegex='[0-9 ][0-9]-[0-9 ][0-9]')
+                                           mask='##-##', validRegex='[0-9 ][0-9]-[0-9 ][0-9]',
+                                           emptyInvalid = True)
       self.result_value.SetFocus()
     
   def GetWinner(self):
