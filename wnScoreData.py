@@ -9,17 +9,18 @@ class wnPoints(object):
     self.place_pts = place_pts
   
 class wnResultFactory(object):
-  def Create(cls, type):
+  def Create(cls, type, args=None):
     dispatch = {'None' : None, 'Pin' : wnResultPin, 'Decision' : wnResultDecision,
                 'Bye' : wnResultBye, 'Default' : wnResultDefault}
     
-    obj = dispatch[type]
+    klass = dispatch[type]
     
-    try:
-      obj = obj()
-    except:
-      pass
-    return obj
+    if klass == None:
+      return None
+    elif args is not None:
+      return klass()
+    else:
+      return apply(klass.__init__, args)
   
   Create = classmethod(Create)
   
@@ -35,9 +36,9 @@ class wnResult(object):
     
 class wnResultPin(wnResult):
   '''This class holds information about a pin win.'''
-  def __init__(self):
+  def __init__(self, pin_time):
     wnResult.__init__(self)
-    self.pin_time = 0
+    self.pin_time = pin_time
     
   def __str__(self):
     return 'Pin\nTime: %s' % str(self.pin_time)
@@ -53,10 +54,10 @@ class wnResultPin(wnResult):
 
 class wnResultDecision(wnResult):
   '''This class holds information about a decision.'''
-  def __init__(self):
+  def __init__(self, win_score, lose_score):
     wnResult.__init__(self)    
-    self.win_score = 0
-    self.lose_score = 0
+    self.win_score = win_score
+    self.lose_score = lose_score
     
   def __str__(self):
     return 'Decision\n%d-%d' % (self.win_score, self.lose_score)

@@ -268,6 +268,7 @@ def WizardFinishedPanel( parent, call_fit = true, set_sizer = true ):
 
 ID_WINNER_CHOICE = 10021
 ID_RESULT_TYPE_RADIO = 10022
+ID_RESULT_PANEL = 10023
 
 def CreateMatchDialog( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -292,18 +293,61 @@ def CreateMatchDialog( parent, call_fit = true, set_sizer = true ):
     item6 = wxStaticBoxSizer( item7, wxVERTICAL )
     parent.result_sizer = item6
     
+    item8 = wxPanel( parent, ID_RESULT_PANEL, wxDefaultPosition, wxSize(200,30), 0 )
+    item6.AddWindow( item8, 0, wxALIGN_CENTRE|wxALL, 5 )
+
     item0.AddSizer( item6, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
-    item8 = wxBoxSizer( wxHORIZONTAL )
+    item9 = wxBoxSizer( wxHORIZONTAL )
     
-    item9 = wxButton( parent, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize, 0 )
-    item9.SetDefault()
-    item8.AddWindow( item9, 0, wxALIGN_CENTRE|wxALL, 5 )
+    item10 = wxButton( parent, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize, 0 )
+    item10.SetDefault()
+    item9.AddWindow( item10, 0, wxALIGN_CENTRE|wxALL, 5 )
 
-    item10 = wxButton( parent, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize, 0 )
-    item8.AddWindow( item10, 0, wxALIGN_CENTRE|wxALL, 5 )
+    item11 = wxButton( parent, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize, 0 )
+    item9.AddWindow( item11, 0, wxALIGN_CENTRE|wxALL, 5 )
 
-    item0.AddSizer( item8, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+    item0.AddSizer( item9, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    if set_sizer == true:
+        parent.SetAutoLayout( true )
+        parent.SetSizer( item0 )
+        if call_fit == true:
+            item0.Fit( parent )
+            item0.SetSizeHints( parent )
+    
+    return item0
+
+ID_TIME_TEXT = 10024
+
+def PinResultPanel( parent, call_fit = true, set_sizer = true ):
+    item0 = wxBoxSizer( wxHORIZONTAL )
+    
+    item1 = wxStaticText( parent, ID_TEXT, "Time", wxDefaultPosition, wxDefaultSize, 0 )
+    item0.AddWindow( item1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    item2 = wxTextCtrl( parent, ID_TIME_TEXT, "", wxDefaultPosition, wxSize(80,-1), 0 )
+    item0.AddWindow( item2, 0, wxALIGN_CENTRE|wxALL, 5 )
+
+    if set_sizer == true:
+        parent.SetAutoLayout( true )
+        parent.SetSizer( item0 )
+        if call_fit == true:
+            item0.Fit( parent )
+            item0.SetSizeHints( parent )
+    
+    return item0
+
+ID_SCORE_TEXT = 10025
+
+def DecisionResultPanel( parent, call_fit = true, set_sizer = true ):
+    item0 = wxBoxSizer( wxHORIZONTAL )
+    
+    item1 = wxStaticText( parent, ID_TEXT, "Score", wxDefaultPosition, wxDefaultSize, 0 )
+    item0.AddWindow( item1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    item2 = wxTextCtrl( parent, ID_SCORE_TEXT, "", wxDefaultPosition, wxSize(80,-1), 0 )
+    item0.AddWindow( item2, 0, wxALIGN_CENTRE|wxALL, 5 )
 
     if set_sizer == true:
         parent.SetAutoLayout( true )
@@ -316,16 +360,16 @@ def CreateMatchDialog( parent, call_fit = true, set_sizer = true ):
 
 # Menubar functions
 
-ID_NEW_MENU = 10023
-ID_OPEN_MENU = 10024
-ID_MENU = 10025
-ID_SAVE_MENU = 10026
-ID_SAVEAS_MENU = 10027
-ID_EXIT_MENU = 10028
-ID_FILE_MENU = 10029
-ID_FASTFALL_MENU = 10030
-ID_NUMBOUTS_MENU = 10031
-ID_QUERY_MENU = 10032
+ID_NEW_MENU = 10026
+ID_OPEN_MENU = 10027
+ID_MENU = 10028
+ID_SAVE_MENU = 10029
+ID_SAVEAS_MENU = 10030
+ID_EXIT_MENU = 10031
+ID_FILE_MENU = 10032
+ID_FASTFALL_MENU = 10033
+ID_NUMBOUTS_MENU = 10034
+ID_QUERY_MENU = 10035
 
 def CreateMenuBar():
     item0 = wxMenuBar()

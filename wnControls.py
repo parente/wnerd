@@ -57,11 +57,11 @@ class wnStaticText(wxPanel):
 class wnDynamicText(wxMaskedTextCtrl):
   def __init__(self, parent, id, text, choices, pos=wxPoint(0,0), size=wxSize(-1,-1)):
     self.parent = parent
-    self.bg_color = self.parent.GetBackgroundColour()
+    bg_color = self.parent.GetBackgroundColour()
     mask = 'N{%d} | N{%d}' % (wnSettings.max_name_length, wnSettings.max_team_length)
     wxMaskedTextCtrl.__init__(self, parent, -1, '', formatcodes='VF_<S',  mask=mask,
-                              pos=pos, size=size, emptyBackgroundColor=self.bg_color,
-                              validBackgroundColor=self.bg_color,
+                              pos=pos, size=size, emptyBackgroundColor=bg_color,
+                              validBackgroundColor=bg_color,
                               fields = {0 : Field(validRegex='^[a-zA-Z0-9]+'),
                                         1 : Field(choices=choices, choiceRequired=True)
                               },
@@ -121,6 +121,7 @@ class wnMatchDialog(wxDialog):
     #store important references
     self.winner = wxPyTypeCast(self.FindWindowById(GUI.ID_WINNER_CHOICE), 'wxChoice')
     self.result_type = wxPyTypeCast(self.FindWindowById(GUI.ID_RESULT_TYPE_RADIO), 'wxRadioBox')
+    self.result_panel = wxPyTypeCast(self.FindWindowById(GUI.ID_RESULT_PANEL), 'wxPanel')
     
     #store the references
     self.wrestlers = wrestlers
@@ -137,12 +138,36 @@ class wnMatchDialog(wxDialog):
     #select the first wrestler
     self.winner.SetSelection(0)
     
+    EVT_RADIOBOX(self, GUI.ID_RESULT_TYPE_RADIO, self.OnChooseResult)
+    EVT_BUTTON(self, GUI.wxID_OK, self.OnOK)
+    
+  def OnOK(self, event):
+    '''Make sure all values are filled in properly.'''
+    if self.result is not None and not self.result.IsValid():
+      dlg = wxMessageDialog(self, -1, 'Please enter a valid result.', 'Invalid result')
+      dlg.ShowModal()
+      dlg.Close()
+    else:
+      self.Close()
+    
+  def OnChooseResult(self, event):
+    '''Show the proper panel for the selected result type.'''    
+    self.result_panel.DestroyChildren()    
+    if self.result_type.GetStringSelection() == 'Pin':
+      bg_color = self.GetBackgroundColour()
+      self.result = wxMaskedTextCtrl(self.result_panel, -1, '', formatcodes='RrF', mask='##:##',
+                                     validRegex='[0-9 ][0-9]:[0-9][0-9]')
+
+    elif self.result_type.GetStringSelection() == 'Decision':
+      bg_color = self.parent.GetBackgroundColour()
+      self.result = wxMaskedTextCtrl(self.result_panel, -1, '', formatcodes='RrF', mask='##-##',
+                                     validRegex='[0-9][0-9]-[0-5][0-9]')
+    else:
+      self.result is None
+    
   def GetWinner(self):
     return self.wrestlers[self.winner.GetSelection()]
-  
-  def GetResultType(self):
-    return self.result_type.GetStringSelection()
-  
+
   def GetLoser(self):
     if self.winner.GetCount() > 1:
       i = self.winner.GetSelection()
@@ -150,3 +175,14 @@ class wnMatchDialog(wxDialog):
         return self.wrestlers[1]
       else:
         return self.wrestlers[0]
+  
+  def GetResultType(self):
+    return self.result_type.GetStringSelection()
+  
+  def GetResultValue(self):
+    '''Hardwired values for testing.'''
+    if self.result_type.GetStringSelection() == 'Pin':
+      return 100
+    elif self.result_type.GetStringSelection == 'Decision':
+      return (10, 2)
+  

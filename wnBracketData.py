@@ -336,10 +336,10 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable):
     result = event.Painter.ShowMatchDialog(opponents, self.result)
     
     if result is not None:
-      winner, loser, result_type = result
+      winner, loser, result_type, result_value = result
     
       #store the information
-      self.result = wnResultFactory.Create(result_type)
+      self.result = wnResultFactory.Create(result_type, result_value)
       self.wrestler = winner
       
       #show the new winner name

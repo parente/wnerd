@@ -151,7 +151,7 @@ class wnPainter(wnRenderer):
       loser = dlg.GetLoser()
       result_type = dlg.GetResultType()
       dlg.Destroy()
-      return winner, loser, result_type
+      return winner, loser, result_type, result_value
     else:
       dlg.Destroy()
       return None
