@@ -58,7 +58,7 @@ class wnResultPin(wnResult):
     self.pin_time = pin_time
     
   def __str__(self):
-    return 'Pin\nTime: %s' % self.TextValue
+    return 'Pin %s' % self.TextValue
     
   def GetPoints(self):
     return 2
@@ -92,7 +92,7 @@ class wnResultDecision(wnResult):
     self.lose_score = lose_score
     
   def __str__(self):
-    return 'Decision\n%d-%d' % (self.win_score, self.lose_score)
+    return 'Decision %d-%d' % (self.win_score, self.lose_score)
 
   def GetTextValue(self):
     sw = str(self.win_score).rjust(2)

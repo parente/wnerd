@@ -161,7 +161,7 @@ class wnWeightClass(wnNode):
       else:
         prev_num = 1e300
         
-      #if this round has fewer entries than the previous, reset drawing to the left side of the
+      #if this round has more entries than the previous, reset drawing to the left side of the
       #bracket window, but below the first entry
       if curr.NumEntries > prev_num:
         step = initial_step
@@ -171,10 +171,11 @@ class wnWeightClass(wnNode):
       if i == 0:
         length = wnSettings.seed_length
       else:
-        length = wnSettings.entry_length
+        length = wnSettings.match_length
 
       start, mx, my = curr.Paint(painter, start, length, step, refresh_labels)
       
+      # line up rounds that have spots for wrestlers that drop down
       if curr.NumEntries != next_num:
         step *= 2
      
@@ -360,6 +361,9 @@ class wnEntry(wnNode):
     self.result = None
     self.is_scoring = True
     
+  def GetResult(self):
+    return self.result
+    
   def GetID(self):
     '''Return the ID of this entry. This ID must be exactly the same as the ID of similar entries
     in other weight classes since it is used to construct text controls by the painter. If the ID
@@ -438,6 +442,7 @@ class wnEntry(wnNode):
   Teams = property(fget=GetTeams)
   Weight = property(fget=GetWeight)
   Wrestler = property(fget=GetWrestler, fset=SetWrestler)
+  Result = property(fget=GetResult)
   
 class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
   '''The match entry class hold individual match results.'''
@@ -451,14 +456,14 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
     
     if refresh_labels:
       painter.DrawMatchTextControl(text,
-                                   pos[0]+wnSettings.entry_offset, pos[1]-wnSettings.entry_height,
-                                   length-wnSettings.entry_offset*2, wnSettings.entry_height,
+                                   pos[0]+wnSettings.match_offset, pos[1]-wnSettings.match_height,
+                                   length-wnSettings.match_offset*2, wnSettings.match_height,
                                    self.ID, self)
     
   def OnMouseEnter(self, event):
     '''Show a popup window with the match results if available. Highlight the entry if it can
     receive results.'''
-    if self.wrestler is not None:
+    if self.wrestler is not None and self.previous != []:
       event.Control.ShowPopup(str(self.result))
     for e in self.previous:
       if e.Wrestler is not None:

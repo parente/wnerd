@@ -7,9 +7,12 @@ Data
 - test scoring algorithm
 
 Printing
-- print brackets
 - print bouts
+- print scores
+- print place winners
 
+Enhancements
+- switch to renderer providing setting information instead of static values
 
 Web page
 parente@shell.sourceforge.net:/home/groups/p/pr/projectname/htdocs

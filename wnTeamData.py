@@ -129,7 +129,7 @@ class wnWrestler(object):
     '''Get the total number of pins and pin times.'''
     total = [0, 0, '']
     for r in self.results.values():
-      if r.Name == 'Pin':
+      if r is not None and r.Name == 'Pin':
         total[0] += 1
         total[1] += r.Value
     

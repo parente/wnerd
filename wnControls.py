@@ -13,7 +13,7 @@ class wnStaticText(wxPanel):
     #make the actual static text control
     self.ctrl = wxStaticText(self, -1, text, wxPoint(0,0), size,
                              style=wxST_NO_AUTORESIZE|wxALIGN_LEFT)
-    self.ctrl.SetFont(wxFont(8, wxMODERN, wxNORMAL, wxNORMAL))
+    self.ctrl.SetFont(wxFont(wnSettings.screen_font_size, wxMODERN, wxNORMAL, wxNORMAL))
     self.clear_color = self.ctrl.GetBackgroundColour()
 
     #register events on the text control

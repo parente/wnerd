@@ -7,6 +7,7 @@ from wxPython.wx import *
 from wxPython.wizard import *
 from wnBuilder import *
 from wnRenderer import *
+from wnPrinting import *
 import WrestlingNerd_wdr as GUI
 import wnSettings
 import cPickle
@@ -141,8 +142,9 @@ class wnFrame(wxFrame):
     
     # if the user wants to print, show the print settings dialog
     if dlg.ShowModal() == wxID_OK:
-      printer = wxPrinter()
-      printer.Print(self, None, True)
+      # use the print factory to do all the printing
+      wnPrintFactory.PrintPreview(self, self.tournament, dlg.GetType(),
+                           dlg.GetWeights(), dlg.GetRounds(), self.canvas.GetBracketSize())
       
     dlg.Destroy()
     
@@ -268,6 +270,7 @@ class wnBracketCanvas(wxScrolledWindow):
     wxScrolledWindow.__init__(self, parent, -1, style=wxNO_FULL_REPAINT_ON_RESIZE)
     self.parent = parent
     self.old_weight = None
+    self.bracket_size = wxSize(0,0)
     
     EVT_PAINT(self, self.OnPaint)
     
@@ -293,13 +296,17 @@ class wnBracketCanvas(wxScrolledWindow):
       p.SetDC(None)
 
       self.old_weight = w
-      self.SetVirtualSize(wxSize(xmax, ymax))
+      self.bracket_size = wxSize(xmax, ymax)
+      self.SetVirtualSize(self.bracket_size)
       self.SetScrollRate(10,10)      
 
       if refresh: p.SetInitialFocus()
       
   def RefreshScores(self):
     self.parent.RefreshScores()
+    
+  def GetBracketSize(self):
+    return self.bracket_size
     
 class wnNewTournamentWizard(wxWizard):
   '''Class that creates a wizard that assists users in setting up new tournaments.'''
@@ -491,8 +498,20 @@ class wnPrintDialog(wxDialog):
     '''Enable or disable the rounds box based on what's selected.'''
     self.rounds.Enable(self.type.GetStringSelection() == 'Bouts')
   
-  def GetSelection(self):
-    return []
+  def GetWeights(self):
+    weights = []
+    for i in self.weights.GetSelections():
+      weights.append(self.weights.GetString(i))
+    return weights
+                  
+  def GetRounds(self):
+    rounds = []
+    for i in self.rounds.GetSelections():
+      rounds.append(self.rounds.GetString(i))
+    return rounds
+  
+  def GetType(self):
+    return self.type.GetStringSelection()
   
 class wnTeamDialog(wxDialog):
   '''Class that creates a dialog box that shows team info.'''

@@ -5,9 +5,20 @@ objects are used to do all rendering operations.
 from wxPython.wx import *
 from wnEvents import *
 from wnControls import *
+import wnSettings
 
 class wnRenderer(object):
-  pass
+  def DrawLine(self, x1, y1, x2, y2):
+    pass
+  
+  def DrawText(self, text, x, y):
+    pass
+  
+  def DrawMatchTextControl(self, text, x, y, length, height, id, obj):
+    pass
+       
+  def DrawSeedTextControl(self, text, x, y, length, height, choices, id, obj):
+    pass
   
 class wnPainter(wnRenderer):
   def __init__(self, frame, canvas):
@@ -61,7 +72,7 @@ class wnPainter(wnRenderer):
     self.dc.SetFont(wxSWISS_FONT)
     self.dc.DrawText(text, x, y)
     
-  def DrawMatchTextControl(self, text, x, y, length, height, id, handler):
+  def DrawMatchTextControl(self, text, x, y, length, height, id, obj):
     '''Draw a static text control. Create it if it does not exist. Register the new event handler
     to receive events from the user.'''
     
@@ -74,17 +85,17 @@ class wnPainter(wnRenderer):
       self.event_man.RegisterMouseEvents(ctrl)
       #self.event_man.RegisterFocusEvents(ctrl)
       self.event_man.RegisterMatchMenuEvents(ctrl)
-      self.event_man.RegisterEventHandler(ctrl.GetId(), handler)
+      self.event_man.RegisterEventHandler(ctrl.GetId(), obj)
       
     #if it already exists
     else:
       ctrl = self.controls[id]
       #hook the event manager
-      self.event_man.RegisterEventHandler(ctrl.GetId(), handler)
+      self.event_man.RegisterEventHandler(ctrl.GetId(), obj)
       #set the current text
       ctrl.SetLabel(text)
    
-  def DrawSeedTextControl(self, text, x, y, length, height, choices, id, handler):
+  def DrawSeedTextControl(self, text, x, y, length, height, choices, id, obj):
     '''Draw a dynamic text control that let's the user enter text directly into it. Register the new
     event handler to receive events from the user.'''
     
@@ -93,13 +104,13 @@ class wnPainter(wnRenderer):
       #don't create the text control immediately, delay until later so they can be defined in the
       #proper tabbing order
       self.control_cache[id] = {'args' : (self.canvas, -1, text, choices, wxPoint(x,y),
-                                          wxSize(length, height)), 'handler' : handler}
+                                          wxSize(length, height)), 'handler' : obj}
       
     #if it already exists
     else:
       ctrl = self.controls[id]
       #hook the event manager
-      self.event_man.RegisterEventHandler(ctrl.GetId(), handler)
+      self.event_man.RegisterEventHandler(ctrl.GetId(), obj)
       #set the current text
       ctrl.SetValue(text)
       
@@ -155,21 +166,65 @@ class wnPainter(wnRenderer):
 class wnPrinter(wnRenderer):
   def __init__(self):
     self.dc = None
+    self.max_size = None
+    self.normal_font = wxFont(wnSettings.print_font_size, wxMODERN, wxNORMAL, wxNORMAL)
+    self.heading_font = wxFont(wnSettings.print_heading_size, wxMODERN, wxNORMAL, wxBOLD)
+    self.scale = 1.0
   
   def SetDC(self, dc):
     self.dc = dc
+    self.max_size = self.dc.GetSize()
   
+    # set the font
+    self.dc.SetFont(self.normal_font)
+        
+  def ScaleToFit(self, max_w, max_h):
+    if self.dc is None: return
+    
+    # store the size of the printout
+    self.max_size = max_w, max_h
+    
+    # add the margin to the bracket size
+    max_w += 2*wnSettings.print_margin_x
+    max_h += 2*wnSettings.print_margin_y
+    
+    # scale the drawing area to fit the page
+    pw, ph = self.dc.GetSize()
+    sx = float(pw)/float(max_w)
+    sy = float(ph)/float(max_h)
+    self.scale = min(sx, sy)
+    self.dc.SetDeviceOrigin(wnSettings.print_margin_x, wnSettings.print_margin_y)    
+    self.dc.SetUserScale(self.scale, self.scale)
+    
+  def DrawHeader(self, *args):
+    if self.dc is None: return
+    
+    self.dc.SetFont(self.heading_font)
+    h = 0
+    for l in args:
+      d = self.dc.GetTextExtent(l)
+      self.DrawText(l, self.max_size[0]-d[0], h)
+      h += d[1]
+    self.dc.SetFont(self.normal_font)
+               
   def DrawLine(self, x1, y1, x2, y2):
     if self.dc is None: return
     self.dc.DrawLine(x1, y1, x2, y2)
   
   def DrawText(self, text, x, y):
     if self.dc is None: return
-    self.dc.SetFont(wxSWISS_FONT)
     self.dc.DrawText(text, x, y)
     
-  def DrawMatchTextControl(self, text, x, y, length, height, id, handler):
-    self.DrawText(x, y, text)
+  def DrawMatchTextControl(self, text, x, y, length, height, id, obj):
+    self.DrawText(text, x, y)
+    if obj.Result is not None:
+      self.DrawText(str(obj.Result), x, y+height)
        
-  def DrawSeedTextControl(self, text, x, y, length, height, choices, id, handler):
-    self.DrawText(x, y, text)
+  def DrawSeedTextControl(self, text, x, y, length, height, choices, id, obj):
+    try:
+      name, team = text.split('|')
+    except:
+      return
+    
+    text = name.strip() + '-' + team.strip()
+    self.DrawText(text, x, y)
