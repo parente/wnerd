@@ -48,7 +48,8 @@ class wnDynamicText(wxMaskedTextCtrl):
   def __init__(self, parent, id, text, choices, pos=wxPoint(0,0), size=wxSize(-1,-1)):
     self.parent = parent
     self.bg_color = self.parent.GetBackgroundColour()
-    wxMaskedTextCtrl.__init__(self, parent, -1, '', formatcodes='VF_<S',  mask='N{18} | N{18}',
+    mask = 'N{%d} | N{%d}' % (wnSettings.max_name_length, wnSettings.max_team_length)
+    wxMaskedTextCtrl.__init__(self, parent, -1, '', formatcodes='VF_<S',  mask=mask,
                               pos=pos, size=size, emptyBackgroundColor=self.bg_color,
                               validBackgroundColor=self.bg_color,
                               fields = {0 : Field(validRegex='[a-zA-Z0-9]+'),
@@ -56,6 +57,7 @@ class wnDynamicText(wxMaskedTextCtrl):
                               },
                               style = wxNO_BORDER, retainFieldValidation = True
                              )
+    self.SetValue(text)
     
     EVT_SET_FOCUS(self, self.OnSetFocus)
     

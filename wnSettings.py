@@ -11,3 +11,6 @@ initial_step = 25
 
 highlight_color = '#FFFFC1'
 popup_color = '#FFFFC1'
+
+max_name_length = 18
+max_team_length = 18

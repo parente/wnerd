@@ -10,19 +10,23 @@ import wnSettings
 
 class wnNode(object):
   '''The node class provides navigation from child nodes to parent nodes.'''
-  def __init__(self, parent):
+  def __init__(self, parent, name):
     self.parent = parent
+    self.name = name
     
   def GetParent(self):
     return self.parent
   
+  def GetName(self):
+    return self.name
+  
+  Name = property(fget=GetName)
   Parent = property(fget=GetParent)
 
 class wnTournament(wnNode):
   '''The tournament class is responsible for holding weight classes and teams.'''
   def __init__(self, name, seeds):
-    wnNode.__init__(self, None)
-    self.name = name
+    wnNode.__init__(self, None, name)
     self.seeds = seeds
     self.teams = {}
     self.weight_classes = {}
@@ -77,23 +81,15 @@ class wnTournament(wnNode):
   def GetTeams(self):
     return self.teams
   
-  def GetName(self):
-    '''Return the tournament name.'''
-    return self.name
-  
   Weights = property(fget=GetWeights)
   Teams = property(fget=GetTeams)
-  Name = property(fget=GetName)
   
 class wnWeightClass(wnNode):
   '''The weight class is responsible for holding rounds.'''
   def __init__(self, name, parent):
-    wnNode.__init__(self, parent)    
-    self.name = name
+    wnNode.__init__(self, parent, name)    
     self.rounds = {}
     self.order = []
-    
-    #self.tournament = tournament
     
   def NewRound(self, name, points):
     r = wnRound(str(name), points, self)
@@ -152,14 +148,11 @@ class wnWeightClass(wnNode):
 class wnRound(wnNode):
   '''The round class is responsible for holding onto individual matches and their results.'''
   def __init__(self, name, points, parent):
-    wnNode.__init__(self, parent)
-    self.name = name
+    wnNode.__init__(self, parent, name)
     self.points = points    
     self.entries = []
     self.next_win = None
     self.next_lose = None
-    
-    #self.weight_class = weight_class
     
   def GetNumberOfEntries(self):
     return len(self.entries)
@@ -167,12 +160,8 @@ class wnRound(wnNode):
   def GetEntries(self):
     return self.entries
   
-  def GetName(self):
-    return self.name
-  
   NumEntries = property(fget=GetNumberOfEntries)
   Entries = property(fget=GetEntries)
-  Name = property(fget=GetName)
         
   def NewEntries(self, number):
     #check if we're making new entries based on an order defined in a list
@@ -240,13 +229,10 @@ class wnRound(wnNode):
 class wnEntry(wnNode):
   '''The entry class holds individual match results.'''
   def __init__(self, name, parent):
-    wnNode.__init__(self, parent)
-    self.name = name
+    wnNode.__init__(self, parent, name)
     self.wrestler = None
     self.next_win = None
     self.next_lose = None
-    
-    #self.round = round
     
   def GetID(self):
     '''Return the ID of this entry. This ID must be exactly the same as the ID of similar entries
@@ -271,15 +257,16 @@ class wnEntry(wnNode):
     properties.'''
     return self.Parent.Parent.Parent.Teams
   
-  def GetWeightClass(self):
-    '''Get the weight class of this entry. Encapsulate how we get this data using properties.'''
+  def GetWeight(self):
+    '''Get the weight class name for this entry. Encapsulate how we get this data using
+    properties.'''
     return self.Parent.Parent.Name
   
   ID = property(fget=GetID)
   NextLose = property(fget=GetNextLose, fset=SetNextLose)
   NextWin = property(fget=GetNextWin, fset=SetNextWin)
   Teams = property(fget=GetTeams)
-  WeightClass = property(fget=GetWeightClass)
+  Weight = property(fget=GetWeight)
   
 class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
   '''The match entry class hold individual match results.'''
@@ -319,16 +306,19 @@ class wnSeedEntry(wnEntry, wnFocusEventReceivable):
     
   def Paint(self, painter, pos, length, refresh_labels):
     '''Paint all of the text controls.'''
-    if self.wrestler is None: text = ''
-    else: text = self.wrestler.Name
-    
     #draw the seed number
     painter.DrawText(str(self.name), pos[0], pos[1]-wnSettings.seed_height)
  
     #draw the text control
     if refresh_labels:
+      if self.wrestler is None:
+        text = ''
+      else:
+        text = self.wrestler.FormattedName
+        print text      
+      
       #get the available teams from the round->weight->tournament
-      teams = self.Teams.keys()
+      teams = self.Teams.keys()      
       painter.DrawSeedTextControl(text,
                                   pos[0]+wnSettings.seed_offset, pos[1]-wnSettings.seed_height,
                                   wnSettings.seed_length, wnSettings.seed_height,
@@ -342,12 +332,43 @@ class wnSeedEntry(wnEntry, wnFocusEventReceivable):
       
   def updateData(self, event):
     '''Figure out what needs to be done to store the wrestler properly.'''
-    if event.Control.IsValid() and not event.Control.IsEmpty():
-      #get the strings from the control
-      w_name, t_name = event.Control.GetValue().split(' | ')
-      w_name = w_name.strip()
-      t_name = t_name.strip()
-      print 'Name:',w_name, 'Team:', t_name
+    if event.Control.IsEmpty():
+      return
+
+    #figure out our current state and to what state we're transitioning
+    if self.wrestler is None and not event.Control.IsValid():
+      #do nothing
+      print 'No change'
+      return
+    elif self.wrestler is not None and not event.Control.IsValid():
+      #delete wrestler from its team
+      self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
+      self.wrestler = None
+      print 'Deleted wrestler'
+      return
+        
+    #get the data from the control since it must be valid
+    w_name, t_name = event.Control.GetValue().split(' | ')
+    w_name = w_name.strip()
+    t_name = t_name.strip()
+    
+    if self.wrestler is None and event.Control.IsValid():
+      #add wrestler to team and store it locally
+      self.wrestler = self.Teams[t_name].NewWrestler(w_name, self.Weight)
+      print 'Added new wrestler'
+
+    elif self.wrestler is not None and event.Control.IsValid():
+      #if the held team is equal to the new team
+      if self.wrestler.Team.Name == t_name:
+        #just update the wrestler in the current team
+        self.wrestler.Name = w_name
+        print 'Updated wrestler name'
+      else:
+        #otherwise, delete the current wrestler from the team
+        self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
+        #and make a new wrestler in the new team
+        self.wrestler = self.Teams[t_name].NewWrestler(w_name, self.Weight)
+        print 'Deleted old wrestler and made a new wrestler in a new team'
       
   def updateFocus(self, event):
     '''Figure out where the focus should go next.'''

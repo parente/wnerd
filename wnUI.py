@@ -9,6 +9,7 @@ from wnBuilder import *
 from wnRenderer import *
 import WrestlingNerd_wdr as GUI
 import cPickle
+import debug
 
 class wnFrame(wxFrame):
   '''Class that creates and manages the main WN window.'''
