@@ -30,6 +30,11 @@
     and used according to the terms of the <a href="license.html">license</a>.</p>
 
     <h1><a name="news"></a>News</h1>
+    <h3>12/12/04</h3>
+    <p>Wrestling Nerd 3.2 is now available for download. See the post from 12/9 below for a list of improvements. I
+    am currently working on updating the <a href="#doc">documentation</a> to describe the new features since version
+    3.0.</p>
+    
     <h3>12/9/04</h3>
     <p>It's been quite a long time since I've posted an update. Now that the fall semester is almost over, I have some
     time to make improvements to WN. I should have a new release posted here in a few days that includes the following:
@@ -51,11 +56,11 @@
     </p>
 
     <h1><a name="features"></a>Features</h1>
-    <p>Wrestling Nerd 3.1 has the following features:</p>
+    <p>Wrestling Nerd 3.2 has the following features:</p>
 
     <ul>
       <li>Point-and-click wrestler advancement</li>
-      <li>Team point calculation</li>
+      <li>Team points calculation</li>
       <li>Fast fall and bout count calculations</li>
       <li>Tools to quickly swap, scratch, and move seeded wrestlers</li>
       <li>Bracket, bout, score, and place winner printouts</li>
@@ -63,10 +68,9 @@
       <li>Three built-in bracket types</li>
       <li>Tools for swapping, scratching, and moving seeds easily</li>
       <li>Easy addition, removal, and changes to wrestlers and teams</li>
-      <li>Support for user-defined brackets of any shape and size</li>
-      <li>Support for user-defined scoring systems</li>
-      <li>Export of tournament results to other file formats (just plain text for now)</li>
-      <li>Separate team score window for display on a large screen</li>
+      <li>Support for user-defined brackets</li>
+      <li>Export of tournament results to other file formats (plain text)</li>
+      <li>Separate team score window for public display on a large screen</li>
     </ul>
 
     <p>Future versions of Wrestling Nerd might support the following features. Please note that
@@ -75,6 +79,7 @@
 
     <ul>
       <li>Export of tournament data to HTML format</li>
+      <li>Support for user-defined scoring systems</li>
       <li>More detailed reports of team and wrestler results</li>
     </ul>
 
@@ -95,7 +100,7 @@
     <span><a href="shots/team.jpg"><img src="shots/team_small.jpg" alt="The team properties window" /></a></span>
 
     <h1><a name="download"></a>Download</h1>
-    <p>Wrestling Nerd 3.1.1 is available for download. Click the link for the version of Wrestling
+    <p>Wrestling Nerd 3.2 is available for download. Click the link for the version of Wrestling
     Nerd appropriate for your computer. Clicking the link will take you to the SourceForge download
     page. The download should start a few seconds after visiting the page.</p>
 
@@ -103,11 +108,12 @@
     Wrestling Nerd.</p>
 
     <ul>
-      <li><a href="http://prdownloads.sourceforge.net/wnerd/WrestlingNerd-3.1.1-win32.exe?download">
-      Download Wrestling Nerd 3.1.1 for Windows</a></li>
-      <li><a href="http://prdownloads.sourceforge.net/wnerd/WrestlingNerd-3.1.1-src.zip?download">
-      Download Wrestling Nerd 3.1.1 for other platforms (requires Python 2.2+ and wxPython 2.4.2.4)</a></li>
+      <li><a href="http://prdownloads.sourceforge.net/wnerd/WrestlingNerd-3.2-win32.exe?download">
+      Download Wrestling Nerd 3.2 for Windows</a></li>
     </ul>
+    
+    <p>The source code for Wrestling Nerd can be anonymously checked out from the 
+    <a href="http://sourceforge.net/cvs/?group_id=83393">wnerd CVS repository</a> on SourceForge.</p>
 
     <h1><a name="doc"></a>Documentation</h1>
     <p>The latest documentation is for Wrestling Nerd 3.0. Click here to <a href="help/index.shtml">

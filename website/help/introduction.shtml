@@ -8,9 +8,9 @@
 
   <body>
     <div class="nav">
-      < Back: None |
+      &lt; Back: None |
       <a href="index.shtml">Up: Table of Contents</a> |
-      <a href="tutorial.shtml">Next: Tutorial Running a Tournament ></a>
+      <a href="tutorial.shtml">Next: Tutorial Running a Tournament &gt;</a>
     </div>
     
     <h1>Introduction</h1>
@@ -25,7 +25,7 @@
     
     <h2><a name="starting"></a>Getting started</h2>
     
-    <h3><a name="removing"</a>Removing old versions</h3>
+    <h3><a name="removing"></a>Removing old versions</h3>
     <p>Old versions of Wrestling Nerd should be uninstalled before a new version is installed. To
     uninstall Wrestling Nerd for Windows, go to the Control Panel and select Add/Remove Programs.
     Find and uninstall Wrestling Nerd in the list of installed programs. On other platforms, simply
@@ -38,14 +38,14 @@
     
     <h3><a name="other"></a>Installing on other platforms</h3>
     <p>Wrestling Nerd may also be run on any other platform supported by Python 2.2+ and the wxPython
-    2.4.2.4. Users may download the Wrestling Nerd Python source from the Wrestling Nerd homepage
-    and run it with their installed Python interpreter.</p>
+    2.5.3.1. Users may check out the Wrestling Nerd Python source code from the CVS repository on
+    SourceForge. See the Wrestling Nerd home page for a link to the repository.</p>
         
     <h2><a name="license"></a>License agreement</h2>
     <p>Permission to use and distribute Wrestling Nerd is governed by the following license
     agreement:</p>
     
-    <p>Copyright (c) 2003 Peter Parente (parente@cs.unc.edu)</p>
+    <p>Copyright (c) 2003, 2004, 2005 Peter Parente (parente@cs.unc.edu)</p>
     <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software
     and associated documentation files (the "Software"), to deal in the Software without restriction,
     including without limitation the rights to use, copy, modify, merge, publish, distribute,

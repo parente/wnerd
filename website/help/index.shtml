@@ -8,7 +8,7 @@
 
   <body>
     <div class="nav"><a href="../index.shtml">Back to the Wrestling Nerd Homepage</a></div>
-    <h1 class="title">Wrestling Nerd 3.0 Documentation</h1>
+    <h1 class="title">Wrestling Nerd 3.2 Documentation</h1>
     <p class="subtitle">by Peter Parente</p>
     <p class="dedication">Dedicated to my father, my mother, and my brother, who all know the glory
     and the pain of wrestling.</p>
@@ -68,16 +68,26 @@
           <li><a href="tutorial.shtml#boutcount">Showing the bout count</a></li>
           <li><a href="tutorial.shtml#scores">Showing team scores in a separate window</a></li>          
         </ol>
+        <li><a href="tutorial.shtml#changing">Changing tournament data</a></li>
+        <ol>
+          <li><a href="tutorial.shtml#add_missing">Adding missing teams</a></li>
+          <li><a href="tutorial.shtml#remove_absent">Removing absent teams</a></li>
+          <li><a href="tutorial.shtml#correct_team">Correcting team names</a></li>
+          <li><a href="tutorial.shtml#correct_wrestler">Correcting wrestler names</a></li>
+          <li><a href="tutorial.shtml#change_tournament">Changing the tournament name</a></li>
+        </ol>
         <li><a href="tutorial.shtml#printing">Printing results</a></li>
         <ol>
           <li><a href="tutorial.shtml#print_bouts">Printing bouts</a></li>
           <li><a href="tutorial.shtml#print_brackets">Printing brackets</a></li>
           <li><a href="tutorial.shtml#print_scores">Printing team scores</a></li>
           <li><a href="tutorial.shtml#print_places">Printing place winners</a></li>
+          <li><a href="tutorial.shtml#print_preview">Viewing a print preview</a></li>
         </ol>
         <li><a href="tutorial.shtml#storing">Storing results</a></li>
         <ol>
           <li><a href="tutorial.shtml#saving">Saving a tournament</a></li>
+          <li><a href="tutorial.shtml#backup">Backing up a tournament</a></li>
           <li><a href="tutorial.shtml#opening">Opening a saved tournament</a></li>
           <li><a href="tutorial.shtml#exporting">Exporting plain text results</a></li>
         </ol>

@@ -8,9 +8,9 @@
 
   <body>
     <div class="nav">
-      <a href="introduction.shtml">< Back: Introduction</a> |
+      <a href="introduction.shtml">&lt; Back: Introduction</a> |
       <a href="index.shtml">Up: Table of Contents</a> |
-      <a href="customizing.shtml">Next: Customizing Wrestling Nerd ></a>
+      <a href="customizing.shtml">Next: Customizing Wrestling Nerd &gt;</a>
     </div>
     
     <h1>Tutorial: Running a Tournament</h1>
@@ -54,7 +54,7 @@
     
     <h2><a name="navigating"></a>Navigating the interface</h2>
     <p>The main interface consists of three primary views: the bracket window, the team scores, and
-    the current weight class indicator.
+    the current weight class indicator.</p>
     
     <h3><a name="bracket_window">Viewing the bracket</a></h3>
     <p>The bracket for the currently selected weight class fills most of the screen. Use the scroll
@@ -213,9 +213,47 @@
     enough to have a computer that supports a second, large screen display, you can show the current
     team scores to the public. To open the team scores in a separate window, choose Score window
     from the Query menu. The score window will refresh to show the most current scores every 30
-    seconds.</p>
+    seconds. You may continue to work with Wrestling Nerd while the score window is open.</p>
     
     <p>The separate score window can be displayed by pressing Ctrl-W instead of using the menus.</p>
+    
+    <h2><a name="changing"></a>Changing tournament data</h2>
+    <p>Sometimes, mistakes are made when creating the tournament and seeding wrestlers. The options in
+    the Tools menu allows you to correct these mistakes while running the tournament.</p>
+    
+    <h3><a name="add_missing"></a>Adding missing teams</h3>
+    <p>In large tournaments, it is often the case that you forget to enter a team name in the new
+    tournament wizard. To add a new team to an existing tournament, select Add a team from the Tools
+    menu. Enter the new team name and click the OK button. If the team you entered already exists 
+    in the tournament, no changes will occur. Otherwise, the new team will appear in the team scores list.</p>
+    
+    <h3><a name="remove_absent"></a>Removing absent teams</h3>
+    <p>When teams fail to show up for a tournament or have no wrestlers that make wait, you may wish to
+    remove them from the tournament. To remove a team, select Remove a team from the Tools menu. Choose 
+    the team you wish to remove and then click the OK button. The team will be deleted from the team score
+    list. However, any wrestlers on that team who appear on the brackets will not be removed.</p>
+    
+    <p>Be careful! Deleting a team destroys the association between that team name and any wrestlers from
+    that team who appear on the brackets. Simply re-adding the team after deleting it will not re-associate
+    those wrestlers, and they will not score team points.</p>
+    
+    <h3><a name="correct_team"></a>Correcting team names</h3>
+    <p>If you mispell a team name, you can correct it without removing and then re-adding the team. To fix
+    the spelling of a team name, select Change team spelling from the Tools menu. Choose the current team
+    name you wish to fix from the drop down box. Then enter the new team name in the text box. Click OK
+    to confirm the name change. The new name will appear in the team scores list and on all brackets.</p>
+    
+    <h3><a name="correct_wrestler"></a>Correcting wrestler names</h3>
+    <p>Misspelling a wrestler name is a very common mistake, one that fans will bug you about constantly.
+    To correct a wrestler's name, select Change wrestler spelling from the Tools menu. Choose the wrestler's
+    team and current name from the first two drop down boxes. Then enter the new wrestler name in the text
+    box. Click OK to confirm the name change. The new name will appear on all brackets.</p>
+    
+    <h3><a name="change_tournament"></a>Changing the tournament name</h3>
+    <p>You may wish to rename the tournament after creating it. To rename the tournament, select Change 
+    tournament name from the Tools menu. The existing tournament name appears in the text box. Replace it
+    with the new name for the tournament, and click OK to confirm the change. The new name appears in the
+    titlebar of the Wrestling Nerd window and on all bracket printouts.</p>
     
     <h2><a name="printing"></a>Printing results</h2>
     <p>Paper copies of bout sheets, brackets, team scores, and place winners are needed by score
@@ -264,6 +302,15 @@
     printer appears. Choose any additional printing options and press OK or Print to begin printing.
     The place winners will print with six weight classes per page.</p>
     
+    <h3><a name="print_preview">Viewing a print preview</a></h3>
+    <p>You may wish to see what a printout will look like on the screen before sending it to the printer.
+    To see a preview of what will be printed, select Print preview from the File menu. Choose the results
+    you want to print by following the instructions in the sections above, and then click the OK button.</p>
+
+    <p>The print preview window will appear showing what will be printed. Use the controls at the top of the
+    window to navigate through the pages to be printed or to zoom in on the current page. Press the Close 
+    button to dismiss the print preview window. Press the Print button to send the pages to the printer.</p>
+    
     <h2><a name="storing"></a>Storing results</h2>
     <p>Tournament data can be stored on disk for later use in Wrestling Nerd or in other programs.</p>
     
@@ -271,9 +318,14 @@
     <p>To save a tournament to disk for the first time, choose Save as from the File menu and enter
     a filename in the file dialog. To quickly save a previously saved tournament, choose Save from
     the File menu. The data will be saved under the last filename used to store this tournament.</p>
-    
+       
     <p>The Save and Save as options may be accessed by pressing Ctrl-S and Shift-Ctrl-S respectively
     instead of through the menus.</p>
+    
+    <h3><a name="backup"></a>Backing up a tournament</h3>
+    <p>To backup a tournament without changing the current filename, choose Backup from the File menu
+    and enter a filename in the file dialog. The next time you choose Save, the tournament will be saved
+    under the previous file name, not the one entered in the backup dialog.</p>
     
     <h3><a name="opening"></a>Opening a saved tournament</h3>
     <p>To open a previously saved tournament from disk, choose Open from the File menu and select
