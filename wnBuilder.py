@@ -11,10 +11,11 @@ class wnRoundSetup(object):
     self.WinMap = win_map
     self.LoseMap = lose_map
 
-class wnFactory(object):
+class wnBuilder(object):
   def GetTournaments(self):
     '''Return the tournaments currently supported.'''
-    configs =  [wnBCInvitationalConfig, wnCTChampionshipConfig]
+    configs = [v for k, v in globals().items() if k.find('Config') > -1]
+    #configs =  [wnBCInvitationalConfig, wnCTChampionshipConfig]
     
     return configs
   
@@ -25,7 +26,7 @@ class wnFactory(object):
       raise TypeError('The tournament configuration is invalid.')
     
     #create the new tournament
-    tourn = wnTournament(name)
+    tourn = wnTournament(name, config.Seeds)
     
     #add the teams
     for t in teams:
@@ -68,6 +69,8 @@ class wnFactory(object):
 class wnBCInvitationalConfig:
   Name = 'Bristol Central Invitational'
   Description = 'The bracket format used in the Bristol Central Invitational tournaments. The outbracket has 32 seed slots, and double-elimination begins in the quarter finals.'
+  Seeds = [1, 32, 17, 16, 9, 24, 25, 8, 5, 28, 21, 12, 13, 20, 29, 4,
+           3, 30, 19, 14, 11, 22, 27, 6, 7, 26, 23, 10, 15, 18, 31, 2]
   Rounds = [wnRoundSetup('Rat-Tails', wnPoints(0,0), 32, 'Sixteen Champion',
                          [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,
                           14,14,15,15]),
@@ -93,6 +96,8 @@ class wnBCInvitationalConfig:
 class wnCTChampionshipConfig:
   Name = 'Connecticut State Tournament'
   Description = 'The bracket format used in the Connecticut State Championships and the Connecticut State Open. The outbracket has 32 seed slots, and double-elimination begins in the round of sixteen.'
+  Seeds = [1, 32, 17, 16, 9, 24, 25, 8, 5, 28, 21, 12, 13, 20, 29, 4,
+           3, 30, 19, 14, 11, 22, 27, 6, 7, 26, 23, 10, 15, 18, 31, 2]
   Rounds = [wnRoundSetup('Rat-Tails Champion', wnPoints(0,0), 32, 'Sixteen Champion',
                          [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,
                           14,14,15,15]),
@@ -121,11 +126,5 @@ class wnCTChampionshipConfig:
             wnRoundSetup('Fifth Place', wnPoints(0,0), 1)]
 
 if __name__ == '__main__':
-  f = wnFactory()
-  print f.GetTournaments()
-  t = f.Create(wnBCInvitationalConfig, 'Bristol Central Invitational 2003', ['95', '103', '112'],
-           ['Bristol Central', 'Bristol Eastern', 'Southington'])
-  for k, v in t.weight_classes.items():
-    print k
-    for rk in v.order:
-      print v.rounds[rk].name  
+  b = wnBuilder()
+  print b.GetTournaments()

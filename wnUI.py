@@ -1,9 +1,10 @@
 from wxPython.wx import *
 from wxPython.wizard import *
 from wxPython.lib.scrolledpanel import wxScrolledPanel
-from wnFactory import *
+from wnBuilder import *
 from wnRenderer import *
 import WrestlingNerd_wdr as GUI
+import cPickle
 
 class wnFrame(wxFrame):
   '''Class that creates and manages the main WN window.'''
@@ -43,6 +44,7 @@ class wnFrame(wxFrame):
     
     #create class variables
     self.tournament = None
+    self.filename = None
     self.weights = wxPyTypeCast(self.FindWindowById(GUI.ID_WEIGHTS_CHOICE), 'wxChoice')
     self.teams = wxPyTypeCast(self.FindWindowById(GUI.ID_TEAMS_LIST), 'wxListCtrl')
     
@@ -51,14 +53,14 @@ class wnFrame(wxFrame):
     self.teams.InsertColumn(1, 'Score', width=-2)
 
     #disable menu items
-    mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(False)
-    mb.FindItemById(GUI.ID_NUMBOUTS_MENU).Enable(False)
-    mb.FindItemById(GUI.ID_SAVE_MENU).Enable(False)
-    mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(False)
+    self.ChangeMenuState('on start')
     
     EVT_CLOSE(self, self.OnClose)
     EVT_MENU(self, GUI.ID_EXIT_MENU, self.OnClose)
     EVT_MENU(self, GUI.ID_NEW_MENU, self.OnNew)
+    EVT_MENU(self, GUI.ID_SAVE_MENU, self.OnSave)
+    EVT_MENU(self, GUI.ID_OPEN_MENU, self.OnOpen)
+    
     EVT_CHOICE(self, GUI.ID_WEIGHTS_CHOICE, self.OnSelectWeight)
     
   def OnClose(self, event):
@@ -68,10 +70,10 @@ class wnFrame(wxFrame):
     
   def OnNew(self, event):
     '''Show the new tournament wizard.'''
-    factory = wnFactory()
+    builder = wnBuilder()
     
     wiz = wnNewTournamentWizard(self)
-    wiz.SetAvailableLayouts(factory.GetTournaments())
+    wiz.SetAvailableLayouts(builder.GetTournaments())
     if wiz.RunWizard():
       name = wiz.GetName()
       weights = wiz.GetWeights()
@@ -79,18 +81,32 @@ class wnFrame(wxFrame):
       layout = wiz.GetLayout()
         
       #create the tournament
-      self.tournament = factory.Create(layout, name, weights, teams)
+      self.tournament = builder.Create(layout, name, weights, teams)
       
-      #add the weights to the weight drop-down
-      for w in weights:
-        self.weights.Append(w)
-      self.weights.SetSelection(0)
+      #reset the GUI
+      self.ResetAfterNew()
       
-      #add the teams to the team list
-      self.RefreshScores()
+  def OnSave(self, event):
+    '''Save the current tournament to disk by pickling it.'''
+    dlg = wxFileDialog(self, 'Save tournament', wildcard='Wrestling Nerd files (*.wnd)|*.wnd',
+                       style=wxSAVE|wxOVERWRITE_PROMPT)
+    
+    if dlg.ShowModal() == wxID_OK:
+      f = file(dlg.GetPath(), 'wb')
+      cPickle.dump(self.tournament, f, True)
+      f.close()
+      self.ChangeMenuState('on save')
       
-      #draw the bracket
-      self.canvas.Refresh()
+  def OnOpen(self, event):
+    '''Open a tournament from disk.'''
+    dlg = wxFileDialog(self, 'Open tournament', wildcard='Wrestling Nerd files (*.wnd)|*.wnd',
+                       style=wxOPEN|wxHIDE_READONLY)
+    
+    if dlg.ShowModal() == wxID_OK:
+      f = file(dlg.GetPath(), 'rb')
+      self.tournament = cPickle.load(f)
+      f.close()
+      self.ResetAfterNew()
       
   def OnSelectWeight(self, event):
     '''Refresh the canvas to show the new weight.'''
@@ -104,17 +120,54 @@ class wnFrame(wxFrame):
       return None
     else:
       return self.weights.GetStringSelection()
+    
   def RefreshScores(self):
     '''Refresh the team scores.'''
-    #scores = self.tournament.GetScores()
-    scores = {'Bristol Central' : 100.5, 'Bristol Eastern' : 0}
+    scores = self.tournament.GetScores()
+    #scores = {'Bristol Central' : 100.5, 'Bristol Eastern' : 0}
     items = scores.items()
     self.teams.DeleteAllItems()
     for i in range(len(items)):
       name, score = items[i]
-      print i, name, score
+      #print i, name, score
       self.teams.InsertStringItem(i, name)
       self.teams.SetStringItem(i, 1, str(score))
+      
+  def ResetAfterNew(self):
+    '''Reset the GUI after a tournament has been created or opened.'''
+      
+    self.weights.Clear()
+    #add the weights to the weight drop-down
+    for w in self.tournament.Weights:
+      self.weights.Append(w)
+    self.weights.SetSelection(0)
+    
+    #add the teams to the team list
+    self.RefreshScores()
+    
+    #change menu item state
+    self.ChangeMenuState('on new')
+    
+    #draw the bracket
+    self.canvas.Refresh()
+      
+  def ChangeMenuState(self, action):
+    mb = self.GetMenuBar()
+    if action == 'on start':
+      mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(False)
+      mb.FindItemById(GUI.ID_NUMBOUTS_MENU).Enable(False)
+      mb.FindItemById(GUI.ID_SAVE_MENU).Enable(False)
+      mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(False)
+    
+    elif action == 'on new':
+      mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(True)
+      mb.FindItemById(GUI.ID_NUMBOUTS_MENU).Enable(True)
+      mb.FindItemById(GUI.ID_SAVE_MENU).Enable(True)      
+      mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(False)
+      
+    elif action == 'on save':
+      mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(True)
+
     
 class wnBracketCanvas(wxScrolledWindow):
   def __init__(self, parent):
@@ -141,7 +194,6 @@ class wnBracketCanvas(wxScrolledWindow):
 
     dc.EndDrawing()
     
-
 class wnNewTournamentWizard(wxWizard):
   '''Class that creates a wizard that assists users in setting up new
   tournaments.'''
@@ -193,6 +245,7 @@ class wnNewTournamentWizard(wxWizard):
     EVT_BUTTON(self, GUI.ID_REMOVE_WEIGHT, self.OnRemoveWeight)
     EVT_BUTTON(self, GUI.ID_ADD_STANDARD_WEIGHTS, self.OnAddStandardWeights)    
     EVT_WIZARD_PAGE_CHANGED(self, self.GetId(), self.OnPageChanged)
+    EVT_WIZARD_PAGE_CHANGING(self, self.GetId(), self.OnPageChanging)
     EVT_LISTBOX(self, GUI.ID_LAYOUT_LIST, self.OnSelectLayout)
  
   def OnSelectLayout(self, event):
@@ -200,13 +253,28 @@ class wnNewTournamentWizard(wxWizard):
     c = self.layouts.GetClientData(event.GetInt())
     self.description.SetValue(c.Description)
     
+  def OnPageChanging(self, event):
+    '''Make sure the values are valid.'''
+    if event.GetPage() == self.name_page and self.name.GetValue() == '':
+      wxMessageDialog(self, 'You must enter a tournament name.', 'Invalid name', wxOK).ShowModal()
+      event.Veto()
+    elif event.GetPage() == self.teams_page and self.teams.GetCount() == 0:
+      wxMessageDialog(self, 'The tournament must have at least one team.', 'No teams',
+                      wxOK).ShowModal()
+      event.Veto()
+    elif event.GetPage() == self.weights_page and self.weights.GetCount() == 0:
+      wxMessageDialog(self, 'The tournament must have at least one weight class.',
+                      'No weight classes', wxOK).ShowModal()
+      event.Veto()
+      
   def OnPageChanged(self, event):
     '''Change the accelerator table appropriately.'''
     if event.GetPage() == self.teams_page:
       table = wxAcceleratorTable([(wxACCEL_CTRL, WXK_RETURN, GUI.ID_ADD_TEAM)])
-    else:
+      self.SetAcceleratorTable(table)
+    elif event.GetPage() == self.weights_page:
       table = wxAcceleratorTable([(wxACCEL_CTRL, WXK_RETURN, GUI.ID_ADD_WEIGHT)])
-    self.SetAcceleratorTable(table)
+      self.SetAcceleratorTable(table)
                             
   def OnAddTeam(self, event):
     t = self.teams.GetValue()
@@ -258,6 +326,9 @@ class wnNewTournamentWizard(wxWizard):
     '''Set the available tournaments.'''
     for c in ts:
       self.layouts.Append(c.Name, c)
+    self.layouts.SetSelection(0)
+    c = self.layouts.GetClientData(0)
+    self.description.SetValue(c.Description)
       
   def GetName(self):
     return self.name.GetValue()

@@ -15,8 +15,14 @@ class wnPainter(wnRenderer):
     if self.dc is None: return
     self.dc.DrawLine(x1, y1, x2, y2)
   
-  def DrawText(self, pt, handler):
-    wxStaticText(self.canvas, -1, 'Entry', point=wxPoint(pt[0], pt[1]), size=wxSize(100,20))
+  def DrawText(self, text, x, y):
+    if self.dc is None: return
+    self.dc.SetFont(wxSWISS_FONT)
+    self.dc.DrawText(text, x, y)
+   
+  def DrawTextInput(self, text, handler, x, y):
+    pass
+    #wxStaticText(self.canvas, -1, 'Entry', point=wxPoint(pt[0], pt[1]), size=wxSize(100,20))
       
 class wnPrinter(wnRenderer):
   pass

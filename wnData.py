@@ -5,8 +5,9 @@ for rendering themselves using a draw object and a print object.
 
 class wnTournament(object):
   '''The tournament class is responsible for holding weight classes and teams.'''
-  def __init__(self, name):
+  def __init__(self, name, seeds):
     self.name = name
+    self.seeds = seeds
     self.teams = {}
     self.weight_classes = {}
         
@@ -32,15 +33,42 @@ class wnTournament(object):
   
   def Paint(self, painter, weight):
     '''Draw the specified weight class to the screen. Pass the provided painter object to the
-    weight class being drawn.
+    weight class being drawn. Draw the seed numbers in the given order first.
     '''
+    
+    #make sure the weight exists first
     try:
       wc = self.weight_classes[weight]
     except:
       return
     
-    return wc.Paint(painter)
+    #draw the numbers for each seed
+    step = 40
+    y = 0
     
+    for num in self.seeds:
+      painter.DrawText(str(num), 0, y)
+      y += step
+      
+    return wc.Paint(painter, (0, 20), step)
+  
+  def GetWeights(self):
+    '''Return a list of all the weight classes in ascending order.'''
+    k = self.weight_classes.keys()
+    k.sort()
+    return k
+  
+  def GetScores(self):
+    '''Calculate all the scores across this tournament.'''
+    #for now, just return zero always
+    d = {}
+    for name in self.teams.keys():
+      d[name] = 0.0
+      
+    return d
+      
+  
+  Weights = property(fget=GetWeights)
   
 class wnWeightClass(object):
   '''The weight class is responsible for holding rounds.'''
@@ -62,15 +90,13 @@ class wnWeightClass(object):
   def GetRound(self, name):
     return self.rounds.get(name)
   
-  def Paint(self, painter):
+  def Paint(self, painter, start, initial_step):
     '''Go through all of the rounds and draw their bracket lines.'''
 
-    start = (0,20)
-    length = 120
-    
-    initial_step = 40
-    step = initial_step
+    length_l = 350
+    length_s = 120
 
+    step = initial_step
     max_x = 0
     max_y = 0
     
@@ -94,6 +120,10 @@ class wnWeightClass(object):
       if curr.NumEntries > prev_num:
         step = initial_step
         start = (0, max_y+step*2)
+        
+      #make the outermost lines long to fit a full name and team name
+      if i == 0: length = length_l
+      else: length = length_s
 
       start, mx, my = curr.Paint(painter, start, length, step)
       
