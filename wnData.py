@@ -1,5 +1,7 @@
 class wnTournament(object):
   def __init__(self):
+    self.name = ''
+    self.description = ''
     self.weight_classes = {}
     self.teams = {}
     

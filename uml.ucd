@@ -5,7 +5,7 @@ Version:
 valuesFileName:
 
 Num.Elems:
-40
+44
 type:
 1
 stereotype:
@@ -21,7 +21,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-3
+124
 ptul:
 460 345
 ptdr:
@@ -29,9 +29,9 @@ ptdr:
 Num.Links:
 2
 link objId:
-9
+127
 link objId:
-11
+128
 name:
 wnWeightClass
 Num.Attrs:
@@ -53,7 +53,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-1
+125
 ptul:
 467 400
 ptdr:
@@ -61,11 +61,11 @@ ptdr:
 Num.Links:
 3
 link objId:
-11
+128
 link objId:
-12
+146
 link objId:
-15
+137
 name:
 wnRound
 Num.Attrs:
@@ -87,7 +87,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-4
+126
 ptul:
 469 459
 ptdr:
@@ -95,11 +95,11 @@ ptdr:
 Num.Links:
 3
 link objId:
-12
+146
 link objId:
-16
+130
 link objId:
-49
+141
 name:
 wnEntry
 Num.Attrs:
@@ -121,15 +121,15 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-9
+127
 Num.Pts:
 2
 510 295
 510 345
 objStartId:
-0
+136
 objEndId:
-3
+124
 roleAname:
 
 roleBname:
@@ -155,15 +155,15 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-11
+128
 Num.Pts:
 2
 510 371
 510 400
 objStartId:
-3
+124
 objEndId:
-1
+125
 roleAname:
 
 roleBname:
@@ -189,15 +189,15 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-14
+129
 Num.Pts:
 2
 362 370
 362 459
 objStartId:
-6
+138
 objEndId:
-7
+139
 roleAname:
 
 roleBname:
@@ -223,15 +223,15 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-16
+130
 Num.Pts:
 2
 559 470
 621 470
 objStartId:
-4
+126
 objEndId:
-2
+133
 roleAname:
 
 type:
@@ -249,21 +249,17 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-17
+131
 ptul:
 150 23
 ptdr:
 240 49
 Num.Links:
-4
+2
 link objId:
-19
+135
 link objId:
-67
-link objId:
-75
-link objId:
-77
+150
 name:
 wnFrame
 Num.Attrs:
@@ -285,7 +281,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-5
+132
 ptul:
 624 401
 ptdr:
@@ -293,7 +289,7 @@ ptdr:
 Num.Links:
 1
 link objId:
-15
+137
 name:
 wnPoints
 Num.Attrs:
@@ -315,15 +311,23 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-2
+133
 ptul:
 621 462
 ptdr:
 711 488
 Num.Links:
-1
+5
 link objId:
-16
+130
+link objId:
+168
+link objId:
+169
+link objId:
+170
+link objId:
+171
 name:
 wnResult
 Num.Attrs:
@@ -345,7 +349,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-18
+134
 ptul:
 8 23
 ptdr:
@@ -353,7 +357,7 @@ ptdr:
 Num.Links:
 1
 link objId:
-19
+135
 name:
 wnApp
 Num.Attrs:
@@ -375,15 +379,15 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-19
+135
 Num.Pts:
 2
 98 33
 150 33
 objStartId:
-18
+134
 objEndId:
-17
+131
 roleAname:
 
 type:
@@ -401,7 +405,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-0
+136
 ptul:
 459 269
 ptdr:
@@ -409,19 +413,19 @@ ptdr:
 Num.Links:
 7
 link objId:
-9
+127
 link objId:
-47
+140
 link objId:
-58
+143
 link objId:
-59
+145
 link objId:
-78
+160
 link objId:
-79
+161
 link objId:
-81
+162
 name:
 wnTournament
 Num.Attrs:
@@ -443,15 +447,15 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-15
+137
 Num.Pts:
 2
 557 410
 624 410
 objStartId:
-1
+125
 objEndId:
-5
+132
 roleAname:
 
 type:
@@ -469,7 +473,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-6
+138
 ptul:
 313 344
 ptdr:
@@ -477,9 +481,9 @@ ptdr:
 Num.Links:
 2
 link objId:
-14
+129
 link objId:
-47
+140
 name:
 wnTeam
 Num.Attrs:
@@ -501,7 +505,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-7
+139
 ptul:
 314 459
 ptdr:
@@ -509,9 +513,9 @@ ptdr:
 Num.Links:
 2
 link objId:
-14
+129
 link objId:
-49
+141
 name:
 wnWrestler
 Num.Attrs:
@@ -533,16 +537,16 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-47
+140
 Num.Pts:
 3
 459 281
 370 281
 370 344
 objStartId:
-0
+136
 objEndId:
-6
+138
 roleAname:
 
 roleBname:
@@ -568,15 +572,15 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-49
+141
 Num.Pts:
 2
 469 476
 404 476
 objStartId:
-4
+126
 objEndId:
-7
+139
 roleAname:
 
 type:
@@ -594,7 +598,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-51
+142
 ptul:
 33 177
 ptdr:
@@ -602,9 +606,9 @@ ptdr:
 Num.Links:
 2
 link objId:
-53
+149
 link objId:
-58
+143
 name:
 wnFactoryCTChamps
 Num.Attrs:
@@ -626,7 +630,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-58
+143
 Num.Pts:
 4
 106 203
@@ -634,9 +638,9 @@ Num.Pts:
 511 239
 511 269
 objStartId:
-51
+142
 objEndId:
-0
+136
 roleAname:
 
 type:
@@ -654,19 +658,19 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-52
+144
 ptul:
 210 177
 ptdr:
-337 203
+339 203
 Num.Links:
 2
 link objId:
-54
+148
 link objId:
-59
+145
 name:
-wnFactoryCTOpen
+wnFactoryBCInvite
 Num.Attrs:
 0
 Num.Opers:
@@ -686,17 +690,17 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-59
+145
 Num.Pts:
 4
-275 203
-275 239
+276 203
+276 239
 511 239
 511 269
 objStartId:
-52
+144
 objEndId:
-0
+136
 roleAname:
 
 type:
@@ -714,15 +718,15 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-12
+146
 Num.Pts:
 2
 510 426
 510 459
 objStartId:
-1
+125
 objEndId:
-4
+126
 roleAname:
 
 roleBname:
@@ -734,92 +738,6 @@ roleBmult:
 composition:
 1
 type:
-1
-stereotype:
-
-constraint:
-
-shortDescrLen:
-0
-shortDescr:
-
-bgrColor:
-128 255 128
-fgrColor:
-0 0 0
-objId:
-24
-ptul:
-114 87
-ptdr:
-267 113
-Num.Links:
-3
-link objId:
-53
-link objId:
-54
-link objId:
-67
-name:
-wnTournamentFactory
-Num.Attrs:
-0
-Num.Opers:
-0
-type:
-2
-stereotype:
-
-constraint:
-
-shortDescrLen:
-0
-shortDescr:
-
-bgrColor:
-255 255 255
-fgrColor:
-0 0 0
-objId:
-54
-Num.Pts:
-4
-273 177
-273 154
-191 154
-191 113
-objStartId:
-52
-objEndId:
-24
-type:
-2
-stereotype:
-
-constraint:
-
-shortDescrLen:
-0
-shortDescr:
-
-bgrColor:
-255 255 255
-fgrColor:
-0 0 0
-objId:
-53
-Num.Pts:
-4
-105 177
-105 154
-191 154
-191 113
-objStartId:
-51
-objEndId:
-24
-type:
 3
 stereotype:
 
@@ -834,15 +752,15 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-67
+150
 Num.Pts:
 2
 188 49
-188 87
+188 86
 objStartId:
-17
+131
 objEndId:
-24
+147
 roleAname:
 
 type:
@@ -860,7 +778,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-61
+151
 ptul:
 629 328
 ptdr:
@@ -868,9 +786,9 @@ ptdr:
 Num.Links:
 2
 link objId:
-71
+155
 link objId:
-79
+161
 name:
 wnPrinter
 Num.Attrs:
@@ -892,7 +810,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-60
+152
 ptul:
 630 270
 ptdr:
@@ -900,9 +818,9 @@ ptdr:
 Num.Links:
 2
 link objId:
-70
+154
 link objId:
-78
+160
 name:
 wnPainter
 Num.Attrs:
@@ -924,7 +842,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-50
+153
 ptul:
 806 298
 ptdr:
@@ -932,9 +850,9 @@ ptdr:
 Num.Links:
 2
 link objId:
-70
+154
 link objId:
-71
+155
 name:
 wnRenderer
 Num.Attrs:
@@ -956,7 +874,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-70
+154
 Num.Pts:
 4
 720 283
@@ -964,9 +882,9 @@ Num.Pts:
 748 311
 806 311
 objStartId:
-60
+152
 objEndId:
-50
+153
 type:
 2
 stereotype:
@@ -982,7 +900,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-71
+155
 Num.Pts:
 4
 719 343
@@ -990,139 +908,9 @@ Num.Pts:
 748 311
 806 311
 objStartId:
-61
+151
 objEndId:
-50
-type:
-5
-stereotype:
-
-constraint:
-
-shortDescrLen:
-0
-shortDescr:
-
-bgrColor:
-255 255 255
-fgrColor:
-0 0 0
-objId:
-75
-Num.Pts:
-2
-240 37
-381 37
-objStartId:
-17
-objEndId:
-62
-roleAname:
-
-roleBname:
-
-roleAmult:
-
-roleBmult:
-
-composition:
-0
-type:
-1
-stereotype:
-
-constraint:
-
-shortDescrLen:
-0
-shortDescr:
-
-bgrColor:
-128 255 128
-fgrColor:
-0 0 0
-objId:
-62
-ptul:
-381 23
-ptdr:
-495 49
-Num.Links:
-1
-link objId:
-75
-name:
-wnBracketPanel
-Num.Attrs:
-0
-Num.Opers:
-0
-type:
-1
-stereotype:
-
-constraint:
-
-shortDescrLen:
-0
-shortDescr:
-
-bgrColor:
-128 255 128
-fgrColor:
-0 0 0
-objId:
-76
-ptul:
-380 66
-ptdr:
-483 92
-Num.Links:
-1
-link objId:
-77
-name:
-wnScorePanel
-Num.Attrs:
-0
-Num.Opers:
-0
-type:
-5
-stereotype:
-
-constraint:
-
-shortDescrLen:
-0
-shortDescr:
-
-bgrColor:
-255 255 255
-fgrColor:
-0 0 0
-objId:
-77
-Num.Pts:
-4
-240 37
-330 37
-330 75
-380 75
-objStartId:
-17
-objEndId:
-76
-roleAname:
-
-roleBname:
-
-roleAmult:
-
-roleBmult:
-
-composition:
-0
+153
 type:
 3
 stereotype:
@@ -1138,15 +926,15 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-78
+160
 Num.Pts:
 2
 565 283
 630 283
 objStartId:
-0
+136
 objEndId:
-60
+152
 roleAname:
 
 type:
@@ -1164,7 +952,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-79
+161
 Num.Pts:
 4
 565 283
@@ -1172,9 +960,9 @@ Num.Pts:
 600 337
 629 337
 objStartId:
-0
+136
 objEndId:
-61
+151
 roleAname:
 
 type:
@@ -1192,15 +980,15 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-81
+162
 Num.Pts:
 2
 533 269
 655 215
 objStartId:
-0
+136
 objEndId:
-80
+163
 type:
 6
 stereotype:
@@ -1218,7 +1006,7 @@ bgrColor:
 fgrColor:
 0 0 0
 objId:
-80
+163
 ptul:
 539 155
 ptdr:
@@ -1226,4 +1014,314 @@ ptdr:
 Num.Links:
 1
 link objId:
-81
+162
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+165
+ptul:
+576 554
+ptdr:
+666 580
+Num.Links:
+1
+link objId:
+169
+name:
+wnDecision
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+164
+ptul:
+473 555
+ptdr:
+563 581
+Num.Links:
+1
+link objId:
+168
+name:
+wnBye
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+166
+ptul:
+676 554
+ptdr:
+766 580
+Num.Links:
+1
+link objId:
+170
+name:
+wnDefault
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+167
+ptul:
+783 553
+ptdr:
+873 579
+Num.Links:
+1
+link objId:
+171
+name:
+wnPin
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+2
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+169
+Num.Pts:
+4
+624 554
+624 520
+665 520
+666 488
+objStartId:
+165
+objEndId:
+133
+type:
+2
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+170
+Num.Pts:
+4
+721 554
+721 520
+665 520
+666 488
+objStartId:
+166
+objEndId:
+133
+type:
+2
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+168
+Num.Pts:
+4
+518 555
+518 520
+665 520
+666 488
+objStartId:
+164
+objEndId:
+133
+type:
+2
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+171
+Num.Pts:
+4
+828 553
+828 520
+665 520
+666 488
+objStartId:
+167
+objEndId:
+133
+type:
+1
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+128 255 128
+fgrColor:
+0 0 0
+objId:
+147
+ptul:
+145 86
+ptdr:
+235 112
+Num.Links:
+3
+link objId:
+149
+link objId:
+148
+link objId:
+150
+name:
+wnFactory
+Num.Attrs:
+0
+Num.Opers:
+0
+type:
+2
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+148
+Num.Pts:
+4
+274 177
+274 154
+191 154
+191 112
+objStartId:
+144
+objEndId:
+147
+type:
+2
+stereotype:
+
+constraint:
+
+shortDescrLen:
+0
+shortDescr:
+
+bgrColor:
+255 255 255
+fgrColor:
+0 0 0
+objId:
+149
+Num.Pts:
+4
+105 177
+105 154
+191 154
+191 112
+objStartId:
+142
+objEndId:
+147

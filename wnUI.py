@@ -1,19 +1,27 @@
 from wxPython.wx import *
 from wxPython.wizard import *
+from wxPython.lib.scrolledpanel import wxScrolledPanel
 import WrestlingNerd_wdr as GUI
 
-class wnUI(wxFrame):
+class wnFrame(wxFrame):
   '''Class that creates and manages the main WN window.'''
   
   def __init__(self):
     '''Initialize.
     '''
     wxFrame.__init__(self, None, -1, 'Wrestling Nerd')
-    
+  
     #set the menu bar
     mb = GUI.CreateMenuBar()
-    self.SetMenuBar(mb)
+    self.SetMenuBar(mb)  
     
+    #correct the background color
+    self.SetBackgroundColour(mb.GetBackgroundColour())
+    
+    #create the components of the main frame
+    GUI.CreateMainFrame(self)
+
+    #disable menu items
     mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(False)
     mb.FindItemById(GUI.ID_NUMBOUTS_MENU).Enable(False)
     mb.FindItemById(GUI.ID_SAVE_MENU).Enable(False)
@@ -28,10 +36,9 @@ class wnUI(wxFrame):
     
   def OnNew(self, event):
     '''Show the new tournament wizard.'''
-    wiz = wnNewTournamentWizard(self)
-    wiz.RunWizard()
-  
-  
+    #wiz = wnNewTournamentWizard(self)
+    #wiz.RunWizard()
+
 class wnNewTournamentWizard(wxWizard):
   '''Class that creates a wizard that assists users in setting up new
   tournaments.'''
@@ -75,7 +82,8 @@ class wnNewTournamentWizard(wxWizard):
     
 if __name__ == '__main__':
   app = wxPySimpleApp(0)
-  frame = wnUI()
+  frame = wnFrame()
+  frame.Centre()
   app.SetTopWindow(frame)
   frame.Show()  
   app.MainLoop()
