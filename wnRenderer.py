@@ -65,7 +65,7 @@ class wnPainter(wnRenderer):
     self.dc.DrawText(text, x, y)
     
   def DrawMatchTextControl(self, text, x, y, length, height, id, handler):
-    '''Draw a static text control. Create it if it doesn't exist. Register the new event handler
+    '''Draw a static text control. Create it if it does not exist. Register the new event handler
     to receive events from the user.'''
     
     #check to see if a static text control already exists for this entry
@@ -75,7 +75,7 @@ class wnPainter(wnRenderer):
       
       #hook the event manager properly
       self.event_man.RegisterMouseEvents(ctrl)
-      self.event_man.RegisterFocusEvents(ctrl)
+      #self.event_man.RegisterFocusEvents(ctrl)
       self.event_man.RegisterMatchMenuEvents(ctrl)
       self.event_man.RegisterEventHandler(ctrl.GetId(), handler)
       
