@@ -50,7 +50,7 @@ class wnFrame(wxFrame):
     self.teams = wxPyTypeCast(self.FindWindowById(GUI.ID_TEAMS_LIST), 'wxListCtrl')
     
     #make a painter object
-    self.painter = wnPainter(self, self.canvas, self.teams)
+    self.painter = wnPainter(self, self.canvas)
     
     #set up the list control
     self.teams.InsertColumn(0, 'Team', width=-2)
@@ -65,10 +65,10 @@ class wnFrame(wxFrame):
     EVT_MENU(self, GUI.ID_SAVE_MENU, self.OnSave)
     EVT_MENU(self, GUI.ID_SAVEAS_MENU, self.OnSaveAs)
     EVT_MENU(self, GUI.ID_OPEN_MENU, self.OnOpen)
+    EVT_MENU(self, GUI.ID_PRINT_MENU, self.OnPrint)
+    EVT_CHOICE(self, GUI.ID_WEIGHTS_CHOICE, self.OnSelectWeight)
     
     EVT_BUTTON(self, GUI.ID_TEAM_DEBUG, self.OnTeamDebug)
-    
-    EVT_CHOICE(self, GUI.ID_WEIGHTS_CHOICE, self.OnSelectWeight)
     
   def OnTeamDebug(self, event):
     for t in self.tournament.teams.values():
@@ -137,6 +137,19 @@ class wnFrame(wxFrame):
       self.ChangeMenuState('on open')
       self.filename = dlg.GetPath()
       
+  def OnPrint(self, event):
+    '''Show the print dialog box.'''
+    dlg = wnPrintDialog(self, self.tournament.Weights,
+                        self.tournament.Rounds, self.GetCurrentWeight())
+    dlg.CentreOnScreen()
+    
+    # if the user wants to print, show the print settings dialog
+    if dlg.ShowModal() == wxID_OK:
+      printer = wxPrinter()
+      printer.Print(self, None, True)
+      
+    dlg.Destroy()
+      
   def OnSelectWeight(self, event):
     '''Refresh the canvas to show the new weight.'''
     self.canvas.Refresh()
@@ -152,8 +165,15 @@ class wnFrame(wxFrame):
     
   def RefreshScores(self):
     '''Refresh the team scores.'''
-    print 'refreshing scores'
-    self.tournament.CalcScores(self.painter, self.GetCurrentWeight())
+    # tell the tournament to update the scores for the current weight
+    scores = self.tournament.CalcScores(self.GetCurrentWeight())
+    
+    # refresh the score display
+    self.teams.DeleteAllItems()
+    for i in range(len(scores)):
+      score, name = scores[i]
+      self.teams.InsertStringItem(i, name)
+      self.teams.SetStringItem(i, 1, str(score))
       
   def ResetAfterNew(self):
     '''Reset the GUI after a tournament has been created or opened.'''
@@ -182,18 +202,21 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_NUMBOUTS_MENU).Enable(False)
       mb.FindItemById(GUI.ID_SAVE_MENU).Enable(False)
       mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(False)
+      mb.FindItemById(GUI.ID_PRINT_MENU).Enable(False)
     
     elif action == 'on new':
       mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(True)
       mb.FindItemById(GUI.ID_NUMBOUTS_MENU).Enable(True)
       mb.FindItemById(GUI.ID_SAVE_MENU).Enable(True)      
       mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(False)
+      mb.FindItemById(GUI.ID_PRINT_MENU).Enable(True)
       
     elif action == 'on open':
       mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(True)
       mb.FindItemById(GUI.ID_NUMBOUTS_MENU).Enable(True)
       mb.FindItemById(GUI.ID_SAVE_MENU).Enable(True)      
       mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(True)
+      mb.FindItemById(GUI.ID_PRINT_MENU).Enable(True)
 
     elif action == 'on save':
       mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(True)
@@ -234,7 +257,7 @@ class wnBracketCanvas(wxScrolledWindow):
 
       self.old_weight = w
       self.SetVirtualSize(wxSize(xmax, ymax))
-      self.SetScrollRate(5,5)      
+      self.SetScrollRate(10,10)      
 
       if refresh: p.SetInitialFocus()
       
@@ -394,6 +417,37 @@ class wnNewTournamentWizard(wxWizard):
   def GetLayout(self):
     i = self.layouts.GetSelection()
     return self.layouts.GetClientData(i)
+
+class wnPrintDialog(wxDialog):
+  '''Class that creates a dialog box that allows users to select what to print.'''
+  def __init__(self, parent, weights, rounds, current_weight):
+    wxDialog.__init__(self, parent, -1, 'Print')
+    GUI.CreatePrintDialog(self)
+    
+    # store references
+    self.weights = wxPyTypeCast(self.FindWindowById(GUI.ID_WEIGHTS_LIST), 'wxListBox')
+    self.rounds = wxPyTypeCast(self.FindWindowById(GUI.ID_ROUNDS_LIST), 'wxListBox')
+    self.type = wxPyTypeCast(self.FindWindowById(GUI.ID_TYPE_RADIOBOX), 'wxRadioBox')
+    
+    # fill the list boxes and set initial selections
+    self.weights.Set(weights)
+    self.rounds.Set(rounds)
+    self.weights.SetStringSelection(current_weight)
+    self.rounds.SetSelection(0)
+    
+    # watch for events to enable or disable the rounds control
+    EVT_RADIOBOX(self, GUI.ID_TYPE_RADIOBOX, self.OnTypeChange) 
+    
+  def OnOK(self, event):
+    '''Make sure the selections are valid.'''
+    return wxID_OK
+  
+  def OnTypeChange(self, event):
+    '''Enable or disable the rounds box based on what's selected.'''
+    self.rounds.Enable(self.type.GetStringSelection() == 'Bouts')
+  
+  def GetSelection(self):
+    return []
 
 class wnScoreWindow(wxFrame):
   '''Class the creates a standalone frame for displaying team scores. Teams scroll past at a regular

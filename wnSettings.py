@@ -1,5 +1,5 @@
 seed_start = 20
-seed_length = 350
+seed_length = 300
 seed_height = 16
 seed_offset = 20
 

@@ -5,6 +5,8 @@ UI
 - swapping wrestler seeds
 - insert and move down in seeds
 - support non-scoring wrestlers
+- point adjustment dialog
+- printing dialog
 
 Data
 - test scoring algorithm
@@ -13,6 +15,5 @@ Data
 - number of bouts
 
 Printing
-- learn how to print in wxPython
 - print brackets
 - print bouts

@@ -10,10 +10,9 @@ class wnRenderer(object):
   pass
   
 class wnPainter(wnRenderer):
-  def __init__(self, frame, canvas, team_scores):
+  def __init__(self, frame, canvas):
     self.frame = frame
     self.canvas = canvas
-    self.team_scores = team_scores
     self.control_cache = {}
     
     self.initial_id = None
@@ -104,12 +103,12 @@ class wnPainter(wnRenderer):
       #set the current text
       ctrl.SetValue(text)
       
-  def DrawTeamScores(self, items):
-    self.team_scores.DeleteAllItems()
-    for i in range(len(items)):
-      score, name = items[i]
-      self.team_scores.InsertStringItem(i, name)
-      self.team_scores.SetStringItem(i, 1, str(score))
+  #def DrawTeamScores(self, items):
+  #  self.team_scores.DeleteAllItems()
+  #  for i in range(len(items)):
+  #    score, name = items[i]
+  #    self.team_scores.InsertStringItem(i, name)
+  #    self.team_scores.SetStringItem(i, 1, str(score))
       
   def Flush(self):
     '''Complete any drawing operations that were cached to be completed later. This is needed so
@@ -138,6 +137,8 @@ class wnPainter(wnRenderer):
     '''Show a dialog box that lets the user enter match results. Initialize the box to the values
     provided by the entry. Return the winner and result entered by the user.'''
     dlg = wnMatchDialog(self.frame, wrestlers, result)
+    dlg.CentreOnScreen()
+    
     if dlg.ShowModal() == wxID_OK:
       winner = dlg.GetWinner()
       loser = dlg.GetLoser()
@@ -151,4 +152,23 @@ class wnPainter(wnRenderer):
     
                              
 class wnPrinter(wnRenderer):
-  pass
+  def __init__(self):
+    self.dc = None
+  
+  def SetDC(self, dc):
+    self.dc = dc
+  
+  def DrawLine(self, x1, y1, x2, y2):
+    if self.dc is None: return
+    self.dc.DrawLine(x1, y1, x2, y2)
+  
+  def DrawText(self, text, x, y):
+    if self.dc is None: return
+    self.dc.SetFont(wxSWISS_FONT)
+    self.dc.DrawText(text, x, y)
+    
+  def DrawMatchTextControl(self, text, x, y, length, height, id, handler):
+    self.DrawText(x, y, text)
+       
+  def DrawSeedTextControl(self, text, x, y, length, height, choices, id, handler):
+    self.DrawText(x, y, text)

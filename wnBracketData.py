@@ -63,7 +63,7 @@ class wnTournament(wnNode):
       
     return result
   
-  def CalcScores(self, painter, weight):
+  def CalcScores(self, weight):
     '''Calculate all the scores across this tournament.'''
     # only compute scores for the current weight class
     try:
@@ -80,11 +80,10 @@ class wnTournament(wnNode):
       self.teams[t].SetWeightScore(weight, scores.get(t) or 0.0)
       score_table.append((self.teams[t].Score, t))
       
-    # sort the scores ascending to decending
+    # sort the scores descending
     score_table.sort()
     score_table.reverse()
-      
-    painter.DrawTeamScores(score_table)
+    return score_table
 
   def GetWeights(self):
     '''Return a list of all the weight classes in ascending order.'''
@@ -95,8 +94,12 @@ class wnTournament(wnNode):
   def GetTeams(self):
     return self.teams
   
+  def GetRoundNames(self):
+    return self.weight_classes.values()[0].Rounds
+  
   Weights = property(fget=GetWeights)
   Teams = property(fget=GetTeams)
+  Rounds = property(fget=GetRoundNames)
   
 class wnWeightClass(wnNode):
   '''The weight class is responsible for holding rounds.'''
@@ -169,6 +172,11 @@ class wnWeightClass(wnNode):
       
     # return a dictionary of team/score pairs
     return scores
+  
+  def GetRoundNames(self):
+    return self.order
+  
+  Rounds = property(fget=GetRoundNames)
   
 class wnRound(wnNode):
   '''The round class is responsible for holding onto individual matches and their results.'''
@@ -483,7 +491,8 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
     
   def OnDelete(self, event):
     '''Delete the wrestler in this entry.'''
-    self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
+    if self.wrestler is not None and self.wrestler.Team is not None:
+      self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
     self.wrestler = None
     event.Control.ClearValue()
     event.Control.RefreshParent()
