@@ -31,8 +31,9 @@
     and used according to the terms of the <a href="license.html">license</a>.</p>
 
     <h1><a name="news"></a>News</h1>
-    <h3>1/5/03</h3>
-    <p>Wrestling Nerd 3.0 will be released on January 6, 2004.</p>
+    <h3>1/6/03</h3>
+    <p>Wrestling Nerd 3.0 has been released. See the <a href="#download">Download</a> section on
+    this page for more information.</p>
     
     <h3>12/23/03</h3>
     <p>The first release of open source Wrestling Nerd is nearing completion. It will be tested at 
@@ -83,20 +84,39 @@
     <span><a href="shots/team.jpg"><img src="shots/team_small.jpg" alt="The team properties window" /></a></span>
     
     <h1><a name="download"></a>Download</h1>
-    <p>Wrestling Nerd 3.0 has not been released at this time. If you wish to look at the source 
-    code, feel free to check it out of CVS from <a href="http://www.sourceforge.net/projects/wnerd">
-    SourceForge</a>.</p>
+    <p>Wrestling Nerd 3.0 is available for download. Click the link for the version of Wrestling
+    Nerd appropriate for your computer. Clicking the link will take you to the SourceForge download
+    page. The download should start a few seconds after visiting the page.</p>
+    
+    <p>After downloading, please see the documentation for assistance on installing and using
+    Wrestling Nerd.</p>
+    
+    <ul>
+      <li><a href="http://prdownloads.sourceforge.net/wnerd/WrestlingNerd-3.0-win32.exe?download">
+      Download Wrestling Nerd 3.0 for Windows</a></li>
+      <li><a href="http://prdownloads.sourceforge.net/wnerd/WrestlingNerd-3.0-src.zip?download">
+      Download Wrestling Nerd 3.0 for other platforms (requires Python 2.2+ and wxPython 2.4.2.4)</a></li>
+    </ul>
 
     <h1><a name="doc"></a>Documentation</h1>
     <p>The latest documentation is for Wrestling Nerd 3.0. Click here to <a href="help/index.shtml">
     view the documentation</a>.</p>
     
     <h1><a name="contact"></a>Contact</h1>
-    <p>The author of Wrestling Nerd, Peter Parente, may be reached by email at <a href="mailto:parente@cs.unc.edu">
-    parente@cs.unc.edu</a> for questions and comments. For the time being, bug reports and feature 
-    requests may be sent to this address.</p>
+    <p>To report bugs, visit the <a href="https://sourceforge.net/tracker/?atid=569316&group_id=83393&func=browse">
+    Wrestling Nerd bug report page</a>. Click the Submit new link on that page to report a new bug.
+    Try to make sure a bug has not been reported before adding it to the list.</p>
     
-    <p>More information about the author is available on his web page at
+    <p>To submit a request for a new feature, visit the <a href="https://sourceforge.net/tracker/?atid=569319&group_id=83393&func=browse">
+    Wrestling nerd feature request page</a>. Click the Submit new link on that page to add a request
+    for a new feature. Please make sure that the feature doesn't already exist and has not been
+    requested by someone else.</p>
+    
+    <p>Additional technical information about the project is located on the
+    <a href="http://sourceforge.net/projects/wnerd">Wrestling Nerd SourceForge project page</a>.</p>
+    
+    <p>The author of Wrestling Nerd, Peter Parente, may be reached by email at <a href="mailto:parente@cs.unc.edu">
+    parente@cs.unc.edu</a>. More information about the author is available on his web page at
     <a href="http://www.cs.unc.edu/~parente">http://www.cs.unc.edu/~parente</a>.</p>
 
     <h1><a name="support"></a>Show Your Support</h1>

@@ -539,8 +539,11 @@ ID_FASTFALL_MENU = 10042
 ID_NUMBOUTS_MENU = 10043
 ID_SCOREWIN_MENU = 10044
 ID_QUERY_MENU = 10045
-ID_ABOUT_MENU = 10046
-ID_HELP_MENU = 10047
+ID_ADDTEAM_MENU = 10046
+ID_REMOVETEAM_MENU = 10047
+ID_TOOLS_MENU = 10048
+ID_ABOUT_MENU = 10049
+ID_HELP_MENU = 10050
 
 def CreateMenuBar():
     item0 = wxMenuBar()
@@ -567,8 +570,13 @@ def CreateMenuBar():
     item0.Append( item2, "&Query" )
     
     item3 = wxMenu()
-    item3.Append( ID_ABOUT_MENU, "&About", "" )
-    item0.Append( item3, "&Help" )
+    item3.Append( ID_ADDTEAM_MENU, "&Add a team...", "" )
+    item3.Append( ID_REMOVETEAM_MENU, "&Remove a team...", "" )
+    item0.Append( item3, "&Tools" )
+    
+    item4 = wxMenu()
+    item4.Append( ID_ABOUT_MENU, "&About", "" )
+    item0.Append( item4, "&Help" )
     
     return item0
 

@@ -73,6 +73,8 @@ class wnFrame(wxFrame):
     EVT_MENU(self, GUI.ID_NUMBOUTS_MENU, self.OnCountBouts)
     EVT_MENU(self, GUI.ID_FASTFALL_MENU, self.OnFastFall)
     EVT_MENU(self, GUI.ID_SCOREWIN_MENU, self.OnScoreWindow)
+    EVT_MENU(self, GUI.ID_ADDTEAM_MENU, self.OnAddTeam)
+    EVT_MENU(self, GUI.ID_REMOVETEAM_MENU, self.OnRemoveTeam)
     EVT_MENU(self, GUI.ID_ABOUT_MENU, self.OnAbout)
     EVT_CHOICE(self, GUI.ID_WEIGHTS_CHOICE, self.OnSelectWeight)
     EVT_LIST_ITEM_ACTIVATED(self, GUI.ID_TEAMS_LIST, self.OnSelectTeam)
@@ -192,6 +194,32 @@ class wnFrame(wxFrame):
     score_win = wnScoreWindow(self)
     score_win.Show(True)
     
+  def OnAddTeam(self, event):
+    # let the user enter a team name
+    dlg = wxTextEntryDialog(self, 'Enter the name of the new team.', 'Add team')
+    if dlg.ShowModal() == wxID_OK:
+      self.tournament.NewTeam(dlg.GetValue())
+      self.ResetAfterNew()
+      
+    dlg.Destroy()
+  
+  def OnRemoveTeam(self, event):
+    #make sure there is more than one team left
+    if len(self.tournament.Teams) <= 1:
+      dlg = wxMessageDialog(self, 'You cannot delete the last team.', 'One team left')
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
+    
+    # let the user pick the team to delete
+    dlg = wxSingleChoiceDialog(self, 'Choose the team to delete.', 'Remove team',
+                               self.tournament.Teams.keys())
+    if dlg.ShowModal() == wxID_OK:
+      self.tournament.DeleteTeam(dlg.GetStringSelection())
+      self.ResetAfterNew()
+      
+    dlg.Destroy()
+    
   def OnAbout(self, event):
     '''Show the about window.'''
     dlg = wxDialog(self, -1, 'About')
@@ -268,6 +296,8 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_EXPORT_MENU).Enable(False)
       mb.FindItemById(GUI.ID_PRINT_MENU).Enable(False)
       mb.FindItemById(GUI.ID_SCOREWIN_MENU).Enable(False)
+      mb.FindItemById(GUI.ID_ADDTEAM_MENU).Enable(False)
+      mb.FindItemById(GUI.ID_REMOVETEAM_MENU).Enable(False)
     
     elif action == 'on new':
       mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(True)
@@ -277,6 +307,8 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_EXPORT_MENU).Enable(True)
       mb.FindItemById(GUI.ID_PRINT_MENU).Enable(True)
       mb.FindItemById(GUI.ID_SCOREWIN_MENU).Enable(True)
+      mb.FindItemById(GUI.ID_ADDTEAM_MENU).Enable(True)
+      mb.FindItemById(GUI.ID_REMOVETEAM_MENU).Enable(True)
       
     elif action == 'on open':
       mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(True)
@@ -286,6 +318,8 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_EXPORT_MENU).Enable(True)
       mb.FindItemById(GUI.ID_PRINT_MENU).Enable(True)
       mb.FindItemById(GUI.ID_SCOREWIN_MENU).Enable(True)
+      mb.FindItemById(GUI.ID_ADDTEAM_MENU).Enable(True)
+      mb.FindItemById(GUI.ID_REMOVETEAM_MENU).Enable(True)
 
     elif action == 'on save':
       mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(True)
@@ -300,6 +334,7 @@ class wnBracketCanvas(wxScrolledWindow):
     self.parent = parent
     self.old_weight = None
     self.bracket_size = wxSize(0,0)
+    self.need_refresh = False
     
     EVT_PAINT(self, self.OnPaint)
     
@@ -318,18 +353,23 @@ class wnBracketCanvas(wxScrolledWindow):
     if t is not None and w is not None:
       refresh = (w != self.old_weight)
       
-      p = self.parent.GetPainter()    
+      p = self.parent.GetPainter()
       p.SetDC(dc)      
-      xmax, ymax = t.Paint(p, w, refresh)
+      xmax, ymax = t.Paint(p, w, refresh or self.need_refresh)
       p.Flush()
       p.SetDC(None)
 
       self.old_weight = w
       self.bracket_size = wxSize(xmax, ymax)
       self.SetVirtualSize(self.bracket_size)
-      self.SetScrollRate(10,10)      
+      self.SetScrollRate(10,10)
 
+      self.need_refresh = False
       if refresh: p.SetInitialFocus()
+      
+  def RefreshBracket(self):
+    self.need_refresh = True
+    self.Refresh()
       
   def RefreshScores(self):
     self.parent.RefreshScores()

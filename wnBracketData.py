@@ -44,6 +44,12 @@ class wnTournament(wnNode):
     self.teams[name] = t
     
     return t
+  
+  def DeleteTeam(self, name):
+    try:
+      del self.teams[name]
+    except:
+      pass
  
   def GetWeightClass(self, name):
     return self.weight_classes.get(name)
@@ -718,7 +724,7 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
       self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
     self.wrestler = None
     event.Control.ClearValue()
-    event.Control.RefreshScores()
+    event.Control.RefreshScores()    
     
   def OnSwapUp(self, event):
     '''Swap the wrestler here with the wrestler one seed above.'''
@@ -881,10 +887,11 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
     # replace an existing wrestler
     elif self.wrestler is not None:
       #if the held team is equal to the new team
-      if self.wrestler.Team.Name == t_name:
+      if self.wrestler.Team.Name == t_name and self.wrestler.Name != w_name:
         #just update the wrestler in the current team
         self.wrestler.Name = w_name
-      else:
+        event.Control.RefreshBracket()
+      elif self.wrestler.Team.Name != t_name:
         #otherwise, delete the current wrestler from the team
         self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
         #and make a new wrestler in the new team

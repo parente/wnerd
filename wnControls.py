@@ -104,6 +104,9 @@ class wnDynamicText(wxMaskedTextCtrl):
   
   def RefreshScores(self):
     wxCallAfter(self.parent.RefreshScores)
+    
+  def RefreshBracket(self):
+    wxCallAfter(self.parent.RefreshBracket)
                                      
 class wnPopup(wxPopupWindow):
   def __init__(self, parent, text, pos, size):
