@@ -43,15 +43,15 @@ class wnTournament(object):
     except:
       return
     
-    #draw the numbers for each seed
-    step = wnSettings.initial_step + 10
-    y = 0
-    
-    for num in self.seeds:
-      painter.DrawText(str(num), 0, y)
-      y += step
+    ##draw the numbers for each seed
+    #step = wnSettings.initial_step + 10
+    #y = 0
+    #
+    #for num in self.seeds:
+    #  painter.DrawText(str(num), 0, y)
+    #  y += step
       
-    return wc.Paint(painter, (0, wnSettings.initial_step), step)
+    return wc.Paint(painter, (0, wnSettings.seed_start), wnSettings.initial_step)
   
   def CalcScores(self, painter):
     '''Calculate all the scores across this tournament.'''
@@ -207,7 +207,7 @@ class wnRound(object):
     x,y = start
     for i in range(self.NumEntries):
       painter.DrawLine(x,y,x+length,y)
-      self.entries[i].Paint(painter, (x,y-wnSettings.entry_height), length)
+      self.entries[i].Paint(painter, (x,y), length)
       y += step
 
     #store the maximum positions so the scrollbars can be set properly
@@ -265,25 +265,22 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
 
   def Paint(self, painter, pos, length):
     '''Paint all of the text controls.'''
-    if self.wrestler is None: text = str(self.name)
+    if self.wrestler is None: text = ''
     else: text = self.wrestler.Name
     
-    painter.DrawStaticTextControl(text, pos[0]+wnSettings.entry_offset, pos[1],
-                                  length-wnSettings.entry_offset*2, wnSettings.entry_height,
-                                  self.ID, self)
+    painter.DrawMatchTextControl(text,
+                                 pos[0]+wnSettings.entry_offset, pos[1]-wnSettings.entry_height,
+                                 length-wnSettings.entry_offset*2, wnSettings.entry_height,
+                                 self.ID, self)
     
   def OnMouseEnter(self, event):
-    '''Highlight the text control under the cursor.'''
-    event.Control.Highlight()
+    '''Show a popup window with the match results if available.'''
     if self.wrestler is not None:
       event.Control.ShowPopup(str(self.result))
-    event.Control.Refresh()
-    
+      
   def OnMouseLeave(self, event):
-    '''Unhighlight the control under the cursor.'''
-    event.Control.Unhighlight()
+    '''Hide the popup window with the match results.'''
     event.Control.HidePopup()
-    event.Control.Refresh()
     
   def OnLeftDoubleClick(self, event):
     '''Display the dialog box that allows a user to enter result information, if there is at least
@@ -297,12 +294,16 @@ class wnSeedEntry(wnEntry, wnFocusEventReceivable):
     
   def Paint(self, painter, pos, length):
     '''Paint all of the text controls.'''
-    if self.wrestler is None: text = str(self.name)
+    if self.wrestler is None: text = ''
     else: text = self.wrestler.Name
-      
-    painter.DrawDynamicTextControl(text, pos[0]+wnSettings.seed_offset, pos[1],
-                                   length-wnSettings.seed_offset*2, wnSettings.entry_height,
-                                   self.ID, self)
+    
+    #draw the seed number
+    painter.DrawText(str(self.name), pos[0], pos[1]-wnSettings.seed_height)
+ 
+    #draw the text control
+    painter.DrawSeedTextControl(text,
+                                pos[0]+wnSettings.seed_offset, pos[1]-wnSettings.seed_height,
+                                wnSettings.seed_length, wnSettings.seed_height, self.ID, self)
     
   def OnKillFocus(self, event):
     '''Don't let a match entry steal the focus. Immediately set it back to the first available

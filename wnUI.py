@@ -17,7 +17,7 @@ class wnFrame(wxFrame):
     '''Initialize.
     '''
     wxFrame.__init__(self, None, -1, 'Wrestling Nerd',
-                     style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
+                     style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN)
   
     #set the menu bar
     mb = GUI.CreateMenuBar()
@@ -27,7 +27,7 @@ class wnFrame(wxFrame):
     self.SetBackgroundColour(mb.GetBackgroundColour())
     
     #create a sizer to layout the window
-    sizer = wxFlexGridSizer(1,3,0,0)
+    sizer = wxFlexGridSizer(1,2,0,0)
     sizer.AddGrowableCol(0)
     sizer.AddGrowableRow(0)
   
@@ -35,13 +35,10 @@ class wnFrame(wxFrame):
     self.canvas = wnBracketCanvas(self)
     sizer.AddWindow(self.canvas, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM|wxTOP, 5)
     
-    #draw a separator
-    line = wxStaticLine(self, -1, size=wxSize(1,-1), style=wxLI_VERTICAL)
-    sizer.AddWindow(line, 0, wxGROW, 5)
-
     #create a frame housing the layer components
-    score_frame = GUI.ScoreFrame(self, False, False)
-    sizer.AddSizer(score_frame, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM|wxTOP, 5)
+    panel = wxPanel(self, -1)
+    score_frame = GUI.ScoreFrame(panel)
+    sizer.AddSizer(panel, 0, 5)
     
     #add the sizer to the window
     self.SetSizer(sizer)
@@ -203,7 +200,7 @@ class wnFrame(wxFrame):
   
 class wnBracketCanvas(wxScrolledWindow):
   def __init__(self, parent):
-    wxScrolledWindow.__init__(self, parent, -1, style=wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE)
+    wxScrolledWindow.__init__(self, parent, -1, style=wxNO_FULL_REPAINT_ON_RESIZE)
     self.parent = parent
     
     EVT_PAINT(self, self.OnPaint)

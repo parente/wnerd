@@ -64,7 +64,7 @@ class wnPainter(wnRenderer):
     self.dc.SetFont(wxSWISS_FONT)
     self.dc.DrawText(text, x, y)
     
-  def DrawStaticTextControl(self, text, x, y, length, height, id, handler):
+  def DrawMatchTextControl(self, text, x, y, length, height, id, handler):
     '''Draw a static text control. Create it if it doesn't exist. Register the new event handler
     to receive events from the user.'''
     
@@ -84,9 +84,9 @@ class wnPainter(wnRenderer):
       #hook the event manager
       self.event_man.RegisterEventHandler(ctrl.GetId(), handler)
       #set the current text
-      ctrl.SetLabel(text)
+      #ctrl.SetLabel(text)
    
-  def DrawDynamicTextControl(self, text, x, y, length, height, id, handler):
+  def DrawSeedTextControl(self, text, x, y, length, height, id, handler):
     '''Draw a dynamic text control that let's the user enter text directly into it. Register the new
     event handler to receive events from the user.'''
     
@@ -103,7 +103,7 @@ class wnPainter(wnRenderer):
       #hook the event manager
       self.event_man.RegisterEventHandler(ctrl.GetId(), handler)
       #set the current text
-      ctrl.SetValue(text)
+      #ctrl.SetValue(text)
       
   def DrawTeamScores(self, items):
     self.team_scores.DeleteAllItems()

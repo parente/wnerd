@@ -1,8 +1,13 @@
+seed_start = 20
 seed_length = 350
+seed_height = 16
+seed_offset = 20
+
 entry_length = 120
 entry_height = 18
-initial_step = 20
 entry_offset = 3
-seed_offset = 20
+
+initial_step = 25
+
 highlight_color = '#FFFFC1'
 popup_color = '#FFFFC1'

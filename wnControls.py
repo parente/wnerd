@@ -1,4 +1,5 @@
 from wxPython.wx import *
+from wxPython.lib.maskededit import Field, wxMaskedTextCtrl
 import wnSettings
 
 class wnStaticText(wxPanel):
@@ -7,6 +8,9 @@ class wnStaticText(wxPanel):
     
     self.parent = parent
     self.popup = None
+    
+    EVT_ENTER_WINDOW(self, self.OnMouseEnter)
+    EVT_LEAVE_WINDOW(self, self.OnMouseLeave)
 
     #make the actual static text control
     self.ctrl = wxStaticText(self, -1, text, wxPoint(0,0), size,
@@ -19,12 +23,6 @@ class wnStaticText(wxPanel):
   def GetLabel(self):
     return self.ctrl.GetLabel(text)
     
-  def Highlight(self):
-    self.ctrl.SetBackgroundColour(wnSettings.highlight_color)
-    
-  def Unhighlight(self):
-    self.ctrl.SetBackgroundColour(self.clear_color)
-    
   def ShowPopup(self, text):    
     p = self.parent.ClientToScreen(self.GetPosition())
     s = self.GetClientSize()
@@ -36,11 +34,29 @@ class wnStaticText(wxPanel):
       self.popup.Show(False)
       self.popup.Destroy()
       self.popup = None
+  
+  def OnMouseEnter(self, event):
+    self.ctrl.SetBackgroundColour(wnSettings.highlight_color)
+    self.Refresh()
+    
+  def OnMouseLeave(self, event):
+    self.ctrl.SetBackgroundColour(self.clear_color)
+    self.ctrl.Refresh()
+
       
-class wnDynamicText(wxTextCtrl):
-  def __init__(self, parent, id, text, pos=wxPoint(0,0), size=wxSize(100,20)):
-    wxTextCtrl.__init__(self, parent, id, text, pos, size)
+class wnDynamicText(wxMaskedTextCtrl):
+  def __init__(self, parent, id, text, pos=wxPoint(0,0), size=wxSize(-1,-1)):
     self.parent = parent
+    self.bg_color = self.parent.GetBackgroundColour()
+    wxMaskedTextCtrl.__init__(self, parent, -1, '', formatcodes='F_',  mask='N{18} | N{18}',
+                              pos=pos, size=size, emptyBackgroundColor=self.bg_color,
+                              validBackgroundColor=self.bg_color,
+                              fields = {0 : Field(validRegex='[a-zA-z ]+', validRequired=True),
+                                        1 : Field(choices=['Bristol Central', 'Maloney'],
+                                         choiceRequired=True)
+                              },
+                              style = wxNO_BORDER, retainFieldValidation = True
+                             )
     
     EVT_SET_FOCUS(self, self.OnSetFocus)
     
