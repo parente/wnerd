@@ -75,6 +75,8 @@ class wnFrame(wxFrame):
     EVT_MENU(self, GUI.ID_SCOREWIN_MENU, self.OnScoreWindow)
     EVT_MENU(self, GUI.ID_ADDTEAM_MENU, self.OnAddTeam)
     EVT_MENU(self, GUI.ID_REMOVETEAM_MENU, self.OnRemoveTeam)
+    EVT_MENU(self, GUI.ID_TEAMSPELLING_MENU, self.OnChangeTeamSpelling)
+    EVT_MENU(self, GUI.ID_WRESTLERSPELLING_MENU, self.OnChangeWrestlerSpelling)
     EVT_MENU(self, GUI.ID_ABOUT_MENU, self.OnAbout)
     EVT_CHOICE(self, GUI.ID_WEIGHTS_CHOICE, self.OnSelectWeight)
     EVT_LIST_ITEM_ACTIVATED(self, GUI.ID_TEAMS_LIST, self.OnSelectTeam)
@@ -198,27 +200,54 @@ class wnFrame(wxFrame):
     # let the user enter a team name
     dlg = wxTextEntryDialog(self, 'Enter the name of the new team.', 'Add team')
     if dlg.ShowModal() == wxID_OK:
-      self.tournament.NewTeam(dlg.GetValue())
-      self.ResetAfterNew()
+      try:
+        self.tournament.TeamNames.index(dlg.GetValue())
+      except:
+        self.tournament.NewTeam(dlg.GetValue())
+        self.ResetAfterNew()
       
     dlg.Destroy()
   
   def OnRemoveTeam(self, event):
     #make sure there is more than one team left
-    if len(self.tournament.Teams) <= 1:
+    if len(self.tournament.TeamNames) <= 1:
       dlg = wxMessageDialog(self, 'You cannot delete the last team.', 'One team left')
       dlg.ShowModal()
       dlg.Destroy()
       return
     
     # let the user pick the team to delete
+    names = self.tournament.TeamNames
     dlg = wxSingleChoiceDialog(self, 'Choose the team to delete.', 'Remove team',
-                               self.tournament.Teams.keys())
+                               names)
     if dlg.ShowModal() == wxID_OK:
       self.tournament.DeleteTeam(dlg.GetStringSelection())
       self.ResetAfterNew()
       
     dlg.Destroy()
+    
+  def OnChangeTeamSpelling(self, event):
+    '''Show the dialog that allows a user to change the spelling of a team name.'''
+    dlg = wnTeamSpellingDialog(self, self.tournament.TeamNames)
+    dlg.CentreOnScreen()
+    
+    if dlg.ShowModal() == wxID_OK:
+      self.tournament.ChangeTeam(dlg.GetOldName(), dlg.GetNewName())
+      self.ResetAfterNew()
+        
+    dlg.Destroy()
+    
+  def OnChangeWrestlerSpelling(self, event):
+    '''Show the dialog that allows a user to change the spelling of a wrestler name.'''
+    dlg = wnWrestlerSpellingDialog(self, self.tournament.Teams)
+    dlg.CentreOnScreen()
+    
+    if dlg.ShowModal() == wxID_OK:
+      t = self.tournament.Teams[dlg.GetTeamName()]
+      t.ChangeWrestler(dlg.GetOldName(), dlg.GetNewName())
+      self.ResetAfterNew()
+        
+    dlg.Destroy()    
     
   def OnAbout(self, event):
     '''Show the about window.'''
@@ -298,6 +327,8 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_SCOREWIN_MENU).Enable(False)
       mb.FindItemById(GUI.ID_ADDTEAM_MENU).Enable(False)
       mb.FindItemById(GUI.ID_REMOVETEAM_MENU).Enable(False)
+      mb.FindItemById(GUI.ID_TEAMSPELLING_MENU).Enable(False)
+      mb.FindItemById(GUI.ID_WRESTLERSPELLING_MENU).Enable(False)
     
     elif action == 'on new':
       mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(True)
@@ -309,6 +340,7 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_SCOREWIN_MENU).Enable(True)
       mb.FindItemById(GUI.ID_ADDTEAM_MENU).Enable(True)
       mb.FindItemById(GUI.ID_REMOVETEAM_MENU).Enable(True)
+      mb.FindItemById(GUI.ID_TEAMSPELLING_MENU).Enable(True)
       
     elif action == 'on open':
       mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(True)
@@ -320,6 +352,7 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_SCOREWIN_MENU).Enable(True)
       mb.FindItemById(GUI.ID_ADDTEAM_MENU).Enable(True)
       mb.FindItemById(GUI.ID_REMOVETEAM_MENU).Enable(True)
+      mb.FindItemById(GUI.ID_TEAMSPELLING_MENU).Enable(True)
 
     elif action == 'on save':
       mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(True)
@@ -710,3 +743,83 @@ class wnScoreWindow(wxFrame):
       self.scores.SetStringItem(i, 1, name)
       self.scores.SetStringItem(i, 2, str(score))
     
+class wnTeamSpellingDialog(wxDialog):
+  '''Class that creates a dialog allowing users to change team name spellings.'''
+  def __init__(self, parent, team_names):
+    wxDialog.__init__(self, parent, -1, 'Change team spelling')
+    GUI.CreateTeamSpellingDialog(self)
+    
+    # get references
+    self.teams = wxPyTypeCast(self.FindWindowById(GUI.ID_TEAMS_CHOICE), 'wxChoice')
+    self.name = wxPyTypeCast(self.FindWindowById(GUI.ID_NAME_TEXT), 'wxTextCtrl')
+    
+    # fill the choice box
+    for name in team_names:
+      self.teams.Append(name)
+    self.teams.SetSelection(0)
+    
+    EVT_BUTTON(self, wxID_OK, self.OnOK)
+  
+  def OnOK(self, event):
+    #make sure the team name change is valid
+    if self.name.GetValue() == '':
+      self.EndModal(wxID_CANCEL)
+    else:
+      self.EndModal(wxID_OK)
+      
+  def GetNewName(self):
+    return self.name.GetValue()[0:wnSettings.max_team_length]
+  
+  def GetOldName(self):
+    return self.teams.GetStringSelection()  
+  
+class wnWrestlerSpellingDialog(wxDialog):
+  '''Class that creates a dialog allowing users to change wrestler name spellings.'''
+  def __init__(self, parent, teams):
+    wxDialog.__init__(self, parent, -1, 'Change wrestler spelling')
+    GUI.CreateWrestlerSpellingDialog(self)
+    
+    # get references
+    self.teams = wxPyTypeCast(self.FindWindowById(GUI.ID_TEAMS_CHOICE), 'wxChoice')
+    self.wrestlers = wxPyTypeCast(self.FindWindowById(GUI.ID_WRESTLERS_CHOICE), 'wxChoice')
+    self.name = wxPyTypeCast(self.FindWindowById(GUI.ID_NAME_TEXT), 'wxTextCtrl')
+    self.team_objs = teams
+    
+    # fill the team choice box
+    team_names = self.team_objs.keys()
+    team_names.sort()
+    for t in team_names:
+      self.teams.Append(t)
+    self.teams.SetSelection(0)
+    
+    # fill the wrestler choice box
+    t = self.team_objs[self.teams.GetString(0)]
+    for w in t.Wrestlers:
+      self.wrestlers.Append(w.Name)
+    self.wrestlers.SetSelection(0)
+    
+    EVT_CHOICE(self, GUI.ID_TEAMS_CHOICE, self.OnChangeTeam)
+    EVT_BUTTON(self, wxID_OK, self.OnOK)
+    
+  def OnChangeTeam(self, event):
+    self.wrestlers.Clear()
+    t = self.team_objs[self.teams.GetStringSelection()]
+    for w in t.Wrestlers:
+      self.wrestlers.Append(w.Name)
+    self.wrestlers.SetSelection(0)
+  
+  def OnOK(self, event):
+    #make sure the team name change is valid
+    if self.name.GetValue() == '':
+      self.EndModal(wxID_CANCEL)
+    else:
+      self.EndModal(wxID_OK)
+      
+  def GetTeamName(self):
+    return self.teams.GetStringSelection()
+  
+  def GetOldName(self):
+    return self.wrestlers.GetStringSelection()  
+      
+  def GetNewName(self):
+    return self.name.GetValue()[0:wnSettings.max_team_length]

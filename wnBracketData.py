@@ -50,6 +50,12 @@ class wnTournament(wnNode):
       del self.teams[name]
     except:
       pass
+    
+  def ChangeTeam(self, old_name, new_name):
+    t = self.teams[old_name]
+    del self.teams[old_name]
+    t.Name = new_name
+    self.teams[new_name] = t
  
   def GetWeightClass(self, name):
     return self.weight_classes.get(name)
@@ -146,11 +152,17 @@ class wnTournament(wnNode):
   def GetTeams(self):
     return self.teams
   
+  def GetTeamNames(self):
+    t = self.teams.keys()
+    t.sort()
+    return t
+  
   def GetRoundNames(self):
     return self.weight_classes.values()[0].Rounds
   
   Weights = property(fget=GetWeights)
   Teams = property(fget=GetTeams)
+  TeamNames = property(fget=GetTeamNames)
   Rounds = property(fget=GetRoundNames)
   
 class wnWeightClass(wnNode):
@@ -918,8 +930,6 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
     self.is_last = value
     
   IsLast = property(fget=GetIsLast, fset=SetIsLast)
-
-
 
 if __name__ == '__main__':
   pass

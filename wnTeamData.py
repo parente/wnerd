@@ -31,6 +31,9 @@ class wnTeam(object):
   def GetName(self):
     return self.name
   
+  def SetName(self, val):
+    self.name = str(val)
+  
   def GetTotalScore(self):
     s = self.point_adjust
     for i in self.points.values():
@@ -67,6 +70,14 @@ class wnTeam(object):
     
     return w
   
+  def ChangeWrestler(self, old_name, new_name):
+    '''Change the name of a wrestler.'''
+    for l in self.wrestlers.values():
+      for w in l:
+        if w.Name == old_name:
+          w.Name = new_name
+          return
+  
   def DeleteWrestler(self, name, weight):
     '''Delete a wrestler from the team.'''
     w_list = self.wrestlers[weight]
@@ -82,7 +93,7 @@ class wnTeam(object):
           del w_list[i]
         break
       
-  Name = property(fget=GetName)  
+  Name = property(fget=GetName, fset=SetName)  
   Score = property(fget=GetTotalScore)
   PointAdjust = property(fget=GetPointAdjust, fset=SetPointAdjust)
   Wrestlers = property(fget=GetWrestlers)

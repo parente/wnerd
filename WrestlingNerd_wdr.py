@@ -524,26 +524,108 @@ def CreateScoreFrame( parent, call_fit = True, set_sizer = True ):
     
     return item0
 
+ID_TEAMS_CHOICE = 10033
+
+def CreateTeamSpellingDialog( parent, call_fit = True, set_sizer = True ):
+    item0 = wxBoxSizer( wxVERTICAL )
+    
+    item1 = wxStaticText( parent, ID_TEXT, "Current name", wxDefaultPosition, wxDefaultSize, 0 )
+    item0.AddWindow( item1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    item2 = wxChoice( parent, ID_TEAMS_CHOICE, wxDefaultPosition, wxSize(200,-1), [], 0 )
+    item0.AddWindow( item2, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item3 = wxStaticText( parent, ID_TEXT, "New name", wxDefaultPosition, wxDefaultSize, 0 )
+    item0.AddWindow( item3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    item4 = wxTextCtrl( parent, ID_NAME_TEXT, "", wxDefaultPosition, wxSize(200,-1), 0 )
+    item0.AddWindow( item4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    item5 = wxBoxSizer( wxHORIZONTAL )
+    
+    item6 = wxButton( parent, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize, 0 )
+    item6.SetDefault()
+    item5.AddWindow( item6, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item7 = wxButton( parent, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize, 0 )
+    item5.AddWindow( item7, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item0.AddSizer( item5, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
+        parent.SetSizer( item0 )
+        if call_fit == True:
+            item0.Fit( parent )
+            item0.SetSizeHints( parent )
+    
+    return item0
+
+ID_WRESTLERS_CHOICE = 10034
+
+def CreateWrestlerSpellingDialog( parent, call_fit = True, set_sizer = True ):
+    item0 = wxBoxSizer( wxVERTICAL )
+    
+    item1 = wxStaticText( parent, ID_TEXT, "Team", wxDefaultPosition, wxDefaultSize, 0 )
+    item0.AddWindow( item1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    item2 = wxChoice( parent, ID_TEAMS_CHOICE, wxDefaultPosition, wxSize(200,-1), [], 0 )
+    item0.AddWindow( item2, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item3 = wxStaticText( parent, ID_TEXT, "Current wrestler name", wxDefaultPosition, wxDefaultSize, 0 )
+    item0.AddWindow( item3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    item4 = wxChoice( parent, ID_WRESTLERS_CHOICE, wxDefaultPosition, wxSize(200,-1), [], 0 )
+    item0.AddWindow( item4, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item5 = wxStaticText( parent, ID_TEXT, "New wrestler name", wxDefaultPosition, wxDefaultSize, 0 )
+    item0.AddWindow( item5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    item6 = wxTextCtrl( parent, ID_NAME_TEXT, "", wxDefaultPosition, wxSize(200,-1), 0 )
+    item0.AddWindow( item6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    item7 = wxBoxSizer( wxHORIZONTAL )
+    
+    item8 = wxButton( parent, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize, 0 )
+    item8.SetDefault()
+    item7.AddWindow( item8, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item9 = wxButton( parent, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize, 0 )
+    item7.AddWindow( item9, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item0.AddSizer( item7, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
+        parent.SetSizer( item0 )
+        if call_fit == True:
+            item0.Fit( parent )
+            item0.SetSizeHints( parent )
+    
+    return item0
+
 # Menubar functions
 
-ID_NEW_MENU = 10033
-ID_OPEN_MENU = 10034
-ID_MENU = 10035
-ID_SAVE_MENU = 10036
-ID_SAVEAS_MENU = 10037
-ID_EXPORT_MENU = 10038
-ID_PRINT_MENU = 10039
-ID_EXIT_MENU = 10040
-ID_FILE_MENU = 10041
-ID_FASTFALL_MENU = 10042
-ID_NUMBOUTS_MENU = 10043
-ID_SCOREWIN_MENU = 10044
-ID_QUERY_MENU = 10045
-ID_ADDTEAM_MENU = 10046
-ID_REMOVETEAM_MENU = 10047
-ID_TOOLS_MENU = 10048
-ID_ABOUT_MENU = 10049
-ID_HELP_MENU = 10050
+ID_NEW_MENU = 10035
+ID_OPEN_MENU = 10036
+ID_MENU = 10037
+ID_SAVE_MENU = 10038
+ID_SAVEAS_MENU = 10039
+ID_EXPORT_MENU = 10040
+ID_PRINT_MENU = 10041
+ID_EXIT_MENU = 10042
+ID_FILE_MENU = 10043
+ID_FASTFALL_MENU = 10044
+ID_NUMBOUTS_MENU = 10045
+ID_SCOREWIN_MENU = 10046
+ID_QUERY_MENU = 10047
+ID_ADDTEAM_MENU = 10048
+ID_REMOVETEAM_MENU = 10049
+ID_TEAMSPELLING_MENU = 10050
+ID_WRESTLERSPELLING_MENU = 10051
+ID_TOOLS_MENU = 10052
+ID_ABOUT_MENU = 10053
+ID_HELP_MENU = 10054
 
 def CreateMenuBar():
     item0 = wxMenuBar()
@@ -572,6 +654,9 @@ def CreateMenuBar():
     item3 = wxMenu()
     item3.Append( ID_ADDTEAM_MENU, "&Add a team...", "" )
     item3.Append( ID_REMOVETEAM_MENU, "&Remove a team...", "" )
+    item3.AppendSeparator()
+    item3.Append( ID_TEAMSPELLING_MENU, "Change team spelling...", "" )
+    item3.Append( ID_WRESTLERSPELLING_MENU, "Change wrestler spelling...", "" )
     item0.Append( item3, "&Tools" )
     
     item4 = wxMenu()
