@@ -38,8 +38,7 @@ class wnTournament(wnNode):
     return wc
   
   def NewTeam(self, name):
-    t = wnTeam(name)
-    t.tournament = self
+    t = wnTeam(name, self)
     self.teams[name] = t
     
     return t
@@ -63,13 +62,22 @@ class wnTournament(wnNode):
       
     return result
   
-  def CalcScores(self, painter):
+  def CalcScores(self, painter, weight):
     '''Calculate all the scores across this tournament.'''
-    #for now, just return zero always
+    # build a list with zeros for team scores
     scores = []
     for k in self.teams.keys():
-      scores.append((k, 0.0))
-        
+      scores.append((k, self.teams[k].PointAdjust))
+
+    # only compute scores for the current weight class
+    try:
+      wc = self.weight_classes[weight]
+    except:
+      return
+    
+    # pass the list of teams to the selected weight class
+    wc.CalcScores(self.teams)
+    
     painter.DrawTeamScores(scores)
 
   def GetWeights(self):
@@ -144,6 +152,12 @@ class wnWeightClass(wnNode):
       max_y = max(my, max_y)
       
     return max_x, max_y+initial_step
+  
+  def CalcScores(self, teams):
+    '''Compute all the team scores in this weight class.'''
+    # go through the rounds in order and tell them to calculate their scores
+    for i in self.order:
+      round = self.rounds[i]
   
 class wnRound(wnNode):
   '''The round class is responsible for holding onto individual matches and their results.'''

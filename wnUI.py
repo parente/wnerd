@@ -152,7 +152,8 @@ class wnFrame(wxFrame):
     
   def RefreshScores(self):
     '''Refresh the team scores.'''
-    scores = self.tournament.CalcScores(self.painter)
+    print 'refreshing scores'
+    self.tournament.CalcScores(self.painter, self.GetCurrentWeight())
     #scores = {'Bristol Central' : 100.5, 'Bristol Eastern' : 0}
       
   def ResetAfterNew(self):
@@ -212,6 +213,7 @@ class wnBracketCanvas(wxScrolledWindow):
     EVT_PAINT(self, self.OnPaint)
     
   def Reset(self):
+    self.DestroyChildren()
     self.Scroll(0,0)
     self.old_weight = None
     

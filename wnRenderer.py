@@ -22,12 +22,10 @@ class wnPainter(wnRenderer):
 
     self.controls = {}
     self.event_man = wnEventManager(self)
-    
 
   def ResetControls(self):
     '''Clean out any stored controls and registered events.'''
-    for c in self.controls.values():
-      c.Close()
+    self.initial_id = None
     self.controls = {}
     self.control_cache = {}
     del self.event_man

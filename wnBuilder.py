@@ -28,10 +28,6 @@ class wnBuilder(object):
     
     #create the new tournament
     tourn = wnTournament(name, config.Seeds)
-    
-    #add the teams
-    for t in teams:
-      tourn.NewTeam(t)
       
     #build the weights
     for w_name in weights:
@@ -46,6 +42,10 @@ class wnBuilder(object):
 
       #connect the rounds
       self.connectRounds(w, config.Rounds)
+      
+    #add the teams
+    for t in teams:
+      tourn.NewTeam(t)      
     
     return tourn
   

@@ -130,6 +130,7 @@ class wnMatchDialog(wxDialog):
     self.result_panel = wxPyTypeCast(self.FindWindowById(GUI.ID_RESULT_PANEL), 'wxPanel')
     
     #store the references
+    self.parent = parent
     self.wrestlers = wrestlers
     self.result_value = None
     
@@ -161,6 +162,8 @@ class wnMatchDialog(wxDialog):
       dlg.ShowModal()
       dlg.Close()
     else:
+      # instruct the parent to update its scores
+      wxCallAfter(self.parent.RefreshScores)
       self.EndModal(wxID_OK)
     
   def OnChooseResult(self, event):

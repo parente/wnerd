@@ -5,10 +5,11 @@ import wnSettings
 
 class wnTeam(object):
   '''The team class holds wrestlers and points.'''
-  def __init__(self, name):
-    self.name = name    
+  def __init__(self, name, tournament):
+    self.name = name
     self.wrestlers = {}
-    self.point_adjust = 0
+    self.point_adjust = 0.0
+    self.points = [0.0 for i in range(len(tournament.Weights))]
     
   def __repr__(self):
     return '<Team Name: %s Wrestlers: %s>' % (self.name, self.wrestlers)
@@ -17,6 +18,11 @@ class wnTeam(object):
     return self.name
   
   Name = property(fget=GetName)
+  
+  def GetPointAdjust(self):
+    return self.point_adjust
+  
+  PointAdjust = property(fget=GetPointAdjust)
   
   def NewWrestler(self, name, weight):
     '''Add a new wrestler to the team. Make the wrestler scoring if he is the first to be added.'''
