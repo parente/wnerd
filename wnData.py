@@ -2,7 +2,7 @@
 The data module defines the classes that store tournament data. These objects are also responsible
 for rendering themselves using a draw object and a print object.
 '''
-from wnEvents import wnEventReceivable
+from wnEvents import wnMouseEventReceivable, wnFocusEventReceivable
 import wnSettings
 
 class wnTournament(object):
@@ -44,7 +44,7 @@ class wnTournament(object):
       return
     
     #draw the numbers for each seed
-    step = 30
+    step = wnSettings.initial_step + 10
     y = 0
     
     for num in self.seeds:
@@ -52,7 +52,6 @@ class wnTournament(object):
       y += step
       
     return wc.Paint(painter, (0, wnSettings.initial_step), step)
-  
   
   def CalcScores(self, painter):
     '''Calculate all the scores across this tournament.'''
@@ -258,7 +257,7 @@ class wnEntry(object):
   NextLose = property(fget=GetNextLose, fset=SetNextLose)
   NextWin = property(fget=GetNextWin, fset=SetNextWin)
     
-class wnMatchEntry(wnEntry, wnEventReceivable):
+class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
   '''The match entry class hold individual match results.'''
   def __init__(self, name, round):
     wnEntry.__init__(self, name, round)
@@ -290,20 +289,11 @@ class wnMatchEntry(wnEntry, wnEventReceivable):
     '''Display the dialog box that allows a user to enter result information, if there is at least
     one wrestler in the preceeding entries.'''
     pass
-
-class wnSeedEntry(wnEntry, wnEventReceivable):
+    
+class wnSeedEntry(wnEntry, wnFocusEventReceivable):
   '''The seed entry class holds information about seeded wrestlers.'''
   def __init__(self, name, round):
     wnEntry.__init__(self, name, round)
-    self.next_peer = None
-    
-  def GetNextPeer(self):
-    return self.next_peer
-  
-  def SetNextPeer(self, entry):
-    self.next_peer = entry
-    
-  NextPeer = property(fget=GetNextPeer, fset=SetNextPeer)
     
   def Paint(self, painter, pos, length):
     '''Paint all of the text controls.'''
@@ -314,14 +304,11 @@ class wnSeedEntry(wnEntry, wnEventReceivable):
                                    length-wnSettings.seed_offset*2, wnSettings.entry_height,
                                    self.ID, self)
     
-  #def OnKillFocus(self, event):
-  #  '''Set the focus to the next entry in the seeding order.'''
-  #  try:
-  #    e = self.round.Entries[self.name]
-  #  except:
-  #    e = self.round.Entries[0]
-  #  
-  #  event.Painter.SetKeyboardFocus(self.round.Entries[e.name-1].ID)
+  def OnKillFocus(self, event):
+    '''Don't let a match entry steal the focus. Immediately set it back to the first available
+    seed entry on the bracket.'''
+    if self.name == self.round.NumEntries:
+      event.Painter.SetFocus(self.round.Entries[0].ID)
         
 class wnPoints(object):
   def __init__(self, adv_pts=0, place_pts=0):

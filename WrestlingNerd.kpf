@@ -8,8 +8,8 @@
 <preference-set id="Invocations">
 <preference-set id="Python">
   <string id="postparams"></string>
-  <string id="userEnvironment"></string>
   <string id="getparams"></string>
+  <boolean id="show-dialog">1</boolean>
   <string id="mpostparams"></string>
   <string id="filename">C:\Documents and Settings\Pete\My Documents\My Work\WrestlingNerd\wnData.py</string>
   <string id="request-method">GET</string>
@@ -18,7 +18,7 @@
   <string id="posttype">application/x-www-form-urlencoded</string>
   <string id="documentRoot"></string>
   <string id="cookieparams"></string>
-  <boolean id="show-dialog">1</boolean>
+  <string id="userEnvironment"></string>
   <boolean id="sim-cgi">0</boolean>
   <string id="cwd"></string>
 </preference-set>
@@ -30,5 +30,11 @@
 <file name="wnRenderer.py" url="wnRenderer.py">
 </file>
 <file name="wnBuilder.py" url="wnBuilder.py">
+</file>
+<file name="wnSettings.py" url="wnSettings.py">
+</file>
+<file name="wnControls.py" url="wnControls.py">
+</file>
+<file name="wnEvents.py" url="wnEvents.py">
 </file>
 </project>

@@ -211,7 +211,6 @@ class wnBracketCanvas(wxScrolledWindow):
   def OnPaint(self, event):
     dc = wxPaintDC(self)
     self.PrepareDC(dc)
-    dc.BeginDrawing()
 
     t = self.parent.GetTournament()
     w = self.parent.GetCurrentWeight()
@@ -220,13 +219,12 @@ class wnBracketCanvas(wxScrolledWindow):
       p = self.parent.GetPainter()    
       p.SetDC(dc)      
       xmax, ymax = t.Paint(p, w)
+      p.Flush()
       p.SetDC(None)
         
       self.SetVirtualSize(wxSize(xmax, ymax))
       self.SetScrollRate(5,5)      
-
-    dc.EndDrawing()
-    
+   
 class wnNewTournamentWizard(wxWizard):
   '''Class that creates a wizard that assists users in setting up new
   tournaments.'''

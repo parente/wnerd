@@ -8,9 +8,9 @@ class wnEvent(object):
   def __init__(self, **kwargs):
     self.__dict__.update(kwargs)
 
-class wnEventReceivable:
-  '''Defines an interface that must be implemented for an object to receive events from the event
-  manager.'''
+class wnMouseEventReceivable:
+  '''Defines an interface that must be implemented for an object to receive mouse events from the
+  event manager.'''
   def OnLeftClick(self, event):
     pass
   
@@ -26,6 +26,10 @@ class wnEventReceivable:
   def OnMouseLeave(self, event):
     pass
   
+
+class wnFocusEventReceivable:
+  '''Defines an interface that must be implemented for an object to receive mouse events from the
+  event manager.'''
   def OnSetFocus(self, event):
     pass
   
@@ -61,7 +65,7 @@ class wnEventManager(wxEvtHandler):
     
   def OnMouseEvent(self, event):
     '''Dispatch to the proper object and function based on the event object and event type.'''
-    dispatch = {wxEVT_LEFT_DOWN : 'OnLeftDown', wxEVT_RIGHT_DOWN : 'OnRightDown',
+    dispatch = {wxEVT_LEFT_DOWN : 'OnLeftClick', wxEVT_RIGHT_DOWN : 'OnRightClick',
                 wxEVT_LEFT_DCLICK : 'OnLeftDoubleClick', wxEVT_ENTER_WINDOW : 'OnMouseEnter',
                 wxEVT_LEAVE_WINDOW : 'OnMouseLeave'}
 

@@ -13,6 +13,7 @@ class wnPainter(wnRenderer):
   def __init__(self, canvas, team_scores):
     self.canvas = canvas
     self.team_scores = team_scores
+    self.control_cache = {}
     
     self.dc = None
 
@@ -24,17 +25,30 @@ class wnPainter(wnRenderer):
     for ctrl in self.controls.values():
       ctrl.Destroy()
     del self.event_man
+    del self.control_cache
     
   def ResetControls(self):
     '''Clean out any stored controls and registered events.'''
     for ctrl in self.controls.values():
       ctrl.Destroy()
     self.controls = {}
+    self.control_cache = {}
     del self.event_man
     self.event_man = wnEventManager(self)
       
   def SetDC(self, dc):
+    if dc is not None:
+      dc.BeginDrawing()
+    else:
+      self.dc.EndDrawing()
     self.dc = dc
+   
+  def SetFocus(self, id):
+    '''Give the focus to the control associated with the given ID if possible.'''
+    try:
+      self.controls[id].SetFocus()
+    except:
+      pass
     
   def DrawLine(self, x1, y1, x2, y2):
     if self.dc is None: return
@@ -57,6 +71,7 @@ class wnPainter(wnRenderer):
       
       #hook the event manager properly
       self.event_man.RegisterMouseEvents(ctrl)
+      self.event_man.RegisterFocusEvents(ctrl)
       self.event_man.RegisterEventHandler(ctrl.GetId(), handler)
       
     #if it already exists
@@ -71,15 +86,12 @@ class wnPainter(wnRenderer):
     '''Draw a dynamic text control that let's the user enter text directly into it. Register the new
     event handler to receive events from the user.'''
     
-    #check to see if a static text control already exists for this entry
+    #check to see if a dynamic text control already exists for this entry
     if not self.controls.has_key(id):
-      ctrl = wxTextCtrl(self.canvas, -1, text, pos=wxPoint(x,y), size=wxSize(length, height),
-                        style = wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB)
-      self.controls[id] = ctrl
-      
-      #hook the event manager properly
-      self.event_man.RegisterFocusEvents(ctrl)
-      self.event_man.RegisterEventHandler(ctrl.GetId(), handler)
+      #don't create the text control immediately, delay until later so they can be defined in the
+      #proper tabbing order
+      self.control_cache[id] = {'args' : (self.canvas, -1, text, wxPoint(x,y), wxSize(length, height)),
+                        'handler' : handler}
       
     #if it already exists
     else:
@@ -95,15 +107,27 @@ class wnPainter(wnRenderer):
       name, score = items[i]
       self.team_scores.InsertStringItem(i, name)
       self.team_scores.SetStringItem(i, 1, str(score))
-
-  def SetKeyboardFocus(self, id):
-    '''Set the focus to the control associated with the given ID.'''
-    try:
-      ctrl = self.controls[id]
-    except:
-      return
+      
+  def Flush(self):
+    '''Complete any drawing operations that were cached to be completed later. This is needed so
+    that the dynamic text controls are drawn in the right order for tabbing.'''
+    if self.control_cache == {}: return
     
-    ctrl.SetFocus()
+    keys = self.control_cache.keys()
+    keys.sort()
+    for id in keys:
+      #self.controls[id].Create(self.control_cache[id]['args'])
+      ctrl = apply(wxTextCtrl, self.control_cache[id]['args'])
+      self.controls[id] = ctrl
+      
+      #hook the event manager properly
+      self.event_man.RegisterFocusEvents(ctrl)
+      self.event_man.RegisterEventHandler(ctrl.GetId(), self.control_cache[id]['handler'])
+      
+    self.control_cache = {}
+
+
+      
 
 class wnPrinter(wnRenderer):
   pass
