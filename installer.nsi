@@ -45,7 +45,7 @@ Section "Program" SecProgram
   SetOutPath "$INSTDIR"
   
   ;Grab the appropriate files
-  File /r ".\dist\WrestlingNerd\*.*"
+  File /r ".\dist\*.*"
   
   ;Store install folder
   WriteRegStr HKLM "Software\WrestlingNerd" "" $INSTDIR
