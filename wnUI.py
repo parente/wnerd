@@ -245,7 +245,7 @@ class wnFrame(wxFrame):
     if dlg.ShowModal() == wxID_OK:
       t = self.tournament.Teams[dlg.GetTeamName()]
       t.ChangeWrestler(dlg.GetOldName(), dlg.GetNewName())
-      self.ResetAfterNew()
+      self.canvas.RefreshBracket()
         
     dlg.Destroy()    
     
@@ -260,7 +260,7 @@ class wnFrame(wxFrame):
       
   def OnSelectWeight(self, event):
     '''Refresh the canvas to show the new weight.'''
-    self.canvas.Refresh()
+    self.canvas.RefreshBracket()
     
   def OnSelectTeam(self, event):
     '''Show a dialog box containing properties of a team.'''
@@ -313,7 +313,7 @@ class wnFrame(wxFrame):
     #reset and draw the bracket
     self.painter.ResetControls()
     self.canvas.Reset()
-    self.canvas.Refresh()
+    self.canvas.RefreshBracket()
      
   def ChangeMenuState(self, action):
     mb = self.GetMenuBar()
@@ -341,7 +341,8 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_ADDTEAM_MENU).Enable(True)
       mb.FindItemById(GUI.ID_REMOVETEAM_MENU).Enable(True)
       mb.FindItemById(GUI.ID_TEAMSPELLING_MENU).Enable(True)
-      
+      mb.FindItemById(GUI.ID_WRESTLERSPELLING_MENU).Enable(True)
+            
     elif action == 'on open':
       mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(True)
       mb.FindItemById(GUI.ID_NUMBOUTS_MENU).Enable(True)
@@ -353,6 +354,7 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_ADDTEAM_MENU).Enable(True)
       mb.FindItemById(GUI.ID_REMOVETEAM_MENU).Enable(True)
       mb.FindItemById(GUI.ID_TEAMSPELLING_MENU).Enable(True)
+      mb.FindItemById(GUI.ID_WRESTLERSPELLING_MENU).Enable(True)
 
     elif action == 'on save':
       mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(True)

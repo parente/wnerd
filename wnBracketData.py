@@ -904,6 +904,7 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
         self.wrestler.Name = w_name
         event.Control.RefreshBracket()
       elif self.wrestler.Team.Name != t_name:
+        print 'new wrestler:', w_name
         #otherwise, delete the current wrestler from the team
         self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
         #and make a new wrestler in the new team
