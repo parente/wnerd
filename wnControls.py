@@ -59,6 +59,9 @@ class wnStaticText(wxPanel):
 
   def ShowMenu(self, pos):
     self.PopupMenu(wnMatchMenu(self), pos)
+  
+  def RefreshParent(self):
+    wxCallAfter(self.parent.RefreshScores)
 
 class wnDynamicText(wxMaskedTextCtrl):
   def __init__(self, parent, id, text, choices, pos=wxPoint(0,0), size=wxSize(-1,-1)):
@@ -89,6 +92,9 @@ class wnDynamicText(wxMaskedTextCtrl):
       
   def ShowMenu(self, pos):
     self.PopupMenu(wnSeedMenu(self), pos)
+  
+  def RefreshParent(self):
+    wxCallAfter(self.parent.RefreshScores)    
                                      
 class wnPopup(wxPopupWindow):
   def __init__(self, parent, text, pos, size):

@@ -237,8 +237,11 @@ class wnBracketCanvas(wxScrolledWindow):
       self.SetVirtualSize(wxSize(xmax, ymax))
       self.SetScrollRate(5,5)      
 
-      if refresh: p.SetInitialFocus()        
-   
+      if refresh: p.SetInitialFocus()
+      
+  def RefreshScores(self):
+    self.parent.RefreshScores()
+    
 class wnNewTournamentWizard(wxWizard):
   '''Class that creates a wizard that assists users in setting up new tournaments.'''
   

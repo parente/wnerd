@@ -9,7 +9,7 @@ class wnTeam(object):
     self.name = name
     self.wrestlers = {}
     self.point_adjust = 0.0
-    self.points = [0.0 for i in range(len(tournament.Weights))]
+    self.points = dict([(w, 0.0) for w in tournament.Weights])
     
   def __repr__(self):
     return '<Team Name: %s Wrestlers: %s>' % (self.name, self.wrestlers)
@@ -17,12 +17,15 @@ class wnTeam(object):
   def GetName(self):
     return self.name
   
-  Name = property(fget=GetName)
+  def GetTotalScore(self):
+    s = self.point_adjust
+    for i in self.points.values():
+      s += i
+    return s
   
-  def GetPointAdjust(self):
-    return self.point_adjust
-  
-  PointAdjust = property(fget=GetPointAdjust)
+  def SetWeightScore(self, weight_name, value):
+    '''Set the score for a weight to a certain value.'''
+    self.points[weight_name] = value
   
   def NewWrestler(self, name, weight):
     '''Add a new wrestler to the team. Make the wrestler scoring if he is the first to be added.'''
@@ -46,6 +49,9 @@ class wnTeam(object):
         else:
           del w_list[i]
         break
+      
+  Name = property(fget=GetName)  
+  Score = property(fget=GetTotalScore)      
       
 class wnWrestler(object):
   '''The wrestler class holds information about individuals in a tournament.'''

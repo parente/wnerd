@@ -6,7 +6,16 @@ individual matches or advancement and placement point systems.
 class wnPoints(object):
   def __init__(self, adv_pts=0, place_pts=0):
     self.adv_points = adv_pts
-    self.place_pts = place_pts
+    self.place_points = place_pts
+    
+  def GetAdvancementPoints(self):
+    return self.adv_points
+  
+  def GetPlacementPoints(self):
+    return self.place_points
+  
+  AdvPoints = property(fget=GetAdvancementPoints)
+  PlacePoints = property(fget=GetPlacementPoints)
   
 class wnResultFactory(object):
   def Create(cls, type, args=None):

@@ -3,7 +3,8 @@ The bracket data module defines the classes that store information about an enti
 classes define the weight classes, rounds, seeds, and matches of the tournament. These objects are
 responsible for rendering themselves and responding to events using renderers provided at run time.
 '''
-from wnEvents import wnMouseEventReceivable, wnFocusEventReceivable
+from wnEvents import wnMouseEventReceivable, wnFocusEventReceivable, wnMatchMenuReceivable, \
+  wnSeedMenuReceivable
 from wnScoreData import *
 from wnTeamData import *
 import wnSettings
@@ -64,21 +65,26 @@ class wnTournament(wnNode):
   
   def CalcScores(self, painter, weight):
     '''Calculate all the scores across this tournament.'''
-    # build a list with zeros for team scores
-    scores = []
-    for k in self.teams.keys():
-      scores.append((k, self.teams[k].PointAdjust))
-
     # only compute scores for the current weight class
     try:
       wc = self.weight_classes[weight]
     except:
       return
     
-    # pass the list of teams to the selected weight class
-    wc.CalcScores(self.teams)
+    # reset the team score for this weight class
+    #for t in self.teams.keys():
+    #  self.teams[t].ResetWeightScore(weight)
     
-    painter.DrawTeamScores(scores)
+    # tell the current weight class to compute its scores
+    scores = wc.CalcScores()
+    
+    # store the new scores and make the score pairs for display
+    score_table = []
+    for t in self.teams.keys():
+      self.teams[t].SetWeightScore(weight, scores.get(t) or 0.0)
+      score_table.append((t, self.teams[t].Score))
+      
+    painter.DrawTeamScores(score_table)
 
   def GetWeights(self):
     '''Return a list of all the weight classes in ascending order.'''
@@ -153,11 +159,16 @@ class wnWeightClass(wnNode):
       
     return max_x, max_y+initial_step
   
-  def CalcScores(self, teams):
+  def CalcScores(self):
     '''Compute all the team scores in this weight class.'''
     # go through the rounds in order and tell them to calculate their scores
+    scores = {}
     for i in self.order:
       round = self.rounds[i]
+      round.CalcScores(scores)
+      
+    # return a dictionary of team/score pairs
+    return scores
   
 class wnRound(wnNode):
   '''The round class is responsible for holding onto individual matches and their results.'''
@@ -174,9 +185,9 @@ class wnRound(wnNode):
   def GetEntries(self):
     return self.entries
   
-  NumEntries = property(fget=GetNumberOfEntries)
-  Entries = property(fget=GetEntries)
-        
+  def GetRoundPoints(self):
+    return self.points
+          
   def NewEntries(self, number):
     #check if we're making new entries based on an order defined in a list
     #if the order is defined, these must be seeds
@@ -241,6 +252,52 @@ class wnRound(wnNode):
     new_start = start[0] + length, start[1] + step/2
     
     return new_start, max_x, max_y
+
+  def CalcScores(self, scores):
+    '''Start scoring threads in this round if possible.'''
+    # quit right away if there is no next win round
+    if self.next_win is None: return
+    
+    # go through all the entries 
+    for entry in self.entries:
+      # tell ones that start a thread to calculate their results
+      if entry.Previous == [] and entry.Wrestler is not None:
+        results = entry.CalcScores()
+        
+        # the result is a list of all results in a thread sorted from earliest to latest round
+        # go through the list in reverse order and add the points
+        # keep track of whether bye points should be added or not
+        count_byes = False
+        bye_score = 0.0
+        thread_score = 0.0
+        
+        while len(results) != 0:
+          match, round = results.pop()
+          
+          # if there was no match, just skip it
+          if match is None: continue
+          
+          # add in non-byes normally and indicate future byes should be counted
+          if match.Name != 'Bye':
+            thread_score += bye_score + match.Points + round.AdvPoints + round.PlacePoints
+            count_byes = True
+            bye_score = 0.0
+            
+          # keep track of bye points for possible addition later
+          elif match.Name == 'Bye' and not count_byes:
+            bye_score += match.Points + round.AdvPoints + round.PlacePoints
+            
+          # count byes normally
+          elif match.Name == 'Bye' and count_byes:
+            thread_score += match.Points + round.AdvPoints + round.PlacePoints
+        
+        # store the result for this team so far
+        tn = entry.Wrestler.Team.Name
+        scores[tn] = scores.get(tn, 0.0) + thread_score
+          
+  NumEntries = property(fget=GetNumberOfEntries)
+  Entries = property(fget=GetEntries)
+  RoundPoints = property(fget=GetRoundPoints)
       
 class wnEntry(wnNode):
   '''The entry class holds individual match results.'''
@@ -250,6 +307,7 @@ class wnEntry(wnNode):
     self.next_win = None
     self.next_lose = None
     self.previous = []
+    self.result = None
     
   def GetID(self):
     '''Return the ID of this entry. This ID must be exactly the same as the ID of similar entries
@@ -283,7 +341,7 @@ class wnEntry(wnNode):
   def GetWeight(self):
     '''Get the weight class name for this entry. Encapsulate how we get this data using
     properties.'''
-    return self.Parent.Parent.Name
+    return self.parent.Parent.Name
   
   def GetWrestler(self):
     '''Get the wrestler stored at this entry.'''
@@ -292,6 +350,24 @@ class wnEntry(wnNode):
     '''Set the wrestler stored at this entry.'''
     self.wrestler = wrestler
   
+  def CalcScores(self):
+    '''Begin a score calculation thread. Call CalcScores recursively on each following win
+    entry to see if the same wrestler is present there. Collect points won in these rounds
+    and update the team score with them.'''
+    
+    # if the wrestler has continued past this point
+    if (self.next_win is not None) and (self.wrestler == self.next_win.Wrestler):
+      # call calc scores again
+      result = self.next_win.CalcScores()
+      
+      # prepend the result of this entry to the growing list
+      result.insert(0, (self.result, self.parent.RoundPoints))
+      return result
+      
+    else:
+      # return the result of this entry
+      return [(self.result, self.parent.RoundPoints)]
+
   ID = property(fget=GetID)
   NextLose = property(fget=GetNextLose, fset=SetNextLose)
   NextWin = property(fget=GetNextWin, fset=SetNextWin)
@@ -300,11 +376,10 @@ class wnEntry(wnNode):
   Weight = property(fget=GetWeight)
   Wrestler = property(fget=GetWrestler, fset=SetWrestler)
   
-class wnMatchEntry(wnEntry, wnMouseEventReceivable):
+class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
   '''The match entry class hold individual match results.'''
   def __init__(self, name, parent):
     wnEntry.__init__(self, name, parent)
-    self.result = None
     
   def Paint(self, painter, pos=(0,0), length=100, refresh_labels=False):
     '''Paint all of the text controls.'''
@@ -376,8 +451,9 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable):
     self.result = None
     event.Control.SetLabel('')
     event.Control.HidePopup()
+    event.Control.RefreshParent()
         
-class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
+class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSeedMenuReceivable):
   '''The seed entry class holds information about seeded wrestlers.'''
   def __init__(self, name, parent):
     wnEntry.__init__(self, name, parent)
@@ -410,6 +486,7 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
     self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
     self.wrestler = None
     event.Control.ClearValue()
+    event.Control.RefreshParent()
   
   def OnKillFocus(self, event):
     '''Store the entered value if it is valid. Give the next seed the focus, wrapping around at

@@ -1,15 +1,16 @@
 Todo
 
 UI
-- show current win value in data entry box
 - delete and move up in seeds
 - swapping wrestler seeds
 - insert and move down in seeds
 - support non-scoring wrestlers
 
 Data
-- scoring algorithm that includes proper Bye points
+- test scoring algorithm
 - support non-scoring wrestlers
+- fast fall
+- number of bouts
 
 Printing
 - learn how to print in wxPython

@@ -88,7 +88,7 @@ class wnBCInvitationalConfig:
             wnRoundSetup('First Place', wnPoints(0,0), 1),
             
             wnRoundSetup('Quarter-Finals Consolation', wnPoints(1,0), 4,
-                         'Semi-Finals Consolation', [1,1,2,2]),
+                         'Semi-Finals Consolation', [0,0,2,2]),
             wnRoundSetup('Semi-Finals Consolation', wnPoints(1,0), 4, 'Finals Consolation',
                          [0,0,1,1], 'Finals Fifth', [0,0,1,1]),
             wnRoundSetup('Finals Consolation', wnPoints(1,0), 2, 'Third Place', [0,0]),
@@ -123,7 +123,7 @@ class wnCTChampionshipConfig:
             wnRoundSetup('Eight Consolation', wnPoints(1,0), 8,
                         'Quarter-Finals Consolation', [0,0,1,1,2,2,3,3]),
             wnRoundSetup('Quarter-Finals Consolation', wnPoints(1,0), 4,
-                        'Semi-Finals Consolation', [1,1,2,2]),
+                        'Semi-Finals Consolation', [0,0,2,2]),
             wnRoundSetup('Semi-Finals Consolation', wnPoints(1,0), 4, 'Finals Consolation',
                          [0,0,1,1], 'Finals Fifth', [0,0,1,1]),
             wnRoundSetup('Finals Consolation', wnPoints(1,0), 2, 'Third Place', [0,0]),
