@@ -14,7 +14,7 @@ def ScoreFrame( parent, call_fit = true, set_sizer = true ):
     item1 = wxStaticBox( parent, -1, "Score" )
     item0 = wxStaticBoxSizer( item1, wxVERTICAL )
     
-    item2 = wxListCtrl( parent, ID_TEAM_LIST, wxDefaultPosition, wxSize(180,120), wxLC_REPORT|wxSUNKEN_BORDER )
+    item2 = wxListCtrl( parent, ID_TEAM_LIST, wxDefaultPosition, wxSize(180,300), wxLC_REPORT|wxSUNKEN_BORDER )
     item0.AddWindow( item2, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     if set_sizer == true:

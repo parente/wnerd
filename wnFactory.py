@@ -1,8 +1,8 @@
 from wnData import *
 
 class wnRoundSetup(object):
-  def __init__(self, name, points, num_entries, next_win = None, next_lose = None,
-               win_map = None, lose_map = None):
+  def __init__(self, name, points, num_entries, next_win = None, win_map = None, next_lose = None,
+               lose_map = None):
     self.Name = name
     self.Points = points
     self.NumEntries = num_entries
@@ -14,7 +14,7 @@ class wnRoundSetup(object):
 class wnFactory(object):
   def GetTournaments(self):
     '''Return the tournaments currently supported.'''
-    configs =  [wnBCInvitationalConfig]
+    configs =  [wnBCInvitationalConfig, wnCTChampionshipConfig]
     
     return configs
   
@@ -74,17 +74,49 @@ class wnBCInvitationalConfig:
             wnRoundSetup('Sixteen Champion', wnPoints(2,0), 16, 'Quarter-Finals Champion',
                          [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7]),
             wnRoundSetup('Quarter-Finals Champion', wnPoints(2,0), 8, 'Semi-Finals Champion',
-                         'Semi-Finals Consolation', [0,0,1,1,2,2,3,3], [0,0,1,1,2,2,3,3]),
+                         [0,0,1,1,2,2,3,3], 'Semi-Finals Consolation', [0,0,1,1,2,2,3,3]),
             wnRoundSetup('Semi-Finals Champion', wnPoints(2,0), 4, 'Finals Champion',
-                        'Semi-Finals Consolation', [0,0,1,1], [3,3,0,0]),
+                         [0,0,1,1], 'Semi-Finals Consolation', [3,3,1,1]),
             wnRoundSetup('Finals Champion', wnPoints(2,0), 2, 'First Place', [0, 0]),
             wnRoundSetup('First Place', wnPoints(0,0), 1),
+            
+            wnRoundSetup('Quarter-Finals Consolation', wnPoints(1,0), 4,
+                         'Semi-Finals Consolation', [1,1,2,2]),
+            wnRoundSetup('Semi-Finals Consolation', wnPoints(1,0), 4, 'Finals Consolation',
+                         [0,0,1,1], 'Finals Fifth', [0,0,1,1]),
+            wnRoundSetup('Finals Consolation', wnPoints(1,0), 2, 'Third Place', [0,0]),
+            wnRoundSetup('Third Place', wnPoints(0,0), 1),
+            
+            wnRoundSetup('Finals Fifth', wnPoints(0,0), 2, 'Fifth Place', [0,0]),
+            wnRoundSetup('Fifth Place', wnPoints(0,0), 1)]
+
+class wnCTChampionshipConfig:
+  Name = 'Connecticut State Tournament'
+  Description = 'The bracket format used in the Connecticut State Championships and the Connecticut State Open. The outbracket has 32 seed slots, and double-elimination begins in the round of sixteen.'
+  Rounds = [wnRoundSetup('Rat-Tails Champion', wnPoints(0,0), 32, 'Sixteen Champion',
+                         [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,
+                          14,14,15,15]),
+            wnRoundSetup('Sixteen Champion', wnPoints(2,0), 16, 'Quarter-Finals Champion',
+                         [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7], 'Rat-Tails Consolation',
+                         [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7]),
+            wnRoundSetup('Quarter-Finals Champion', wnPoints(2,0), 8, 'Semi-Finals Champion',
+                         [0,0,1,1,2,2,3,3], 'Eight Consolation', [1,1,3,3,5,5,7,7]),
+            wnRoundSetup('Semi-Finals Champion', wnPoints(2,0), 4, 'Finals Champion',
+                         [0,0,1,1], 'Semi-Finals Consolation', [3,3,1,1]),
+            wnRoundSetup('Finals Champion', wnPoints(2,0), 2, 'First Place', [0, 0]),
+            wnRoundSetup('First Place', wnPoints(0,0), 1),
+            
+            wnRoundSetup('Rat-Tails Consolation', wnPoints(1,0), 8,
+                        'Eight Consolation', [0,0,2,2,4,4,6,6]),
+            wnRoundSetup('Eight Consolation', wnPoints(1,0), 8,
+                        'Quarter-Finals Consolation', [0,0,1,1,2,2,3,3]),
             wnRoundSetup('Quarter-Finals Consolation', wnPoints(1,0), 4,
                         'Semi-Finals Consolation', [1,1,2,2]),
             wnRoundSetup('Semi-Finals Consolation', wnPoints(1,0), 4, 'Finals Consolation',
-                        'Finals Fifth', [0,0,1,1], [0,0,1,1]),
+                         [0,0,1,1], 'Finals Fifth', [0,0,1,1]),
             wnRoundSetup('Finals Consolation', wnPoints(1,0), 2, 'Third Place', [0,0]),
             wnRoundSetup('Third Place', wnPoints(0,0), 1),
+            
             wnRoundSetup('Finals Fifth', wnPoints(0,0), 2, 'Fifth Place', [0,0]),
             wnRoundSetup('Fifth Place', wnPoints(0,0), 1)]
 
