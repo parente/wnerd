@@ -68,6 +68,7 @@ class wnFrame(wxFrame):
     EVT_MENU(self, GUI.ID_PRINT_MENU, self.OnPrint)
     EVT_MENU(self, GUI.ID_NUMBOUTS_MENU, self.OnCountBouts)
     EVT_MENU(self, GUI.ID_FASTFALL_MENU, self.OnFastFall)
+    EVT_MENU(self, GUI.ID_ABOUT_MENU, self.OnAbout)
     EVT_CHOICE(self, GUI.ID_WEIGHTS_CHOICE, self.OnSelectWeight)
     EVT_LIST_ITEM_ACTIVATED(self, GUI.ID_TEAMS_LIST, self.OnSelectTeam)
     
@@ -161,6 +162,15 @@ class wnFrame(wxFrame):
   def OnFastFall(self, event):
     '''Show the fast fall dialog.'''
     dlg = wnFastFallDialog(self, self.tournament.CalcFastFall())
+    dlg.CentreOnScreen()
+    dlg.ShowModal()
+    dlg.Destroy()
+    
+  def OnAbout(self, event):
+    '''Show the about window.'''
+    dlg = wxDialog(self, -1, 'About')
+    GUI.CreateAboutDialog(dlg)
+    dlg.SetBackgroundColour(wxWHITE)
     dlg.CentreOnScreen()
     dlg.ShowModal()
     dlg.Destroy()

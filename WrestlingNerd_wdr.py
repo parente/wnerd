@@ -448,20 +448,51 @@ def CreateFastFallDialog( parent, call_fit = True, set_sizer = True ):
     
     return item0
 
+ID_STATICBITMAP = 10031
+
+def CreateAboutDialog( parent, call_fit = True, set_sizer = True ):
+    item0 = wxBoxSizer( wxVERTICAL )
+    
+    item1 = wxStaticBitmap( parent, ID_STATICBITMAP, LogoBitmaps( 0 ), wxDefaultPosition, wxDefaultSize )
+    item0.AddWindow( item1, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item2 = wxStaticText( parent, ID_TEXT, 
+        "Wrestling Nerd 3.0\n"
+        "Written by Peter Parente\n"
+        "\n"
+        "Thanks to Jakob Fischer for the font used in the Wrestling Nerd logo.\n"
+        "\n"
+        "Copyright 2003 Peter Parente under the MIT License\n"
+        "See the included LICENSE.txt file for restrictions on the use and distribution of this software.",
+        wxDefaultPosition, wxDefaultSize, 0 )
+    item2.SetBackgroundColour( wxWHITE )
+    item0.AddWindow( item2, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
+        parent.SetSizer( item0 )
+        if call_fit == True:
+            item0.Fit( parent )
+            item0.SetSizeHints( parent )
+    
+    return item0
+
 # Menubar functions
 
-ID_NEW_MENU = 10031
-ID_OPEN_MENU = 10032
-ID_MENU = 10033
-ID_SAVE_MENU = 10034
-ID_SAVEAS_MENU = 10035
-ID_PRINT_MENU = 10036
-ID_EXIT_MENU = 10037
-ID_FILE_MENU = 10038
-ID_FASTFALL_MENU = 10039
-ID_NUMBOUTS_MENU = 10040
-ID_SCOREWIN_MENU = 10041
-ID_QUERY_MENU = 10042
+ID_NEW_MENU = 10032
+ID_OPEN_MENU = 10033
+ID_MENU = 10034
+ID_SAVE_MENU = 10035
+ID_SAVEAS_MENU = 10036
+ID_PRINT_MENU = 10037
+ID_EXIT_MENU = 10038
+ID_FILE_MENU = 10039
+ID_FASTFALL_MENU = 10040
+ID_NUMBOUTS_MENU = 10041
+ID_SCOREWIN_MENU = 10042
+ID_QUERY_MENU = 10043
+ID_ABOUT_MENU = 10044
+ID_HELP_MENU = 10045
 
 def CreateMenuBar():
     item0 = wxMenuBar()
@@ -476,14 +507,18 @@ def CreateMenuBar():
     item1.Append( ID_PRINT_MENU, "&Print...\tCtrl-P", "" )
     item1.AppendSeparator()
     item1.Append( ID_EXIT_MENU, "E&xit", "" )
-    item0.Append( item1, "File" )
+    item0.Append( item1, "&File" )
     
     item2 = wxMenu()
     item2.Append( ID_FASTFALL_MENU, "&Fast fall...\tCtrl-F", "" )
     item2.Append( ID_NUMBOUTS_MENU, "&Bout count...\tCtrl-B", "" )
     item2.AppendSeparator()
     item2.Append( ID_SCOREWIN_MENU, "Score &window...\tCtrl-W", "" )
-    item0.Append( item2, "Query" )
+    item0.Append( item2, "&Query" )
+    
+    item3 = wxMenu()
+    item3.Append( ID_ABOUT_MENU, "&About", "" )
+    item0.Append( item3, "&Help" )
     
     return item0
 
@@ -491,5 +526,11 @@ def CreateMenuBar():
 
 # Bitmap functions
 
+ID_LOGO = 10046
+
+def LogoBitmaps( index ):
+    if (index == 0) or (index == ID_LOGO):
+        return wxImage( "WrestlingNerd_wdr/LogoBitmaps_0.png", wxBITMAP_TYPE_PNG ).ConvertToBitmap()
+    return wxNullBitmap
 
 # End of generated file
