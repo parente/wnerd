@@ -31,10 +31,10 @@
 
     <h1><a name="news"></a>News</h1>
     <h3>12/12/04</h3>
-    <p>Wrestling Nerd 3.2 is now available for download. See the post from 12/9 below for a list of improvements. I
-    am currently working on updating the <a href="#doc">documentation</a> to describe the new features since version
-    3.0.</p>
-    
+    <p>Wrestling Nerd 3.2 is now available for download. See the post from 12/9 below for a list of improvements. I've
+    updated the <a href="#doc">documentation</a> to describe the new features since version 3.0, but I still have to
+    finish the section on how to create new bracket layouts.</p>
+
     <h3>12/9/04</h3>
     <p>It's been quite a long time since I've posted an update. Now that the fall semester is almost over, I have some
     time to make improvements to WN. I should have a new release posted here in a few days that includes the following:
@@ -111,12 +111,12 @@
       <li><a href="http://prdownloads.sourceforge.net/wnerd/WrestlingNerd-3.2-win32.exe?download">
       Download Wrestling Nerd 3.2 for Windows</a></li>
     </ul>
-    
-    <p>The source code for Wrestling Nerd can be anonymously checked out from the 
+
+    <p>The source code for Wrestling Nerd can be anonymously checked out from the
     <a href="http://sourceforge.net/cvs/?group_id=83393">wnerd CVS repository</a> on SourceForge.</p>
 
     <h1><a name="doc"></a>Documentation</h1>
-    <p>The latest documentation is for Wrestling Nerd 3.0. Click here to <a href="help/index.shtml">
+    <p>The latest documentation is for Wrestling Nerd 3.2. Click here to <a href="help/index.shtml">
     view the documentation</a>.</p>
 
     <h1><a name="contact"></a>Contact</h1>
