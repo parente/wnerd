@@ -77,6 +77,7 @@ class wnEventManager(wxEvtHandler):
       func_name = dispatch[event.GetEventType()]
       func = getattr(handler, func_name)
       func(e)
+    event.Skip()
       
   def OnFocusEvent(self, event):
     '''Dispatch to the proper object and function based on the event object and event type.'''
@@ -90,3 +91,4 @@ class wnEventManager(wxEvtHandler):
       func_name = dispatch[event.GetEventType()]
       func = getattr(handler, func_name)
       func(e)
+    event.Skip()

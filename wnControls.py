@@ -1,7 +1,7 @@
 from wxPython.wx import *
 import wnSettings
 
-class wnStaticTextWithEvents(wxPanel):
+class wnStaticText(wxPanel):
   def __init__(self, parent, id, text, pos=wxPoint(0,0), size=wxSize(100,20)):
     wxPanel.__init__(self, parent, id, pos, size, style=wxTRANSPARENT_WINDOW)
     
@@ -36,6 +36,19 @@ class wnStaticTextWithEvents(wxPanel):
       self.popup.Show(False)
       self.popup.Destroy()
       self.popup = None
+      
+class wnDynamicText(wxTextCtrl):
+  def __init__(self, parent, id, text, pos=wxPoint(0,0), size=wxSize(100,20)):
+    wxTextCtrl.__init__(self, parent, id, text, pos, size)
+    self.parent = parent
+    
+    EVT_SET_FOCUS(self, self.OnSetFocus)
+    
+  def OnSetFocus(self, event):
+    x,y = self.GetPosition()
+    px, py = self.parent.GetScrollPixelsPerUnit()
+    sx, sy = self.parent.GetViewStart()
+    self.parent.Scroll(0, sy+y/py)
                                
 class wnPopup(wxPopupWindow):
   def __init__(self, parent, text, pos, size):

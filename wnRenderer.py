@@ -50,6 +50,11 @@ class wnPainter(wnRenderer):
     except:
       pass
     
+  def GetFocus(self):
+    ctrl = wxWindow_FindFocus()
+    reverse = dict([(v,k) for k,v in self.controls.items()])
+    return reverse.get(ctrl)
+    
   def DrawLine(self, x1, y1, x2, y2):
     if self.dc is None: return
     self.dc.DrawLine(x1, y1, x2, y2)
@@ -65,8 +70,7 @@ class wnPainter(wnRenderer):
     
     #check to see if a static text control already exists for this entry
     if not self.controls.has_key(id):
-      ctrl = wnStaticTextWithEvents(self.canvas, -1, text, pos=wxPoint(x,y),
-                                    size=wxSize(length, height))
+      ctrl = wnStaticText(self.canvas, -1, text, pos=wxPoint(x,y), size=wxSize(length, height))
       self.controls[id] = ctrl
       
       #hook the event manager properly
@@ -90,8 +94,8 @@ class wnPainter(wnRenderer):
     if not self.controls.has_key(id):
       #don't create the text control immediately, delay until later so they can be defined in the
       #proper tabbing order
-      self.control_cache[id] = {'args' : (self.canvas, -1, text, wxPoint(x,y), wxSize(length, height)),
-                        'handler' : handler}
+      self.control_cache[id] = {'args' : (self.canvas, -1, text, wxPoint(x,y),
+                                          wxSize(length, height)), 'handler' : handler}
       
     #if it already exists
     else:
@@ -111,13 +115,12 @@ class wnPainter(wnRenderer):
   def Flush(self):
     '''Complete any drawing operations that were cached to be completed later. This is needed so
     that the dynamic text controls are drawn in the right order for tabbing.'''
-    if self.control_cache == {}: return
+    if len(self.control_cache) == 0: return
     
     keys = self.control_cache.keys()
     keys.sort()
     for id in keys:
-      #self.controls[id].Create(self.control_cache[id]['args'])
-      ctrl = apply(wxTextCtrl, self.control_cache[id]['args'])
+      ctrl = apply(wnDynamicText, self.control_cache[id]['args'])
       self.controls[id] = ctrl
       
       #hook the event manager properly
@@ -125,9 +128,6 @@ class wnPainter(wnRenderer):
       self.event_man.RegisterEventHandler(ctrl.GetId(), self.control_cache[id]['handler'])
       
     self.control_cache = {}
-
-
-      
 
 class wnPrinter(wnRenderer):
   pass

@@ -307,8 +307,14 @@ class wnSeedEntry(wnEntry, wnFocusEventReceivable):
   def OnKillFocus(self, event):
     '''Don't let a match entry steal the focus. Immediately set it back to the first available
     seed entry on the bracket.'''
-    if self.name == self.round.NumEntries:
-      event.Painter.SetFocus(self.round.Entries[0].ID)
+    next_id = event.Painter.GetFocus()
+    if next_id is None: return
+
+    if next_id[1] != self.ID[1]:
+      if self.name == 1:
+        event.Painter.SetFocus(self.round.Entries[1].ID)
+      elif self.name == self.round.NumEntries:
+        event.Painter.SetFocus(self.round.Entries[0].ID)        
         
 class wnPoints(object):
   def __init__(self, adv_pts=0, place_pts=0):
