@@ -58,10 +58,10 @@ Section "Program" SecProgram
   WriteUninstaller "$INSTDIR\uninstall.exe"
 SectionEnd
 
-Section "Start Menu Shortcuts"
-  ;Create start menu shortcuts
+Section "Shortcuts"
   CreateDirectory "$SMPROGRAMS\Wrestling Nerd"
-  CreateShortcut "$SMPROGRAMS\Wrestling Nerd\Wrestling Nerd.lnk" "$INSTDIR\WrestlingNerd.exe"
+  CreateShortcut "$SMPROGRAMS\Wrestling Nerd\Wrestling Nerd 3.0.lnk" "$INSTDIR\WrestlingNerd.exe"
+  CreateShortcut "$DESKTOP\Wrestling Nerd 3.0.lnk" "$INSTDIR\WrestlingNerd.exe"
 SectionEnd
 
 ;--------------------------------
@@ -76,6 +76,7 @@ Section "Uninstall"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\WrestlingNerd"
 
   ; delete shortcuts
-  Delete "$SMPROGRAMS\Wrestling Nerd\Wrestling Nerd.lnk"
+  Delete "$SMPROGRAMS\Wrestling Nerd\Wrestling Nerd 3.0.lnk"
+  Delete "$DESKTOP\Wrestling Nerd\Wrestling Nerd 3.0.lnk"
   RMDir "$SMPROGRAMS\Wrestling Nerd"
 SectionEnd

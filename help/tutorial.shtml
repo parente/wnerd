@@ -213,16 +213,47 @@
     keepers, the press, and fans. Wrestling Nerd is capable of printing tournament results for you.</p>
     
     <h3><a name="print_bouts"></a>Printing bouts</h3>
-    <p></p>
+    <p>Bouts sheets are structured forms that scorekeepers used to keep track of points in
+    individual matches and report results. To print bout sheets for certain rounds and weight
+    classes, choose Print from the File menu. The print dialog appears. Select Bouts as the type of
+    printout you wish to make. Select the weights for which you wish to print bouts by holding the
+    Ctrl key and left clicking on the weight class names. Select the rounds in the same manner.
+    Holding shift and left clicking selects a contiguous range of items in either list.</p>
+    
+    <p>Once you have selected the desired weights and rounds, click the OK button. The options
+    dialog for your printer appears. Choose any additional printing options and press OK or Print to
+    begin printing. The bout sheets will print two to a page.</p>
     
     <h3><a name="print_brackets"></a>Printing brackets</h3>
-    <p></p>
+    <p>Printed brackets resemble the bracket shown on the screen, except that the results of each
+    match are printed directly below the wrestler name. To print brackets for certain weight classes,
+    choose Print from the File menu. The print dialog appears. Select Brackets as the type of
+    printout. Select the weights for which you wish to print brackets by holding the Ctrl key and
+    left clicking on the weight class names. Holding shift and left clicking selects a contiguous
+    range weights.</p>
+    
+    <p>Once you have selected the desired weights, click the OK button. The options dialog for your
+    printer appears. Choose any additional printing options and press OK or Print to begin printing.
+    The brackets will print one to a page.</p>
     
     <h3><a name="print_scores"></a>Printing team scores</h3>
-    <p></p>
+    <p>Team scores are a current ranking of teams by their scores in descending order. To print team
+    scores, choose Print from the File menu. The print dialog appears. Select Scores as the type of
+    printout.</p>
+    
+    <p>Click the OK button when you are ready. The options dialog for your printer appears. Choose
+    any additional printing options and press OK or Print to begin printing. The scores will print
+    with about fifty teams per page.</p>
     
     <h3><a name="print_places"></a>Printing place winners</h3>
-    <p></p>
+    <p>Place winners are medalists for each weight class. To print brackets for certain weight
+    classes, choose Print from the File menu. Select Places as the type of printout. Select the
+    weights for which you wish to print place winners by holding the Ctrl key and left clicking on
+    the weight class names. Holding shift and left clicking selects a contiguous range weights.</p>
+
+    <p>Once you have selected the desired weights, click the OK button. The options dialog for your
+    printer appears. Choose any additional printing options and press OK or Print to begin printing.
+    The place winners will print with six weight classes per page.</p>
     
     <h2><a name="storing"></a>Storing results</h2>
     <p>Tournament data can be stored on disk for later use in Wrestling Nerd or in other programs.</p>
@@ -242,7 +273,9 @@
     <p>The open dialog may be opened by pressing Ctrl-O instead of using the menus.</p>
     
     <h3><a name="exporting"></a>Exporting plain text results</h3>
-    <p>
+    <p>The final scores, place winners, and fast fall leader of a tournament can be saved to a plain
+    text file that can be opened in a simple text editor. To export these results, choose Export
+    from the File menu. Enter a filename for the text document in the file dialog box that appears.</p>
     
   </body>
 </html>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xshtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <title>Wrestling Nerd Documentation</title>
@@ -8,18 +8,23 @@
 
   <body>
     <div class="nav"><a href="../index.shtml">Back to the Wrestling Nerd Homepage</a></div>
-    <h1>Wrestling Nerd 3.0 Documentation</h1>
-    <h2>by Peter Parente</h2>
+    <h1 class="title">Wrestling Nerd 3.0 Documentation</h1>
+    <p class="subtitle">by Peter Parente</p>
+    <p class="dedication">Dedicated to my father, my mother, and my brother, whom all know the glory
+    and the pain of wrestling.</p>
     
-    <h2>Table of Contents</h2>
+    <hr width="80%"/>
+    
+    <h1>Table of Contents</h1>
     <ol>
       <li><a href="introduction.shtml">Introduction</a></li>
       <ol>
         <li><a href="introduction.shtml#what">What is Wrestling Nerd?</a></li>
         <li><a href="introduction.shtml#starting">Getting started</a></li>
         <ol>
-          <li><a href="introduction.shtml#windows">Windows 95, 98, ME, NT, 2000, XP</a></li>
-          <li><a href="introduction.shtml#other">Other platforms</a></li>
+          <li><a href="introduction.shtml#windows">Removing old versions</a></li>
+          <li><a href="introduction.shtml#windows">Installing on Windows 95, 98, ME, NT, 2000, XP</a></li>
+          <li><a href="introduction.shtml#other">Installing on other platforms</a></li>
         </ol>
         <li><a href="introduction.shtml#contacting">Contacting the author</a></li>
         <li><a href="introduction.shtml#license">License agreement</a></li>

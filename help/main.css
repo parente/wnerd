@@ -13,6 +13,27 @@ div {
   padding: 4px;
 }
 
+h1.title {
+  font-size: 26pt;
+  margin-bottom: 0px;
+  text-align: center;
+}
+
+p.subtitle {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-size: 12pt;
+  font-weight: bold;
+  text-align: center;  
+}
+
+p.dedication {
+  margin-top: 0px;
+  font-size: 10pt;
+  font-style: italic;
+  text-align: center;  
+}
+
 h1 {
   font-size: 20pt;
 }

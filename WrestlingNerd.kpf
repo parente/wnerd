@@ -10,6 +10,10 @@
 </file>
 <file name="tutorial.shtml" url="help/tutorial.shtml">
 </file>
+<file name="customizing.shtml" url="help/customizing.shtml">
+</file>
+<file name="appendix.shtml" url="help/appendix.shtml">
+</file>
 </folder>
 <folder name="installer">
 <file name="setup.py" url="setup.py">
