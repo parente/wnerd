@@ -23,3 +23,5 @@ print_margin_y = 30
 screen_font_size = 8
 print_font_size = 10
 print_heading_size = 12
+
+bout_bitmap_filename = 'WrestlingNerd_wdr/bout.png'

@@ -167,16 +167,11 @@ class wnPrinter(wnRenderer):
   def __init__(self):
     self.dc = None
     self.max_size = None
-    self.normal_font = wxFont(wnSettings.print_font_size, wxMODERN, wxNORMAL, wxNORMAL)
-    self.heading_font = wxFont(wnSettings.print_heading_size, wxMODERN, wxNORMAL, wxBOLD)
     self.scale = 1.0
   
   def SetDC(self, dc):
     self.dc = dc
     self.max_size = self.dc.GetSize()
-  
-    # set the font
-    self.dc.SetFont(self.normal_font)
         
   def ScaleToFit(self, max_w, max_h):
     if self.dc is None: return
@@ -199,17 +194,16 @@ class wnPrinter(wnRenderer):
   def DrawHeader(self, *args):
     if self.dc is None: return
     
-    self.dc.SetFont(self.heading_font)
     h = 0
     for l in args:
       d = self.dc.GetTextExtent(l)
       self.DrawText(l, self.max_size[0]-d[0], h)
       h += d[1]
-    self.dc.SetFont(self.normal_font)
                
   def DrawLine(self, x1, y1, x2, y2):
     if self.dc is None: return
     self.dc.DrawLine(x1, y1, x2, y2)
+
   
   def DrawText(self, text, x, y):
     if self.dc is None: return

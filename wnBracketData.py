@@ -7,6 +7,7 @@ from wnEvents import wnMouseEventReceivable, wnFocusEventReceivable, wnMatchMenu
   wnSeedMenuReceivable
 from wnScoreData import *
 from wnTeamData import *
+from wnTempData import *
 import wnSettings
 
 class wnNode(object):
@@ -62,24 +63,23 @@ class wnTournament(wnNode):
       
     return result
   
-  def CalcScores(self, weight):
+  def CalcScores(self, weight=None):
     '''Calculate all the scores across this tournament.'''
-    # only compute scores for the current weight class
-    try:
-      wc = self.weight_classes[weight]
-    except:
-      return
+    # try to get the weight class that should be updated
+    wc = self.weight_classes.get(weight)
     
-    # tell the current weight class to compute its scores
-    scores = wc.CalcScores()
-    
-    # store the new scores and make the score pairs for display
+    if wc is not None:
+      # tell the current weight class to compute its scores
+      scores = wc.CalcScores()
+      for t in self.teams.keys():
+        self.teams[t].SetWeightScore(weight, scores.get(t) or 0.0)
+
+    # compute the total scores
     score_table = []
-    for t in self.teams.keys():
-      self.teams[t].SetWeightScore(weight, scores.get(t) or 0.0)
+    for t in self.teams.keys():      
       score_table.append((self.teams[t].Score, t))
-      
-    # sort the scores descending
+    
+    # return for display in descending order
     score_table.sort()
     score_table.reverse()
     return score_table
@@ -90,13 +90,24 @@ class wnTournament(wnNode):
     for t in self.teams.values():
       results += t.CalcFastFall()
       
-    # sort first by pins
+    # the fast fall objects know how to sort by pin and time
     results.sort()
-    results.reverse()
-    
-    # now sort by times
     
     return results
+  
+  def GetBouts(self, weights, rounds):
+    '''Return a list of all the bouts for the given weights and rounds.'''
+    bouts = []
+    
+    # ask each weight class to compute the bouts for its rounds
+    for w in weights:
+      try:
+        wc = self.weight_classes[w]
+      except:
+        continue
+      bouts += wc.GetBouts(rounds)
+      
+    return bouts
   
   def CountBouts(self):
     '''Get a count of the total number of bouts.'''
@@ -195,6 +206,19 @@ class wnWeightClass(wnNode):
     # return a dictionary of team/score pairs
     return scores
   
+  def GetBouts(self, rounds):
+    '''Get a list of bouts for the given rounds.'''
+    bouts = []
+    
+    for r in rounds:
+      try:
+        round = self.rounds[r]
+      except:
+        continue      
+      bouts += round.GetBouts()
+  
+    return bouts
+  
   def CountBouts(self):
     '''Get a count of the total number of bouts.'''
     i = 0
@@ -278,7 +302,7 @@ class wnRound(wnNode):
     x,y = start
     for i in range(self.NumEntries):
       painter.DrawLine(x,y,x+length,y)
-      self.entries[i].Paint(painter, (x,y), length, refresh_labels)
+      self.entries[i].Paint(painter, (x,y), refresh_labels)
       y += step
 
     #store the maximum positions so the scrollbars can be set properly
@@ -337,6 +361,20 @@ class wnRound(wnNode):
         # store the result for this team so far
         tn = entry.Wrestler.Team.Name
         scores[tn] = scores.get(tn, 0.0) + thread_score
+        
+  def GetBouts(self):
+    '''Return all of the matchups in the given round.'''
+    bouts = []
+
+    for i in range(0, len(self.entries), 2):
+      e1 = self.entries[i]
+      e2 = self.entries[i+1]
+      
+      # it's only a bout of two consecutive entries have wrestlers
+      if e1.Wrestler is not None and e2.Wrestler is not None:
+        bouts.append(wnBout(self.parent.Name, self.name, e1.Wrestler, e2.Wrestler))
+        
+    return bouts
 
   def CountBouts(self):
     '''Get a count of the total number of bouts.'''
@@ -449,7 +487,7 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
   def __init__(self, name, parent):
     wnEntry.__init__(self, name, parent)
     
-  def Paint(self, painter, pos=(0,0), length=100, refresh_labels=False):
+  def Paint(self, painter, pos=(0,0), refresh_labels=False):
     '''Paint all of the text controls.'''
     if self.wrestler is None: text = ''
     else: text = self.wrestler.Name
@@ -457,7 +495,7 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
     if refresh_labels:
       painter.DrawMatchTextControl(text,
                                    pos[0]+wnSettings.match_offset, pos[1]-wnSettings.match_height,
-                                   length-wnSettings.match_offset*2, wnSettings.match_height,
+                                   wnSettings.match_length-wnSettings.match_offset*2, wnSettings.match_height,
                                    self.ID, self)
     
   def OnMouseEnter(self, event):
@@ -536,7 +574,7 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
     wnEntry.__init__(self, name, parent)
     self.is_last = False
     
-  def Paint(self, painter, pos=(0,0), length=100, refresh_labels=False, full=True):
+  def Paint(self, painter, pos=(0,0), refresh_labels=False, full=True):
     '''Paint all of the text controls.'''
     if full:
       #draw the seed number
@@ -736,6 +774,8 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
     self.is_last = value
     
   IsLast = property(fget=GetIsLast, fset=SetIsLast)
+
+
 
 if __name__ == '__main__':
   pass

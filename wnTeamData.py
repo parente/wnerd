@@ -1,8 +1,9 @@
 '''
 The team data module contains classes that hold team and wrestler information.
 '''
+from wnTempData import *
 import wnSettings
-from wnScoreData import wnResultPin
+
 
 class wnTeam(object):
   '''The team class holds wrestlers and points.'''
@@ -44,18 +45,15 @@ class wnTeam(object):
   
   def CalcFastFall(self):
     '''Go through all the wrestlers on this team and compute their fast fall results.'''
-    wrestlers = []
+    falls = []
     for weight in self.wrestlers:
       weight_list = self.wrestlers[weight]
       for wrestler in weight_list:
-        data = wrestler.CalcFastFall()
-        data.append(wrestler.Name)
-        data.append(self.name)
-        data.append(weight)
+        ff = wrestler.CalcFastFall()
+        if ff is not None:
+          falls.append(ff)
         
-        wrestlers.append(data)
-        
-    return wrestlers
+    return falls
   
   def SetWeightScore(self, weight_name, value):
     '''Set the score for a weight to a certain value.'''
@@ -127,15 +125,16 @@ class wnWrestler(object):
     
   def CalcFastFall(self):
     '''Get the total number of pins and pin times.'''
-    total = [0, 0, '']
+    total = [0, 0]
     for r in self.results.values():
       if r is not None and r.Name == 'Pin':
         total[0] += 1
         total[1] += r.Value
-    
-    total[2] = wnResultPin(total[1]).TextValue
-        
-    return total
+
+    if total[0] == 0:
+      return None
+    else:
+      return wnFastFall(self.name, self.team.Name, self.weight, total[0], total[1])
     
   def GetFormattedName(self):
     n_fill = wnSettings.max_name_length - len(self.name)

@@ -497,6 +497,7 @@ class wnPrintDialog(wxDialog):
   def OnTypeChange(self, event):
     '''Enable or disable the rounds box based on what's selected.'''
     self.rounds.Enable(self.type.GetStringSelection() == 'Bouts')
+    self.weights.Enable(self.type.GetStringSelection() != 'Scores')
   
   def GetWeights(self):
     weights = []
@@ -571,12 +572,12 @@ class wnFastFallDialog(wxDialog):
     
     # show the results
     for i in range(len(table)):
-      num, time, time_str, name, team, weight = table[i]
-      self.results.InsertStringItem(i, name)
-      self.results.SetStringItem(i, 1, team)
-      self.results.SetStringItem(i, 2, weight)
-      self.results.SetStringItem(i, 3, str(num))
-      self.results.SetStringItem(i, 4, time_str)
+      ff = table[i]
+      self.results.InsertStringItem(i, ff.Name)
+      self.results.SetStringItem(i, 1, ff.Team)
+      self.results.SetStringItem(i, 2, ff.Weight)
+      self.results.SetStringItem(i, 3, str(ff.Pins))
+      self.results.SetStringItem(i, 4, ff.TimeText)
 
 class wnScoreWindow(wxFrame):
   '''Class the creates a standalone frame for displaying team scores. Teams scroll past at a regular

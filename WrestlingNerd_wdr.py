@@ -331,7 +331,7 @@ def CreatePrintDialog( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
     
     item1 = wxRadioBox( parent, ID_TYPE_RADIOBOX, "Document", wxDefaultPosition, wxDefaultSize, 
-        ["Brackets","Bouts","Places"] , 1, wxRA_SPECIFY_ROWS )
+        ["Brackets","Bouts","Places","Scores"] , 1, wxRA_SPECIFY_ROWS )
     item0.AddWindow( item1, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     item2 = wxBoxSizer( wxHORIZONTAL )
