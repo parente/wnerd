@@ -145,7 +145,7 @@ class wnSeedMenu(wxMenu):
     
 class wnMatchDialog(wxDialog):
   '''Class that creates a dialog box that allows users to enter match results.'''
-  def __init__(self, parent, wrestlers, result, is_scoring):
+  def __init__(self, parent, wrestlers, winner, result, is_scoring):
     wxDialog.__init__(self, parent, -1, 'Match results')
     GUI.CreateMatchDialog(self)
 
@@ -178,9 +178,15 @@ class wnMatchDialog(wxDialog):
           pass
         self.result_value.SetFocus()
     
-    #select the first wrestler and is scoring check appropriately
-    self.winner.SetSelection(0)
-    self.OnChooseWinner(None)
+    #select the current wrestler and check is scoring appropriately
+    if winner is not None:
+      self.winner.SetStringSelection(winner.Name)
+    else:
+      self.winner.SetSelection(0)
+    if result is None:
+      self.OnChooseWinner(None)
+    else:
+      self.scoring_check.SetValue(is_scoring)
     
     EVT_RADIOBOX(self, GUI.ID_RESULT_TYPE_RADIO, self.OnChooseResult)
     EVT_CHOICE(self, GUI.ID_WINNER_CHOICE, self.OnChooseWinner) 
@@ -199,7 +205,7 @@ class wnMatchDialog(wxDialog):
     
   def OnChooseWinner(self, event):
     '''Set if the match is scoring or not based on the winner name. If it contains the non-scoring
-    prefix, then don't score the match by default.'''
+    prefix, then do not score the match by default.'''
     if self.GetWinner().IsScoring:
       self.scoring_check.SetValue(True)
     else:

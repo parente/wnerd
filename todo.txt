@@ -1,13 +1,12 @@
 Todo
 UI
 - make score window scrolling
-- use icons
 
 Data
-- export data to text file
 - export data to HTML pages with bracket images
 - add/remove team from tournament
 - change wrestler name
+- finish checking team scores
 
 Printing
 - try to get headings to work on printouts that have scaling problem

@@ -532,15 +532,16 @@ ID_OPEN_MENU = 10034
 ID_MENU = 10035
 ID_SAVE_MENU = 10036
 ID_SAVEAS_MENU = 10037
-ID_PRINT_MENU = 10038
-ID_EXIT_MENU = 10039
-ID_FILE_MENU = 10040
-ID_FASTFALL_MENU = 10041
-ID_NUMBOUTS_MENU = 10042
-ID_SCOREWIN_MENU = 10043
-ID_QUERY_MENU = 10044
-ID_ABOUT_MENU = 10045
-ID_HELP_MENU = 10046
+ID_EXPORT_MENU = 10038
+ID_PRINT_MENU = 10039
+ID_EXIT_MENU = 10040
+ID_FILE_MENU = 10041
+ID_FASTFALL_MENU = 10042
+ID_NUMBOUTS_MENU = 10043
+ID_SCOREWIN_MENU = 10044
+ID_QUERY_MENU = 10045
+ID_ABOUT_MENU = 10046
+ID_HELP_MENU = 10047
 
 def CreateMenuBar():
     item0 = wxMenuBar()
@@ -551,6 +552,8 @@ def CreateMenuBar():
     item1.AppendSeparator()
     item1.Append( ID_SAVE_MENU, "&Save\tCtrl-S", "" )
     item1.Append( ID_SAVEAS_MENU, "Save &as...\tShift-Ctrl-S", "" )
+    item1.AppendSeparator()
+    item1.Append( ID_EXPORT_MENU, "Export...\tCtrl-E", "" )
     item1.AppendSeparator()
     item1.Append( ID_PRINT_MENU, "&Print...\tCtrl-P", "" )
     item1.AppendSeparator()

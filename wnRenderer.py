@@ -148,10 +148,10 @@ class wnPainter(wnRenderer):
       
     self.control_cache = {}
     
-  def ShowMatchDialog(self, wrestlers, result, is_scoring):
+  def ShowMatchDialog(self, wrestlers, winner, result, is_scoring):
     '''Show a dialog box that lets the user enter match results. Initialize the box to the values
     provided by the entry. Return the winner and result entered by the user.'''
-    dlg = wnMatchDialog(self.frame, wrestlers, result, is_scoring)
+    dlg = wnMatchDialog(self.frame, wrestlers, winner, result, is_scoring)
     dlg.CentreOnScreen()
     
     if dlg.ShowModal() == wxID_OK:

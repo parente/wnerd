@@ -611,7 +611,7 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
     
     #show the results dialog, providing the wrestlers and current results
     opponents = [entry.Wrestler for entry in self.previous if entry.Wrestler is not None]
-    result = event.Painter.ShowMatchDialog(opponents, self.result, self.is_scoring)
+    result = event.Painter.ShowMatchDialog(opponents, self.wrestler, self.result, self.is_scoring)
     
     # store the result
     if result is not None:
@@ -666,6 +666,7 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
     #store the information in the entry
     self.result = result.Result
     self.wrestler = result.Winner
+    self.is_scoring = result.IsScoring
     
     #store the result for the wrestler
     self.wrestler.StoreResult(self.ID, self.result)

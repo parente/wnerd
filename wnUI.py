@@ -8,6 +8,7 @@ from wxPython.wizard import *
 from wnBuilder import *
 from wnRenderer import *
 from wnPrinting import *
+from wnExport import *
 import WrestlingNerd_wdr as GUI
 import wnSettings
 import cPickle
@@ -26,7 +27,7 @@ class wnFrame(wxFrame):
     
     #correct the background color
     self.SetBackgroundColour(mb.GetBackgroundColour())
-    #self.SetIcon(wxIcon(wnSettings.icon_filename, wxBITMAP_TYPE_GIF))
+    self.SetIcon(wxIcon(wnSettings.icon_filename, wxBITMAP_TYPE_ICO))
     
     #create a sizer to layout the window
     sizer = wxFlexGridSizer(1,2,0,0)
@@ -66,6 +67,7 @@ class wnFrame(wxFrame):
     EVT_MENU(self, GUI.ID_NEW_MENU, self.OnNew)
     EVT_MENU(self, GUI.ID_SAVE_MENU, self.OnSave)
     EVT_MENU(self, GUI.ID_SAVEAS_MENU, self.OnSaveAs)
+    EVT_MENU(self, GUI.ID_EXPORT_MENU, self.OnExport)
     EVT_MENU(self, GUI.ID_OPEN_MENU, self.OnOpen)
     EVT_MENU(self, GUI.ID_PRINT_MENU, self.OnPrint)
     EVT_MENU(self, GUI.ID_NUMBOUTS_MENU, self.OnCountBouts)
@@ -123,6 +125,8 @@ class wnFrame(wxFrame):
       self.ChangeMenuState('on save')
       self.filename = dlg.GetPath()
       
+    dlg.Destroy()
+      
   def OnOpen(self, event):
     '''Open a tournament from disk.'''
     dlg = wxFileDialog(self, 'Open tournament', wildcard='Wrestling Nerd files (*.wnd)|*.wnd',
@@ -135,6 +139,19 @@ class wnFrame(wxFrame):
       self.ResetAfterNew()
       self.ChangeMenuState('on open')
       self.filename = dlg.GetPath()
+      
+    dlg.Destroy()
+      
+  def OnExport(self, event):
+    '''Show the export dialog. Right now, only export to plain text.'''
+    dlg = wxFileDialog(self, 'Export plain text', wildcard='Text files (*.txt)|*.txt',
+                         style=wxSAVE|wxOVERWRITE_PROMPT)
+    
+    if dlg.ShowModal() == wxID_OK:
+      exp = wnExportPlainText(dlg.GetPath(), self.tournament)
+      exp.Save()
+      
+    dlg.Destroy()
       
   def OnPrint(self, event):
     '''Show the print dialog box.'''
@@ -248,6 +265,7 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_NUMBOUTS_MENU).Enable(False)
       mb.FindItemById(GUI.ID_SAVE_MENU).Enable(False)
       mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(False)
+      mb.FindItemById(GUI.ID_EXPORT_MENU).Enable(False)
       mb.FindItemById(GUI.ID_PRINT_MENU).Enable(False)
       mb.FindItemById(GUI.ID_SCOREWIN_MENU).Enable(False)
     
@@ -256,6 +274,7 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_NUMBOUTS_MENU).Enable(True)
       mb.FindItemById(GUI.ID_SAVE_MENU).Enable(True)      
       mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(False)
+      mb.FindItemById(GUI.ID_EXPORT_MENU).Enable(True)
       mb.FindItemById(GUI.ID_PRINT_MENU).Enable(True)
       mb.FindItemById(GUI.ID_SCOREWIN_MENU).Enable(True)
       
@@ -264,6 +283,7 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_NUMBOUTS_MENU).Enable(True)
       mb.FindItemById(GUI.ID_SAVE_MENU).Enable(True)      
       mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(True)
+      mb.FindItemById(GUI.ID_EXPORT_MENU).Enable(True)
       mb.FindItemById(GUI.ID_PRINT_MENU).Enable(True)
       mb.FindItemById(GUI.ID_SCOREWIN_MENU).Enable(True)
 
@@ -608,10 +628,13 @@ class wnScoreWindow(wxFrame):
   '''Class the creates a standalone frame for displaying team scores. Teams scroll past at a regular
   interval. Useful for multi-monitor setups with scores on public display.'''
   def __init__(self, parent):
-    wxFrame.__init__(self, parent, -1, 'Team Scores', size=wxSize(640, 480),
+    wxFrame.__init__(self, parent, -1, '', size=wxSize(640, 480),
                      style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN)
-    GUI.CreateScoreFrame(self, False, False)
     
+    # set up the UI                 
+    GUI.CreateScoreFrame(self, False, False)
+    self.SetIcon(parent.GetIcon())
+        
     # get a reference to the list control
     self.scores = wxPyTypeCast(self.FindWindowById(GUI.ID_SCORES_LIST), 'wxListCtrl')
     
@@ -623,6 +646,9 @@ class wnScoreWindow(wxFrame):
     # create object variables
     self.index = 0
     self.parent = parent
+    
+    # set the window title
+    self.SetTitle(self.parent.GetTournament().Name)
     
     # show the scores
     self.OnDrawScores(None)

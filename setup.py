@@ -9,7 +9,8 @@ setup(name="WrestlingNerd",
       description="Wrestling Nerd: Wrestling tournament management software",
       scripts=["WrestlingNerd.py"],
       data_files=[("WrestlingNerd_wdr",
-                   ["WrestlingNerd_wdr/bout.png", "WrestlingNerd_wdr/LogoBitmaps_0.png"]),
+                   ["WrestlingNerd_wdr/bout.png", "WrestlingNerd_wdr/LogoBitmaps_0.png", 
+                    "WrestlingNerd_wdr/nerd.ico", "WrestlingNerd_wdr/WrestlingNerd.exe.manifest"]),
                   ("",
                    ["LICENSE.txt"])]
 )
