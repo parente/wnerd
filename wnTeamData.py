@@ -141,6 +141,13 @@ class wnWrestler(object):
     fill_text = ' '*n_fill
     return self.name + fill_text + ' | ' + self.team.Name
     
+  def GetShortName(self):
+    if self.IsScoring:
+      i = self.name.find(' ')
+    else:
+      i = self.name.find(' ', len(wnSettings.no_scoring_prefix)+1)
+    return self.name[i+1:]
+    
   def GetName(self):
     return self.name
   
@@ -160,4 +167,5 @@ class wnWrestler(object):
   Team = property(fget=GetTeam)  
   Name = property(fget=GetName, fset=SetName)
   FormattedName = property(fget=GetFormattedName)
+  ShortName = property(fget=GetShortName)
   IsScoring = property(fget=GetIsScoring)

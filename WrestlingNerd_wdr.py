@@ -20,6 +20,7 @@ ID_INSERTMOVEDOWN_SEED_MENU = wxNewId()
 ID_SETLAST_SEED_MENU = wxNewId()
 ID_SWAPUP_SEED_MENU = wxNewId()
 ID_SWAPDOWN_SEED_MENU = wxNewId()
+ID_SWAPTO_SEED_MENU = wxNewId()
 
 start_caption = '''Welcome to the new tournament wizard.
 
@@ -298,7 +299,7 @@ def WizardFinishedPanel( parent, call_fit = True, set_sizer = True ):
     
     return item0
 
-ID_WINNER_CHOICE = 10020
+ID_WINNER_LIST = 10020
 ID_SCOREPOINTS_CHECK = 10021
 ID_RESULT_TYPE_RADIO = 10022
 ID_RESULT_PANEL = 10023
@@ -309,7 +310,7 @@ def CreateMatchDialog( parent, call_fit = True, set_sizer = True ):
     item2 = wxStaticBox( parent, -1, "Winner" )
     item1 = wxStaticBoxSizer( item2, wxVERTICAL )
     
-    item3 = wxChoice( parent, ID_WINNER_CHOICE, wxDefaultPosition, wxSize(150,-1), [], 0 )
+    item3 = wxListBox( parent, ID_WINNER_LIST, wxDefaultPosition, wxSize(60,30), [], wxLB_SINGLE )
     item1.AddWindow( item3, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     item4 = wxCheckBox( parent, ID_SCOREPOINTS_CHECK, "Score team points", wxDefaultPosition, wxDefaultSize, 0 )
@@ -366,7 +367,7 @@ def CreatePrintDialog( parent, call_fit = True, set_sizer = True ):
     item4 = wxStaticBox( parent, -1, "Weights" )
     item3 = wxStaticBoxSizer( item4, wxVERTICAL )
     
-    item5 = wxListBox( parent, ID_WEIGHTS_LIST, wxDefaultPosition, wxSize(200,100), [], wxLB_EXTENDED )
+    item5 = wxListBox( parent, ID_WEIGHTS_LIST, wxDefaultPosition, wxSize(200,200), [], wxLB_EXTENDED )
     item3.AddWindow( item5, 0, wxALIGN_CENTER|wxALL, 5 )
 
     item2.AddSizer( item3, 0, wxALIGN_CENTER|wxALL, 5 )
@@ -374,7 +375,7 @@ def CreatePrintDialog( parent, call_fit = True, set_sizer = True ):
     item7 = wxStaticBox( parent, -1, "Rounds" )
     item6 = wxStaticBoxSizer( item7, wxVERTICAL )
     
-    item8 = wxListBox( parent, ID_ROUNDS_LIST, wxDefaultPosition, wxSize(200,100), [], wxLB_EXTENDED )
+    item8 = wxListBox( parent, ID_ROUNDS_LIST, wxDefaultPosition, wxSize(200,200), [], wxLB_EXTENDED )
     item8.Enable(False)
     item6.AddWindow( item8, 0, wxALIGN_CENTER|wxALL, 5 )
 
@@ -484,17 +485,15 @@ def CreateAboutDialog( parent, call_fit = True, set_sizer = True ):
     item0.AddWindow( item1, 0, wxALIGN_CENTER|wxALL, 5 )
 
     item2 = wxStaticText( parent, ID_TEXT, 
-        "Wrestling Nerd 3.0\n"
-        "Written by Peter Parente (parente@cs.unc.edu)\n"
+        "Dedicated to my father, my mother, and my brother, who all know the glory and pain of wrestling.\n"
         "\n"
-        "Dedicated to my father, my mother, and my brother, whom all know the glory and pain of wrestling.\n"
-        "Thanks to Chris Brown (cbrown@eon.net.au) for the face used in the Wrestling Nerd logo.\n"
+        "Copyright 2003 Peter Parente under the terms of the MIT public license.\n"
         "\n"
-        "Copyright 2003 Peter Parente under the MIT License\n"
-        "See the included LICENSE.txt file for restrictions on the use and distribution of this software.",
+        "See the included LICENSE.txt file included with this software for restrictions on the use and \n"
+        "distribution of this software.",
         wxDefaultPosition, wxDefaultSize, 0 )
     item2.SetBackgroundColour( wxWHITE )
-    item0.AddWindow( item2, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+    item0.AddWindow( item2, 0, wxALIGN_CENTER|wxALL, 5 )
 
     if set_sizer == True:
         parent.SetAutoLayout( True )
@@ -513,7 +512,7 @@ def CreateScoreFrame( parent, call_fit = True, set_sizer = True ):
     item0.AddGrowableRow( 0 )
     
     item1 = wxListCtrl( parent, ID_SCORES_LIST, wxDefaultPosition, wxSize(160,120), wxLC_REPORT|wxSUNKEN_BORDER )
-    item1.SetFont( wxFont( 16, wxSWISS, wxNORMAL, wxNORMAL ) )
+    item1.SetFont( wxFont( 14, wxSWISS, wxNORMAL, wxNORMAL ) )
     item0.AddWindow( item1, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5 )
 
     if set_sizer == True:

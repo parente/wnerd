@@ -6,7 +6,7 @@ Data
 - export data to HTML pages with bracket images
 - add/remove team from tournament
 - change wrestler name
-- finish checking team scores
+- make name spelling changes easier
 
 Printing
 - try to get headings to work on printouts that have scaling problem

@@ -9,7 +9,7 @@
   ;General
   Name "Wrestling Nerd 3.0"
   OutFile "WrestlingNerd-3.0-win32.exe"
-  Icon ".\WrestlingNerd_wdr\nerd.ico"
+  Icon "WrestlingNerd_wdr\nerd.ico"
 
   ;Folder selection page
   InstallDir "$PROGRAMFILES\WrestlingNerd"

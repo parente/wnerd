@@ -354,14 +354,13 @@ class wnRound(wnNode):
         results = entry.CalcScores()
         
         # the result is a list of all results in a thread sorted from earliest to latest round
-        # go through the list in reverse order and add the points
-        # keep track of whether bye points should be added or not
-        count_byes = False
+        # go through the list to add up the points, keeping track of byes in a separate count
+        # and only adding them when a non-bye match follows
         bye_score = 0.0
         thread_score = 0.0
         
         while len(results) != 0:
-          match, round = results.pop()
+          match, round = results.pop(0)
           
           # if there was no match, just skip it
           if match is None: continue
@@ -369,17 +368,12 @@ class wnRound(wnNode):
           # add in non-byes normally and indicate future byes should be counted
           if match.Name != 'Bye':
             thread_score += bye_score + match.Points + round.AdvPoints + round.PlacePoints
-            count_byes = True
             bye_score = 0.0
             
           # keep track of bye points for possible addition later
-          elif match.Name == 'Bye' and not count_byes:
+          elif match.Name == 'Bye':
             bye_score += match.Points + round.AdvPoints + round.PlacePoints
-            
-          # count byes normally
-          elif match.Name == 'Bye' and count_byes:
-            thread_score += match.Points + round.AdvPoints + round.PlacePoints
-        
+                    
         # store the result for this team so far
         tn = entry.Wrestler.Team.Name
         scores[tn] = scores.get(tn, 0.0) + thread_score
@@ -571,7 +565,7 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
   def Paint(self, painter, pos=(0,0), refresh_labels=False):
     '''Paint all of the text controls.'''
     if self.wrestler is None: text = ''
-    else: text = self.wrestler.Name
+    else: text = self.wrestler.ShortName
     
     if refresh_labels:
       painter.DrawMatchTextControl(text,
@@ -585,7 +579,7 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
     if self.wrestler is not None:
       event.Control.ShowPopup(self.Wrestler.Team.Name + '\n' + str(self.result))
       event.Control.Highlight(True)
-    else:        
+    else:
       for e in self.previous:
         if e.Wrestler is not None:
           event.Control.Highlight(True)
@@ -672,7 +666,7 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
     self.wrestler.StoreResult(self.ID, self.result)
     
     #show the new winner name
-    event.Painter.GetControl(self.ID).SetLabel(self.wrestler.Name)
+    event.Painter.GetControl(self.ID).SetLabel(self.wrestler.ShortName)
     
     #move the loser if he exists and isn't eliminated
     if result.Loser is not None:
@@ -737,6 +731,9 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
     # change the focus
     event.Painter.SetFocus(e.ID)
     
+    # refresh all scores
+    event.Control.RefreshScores()
+    
   def OnSwapDown(self, event):
     '''Swap the wrestler here with the wrestler one seed below.'''
     # get a ref to the next entry
@@ -747,6 +744,26 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
     
     # change the focus
     event.Painter.SetFocus(e.ID)
+    
+    # refresh all scores
+    event.Control.RefreshScores()
+    
+  def OnSwapTo(self, event):
+    '''Swap the wrestler to another seed.'''
+    result = event.Painter.ShowSwapDialog(self.name)
+    
+    if result is not None:
+      # get a ref to the other entry
+      try:
+        e = self.parent.Entries[int(result)-1]
+      except:
+        return
+        
+      # do the swap and redraw
+      self.Swap(e, event.Painter)
+      
+    # refresh all scores
+    event.Control.RefreshScores()      
     
   def OnSetLastSeed(self, event):
     '''Set this seed as the last seed that should be moved in case of a delete and move up.'''

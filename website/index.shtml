@@ -12,8 +12,8 @@
     <p>Wrestling Nerd is designed to help manage wrestling tournaments. It features a simple point 
     and click interface for advancing wrestlers in a tournament. Scores are automatically calculated 
     based on win types as the tournament progresses. The program prints brackets, bouts, scores,
-    and place winners. It also performs a number of queries like fastest
-    fall times, the number of bouts, and individual wrestler statistics.</p>
+    and place winners. It also performs a number of queries like fastest fall times, the number of
+    bouts, and individual wrestler statistics.</p>
 
     <p>Wrestling Nerd is Open Source Software. Program binaries and source code can be downloaded 
     and used according to the terms of the <a href="license.html">license</a>.</p>
@@ -38,8 +38,16 @@
       <li>Tools for swapping, scratching, and moving seeds easily</li>
       <li>Support for user-defined brackets of any shape and size</li>
       <li>Support for user-defined scoring systems</li>
-      <li>Exports of place winners to other file formats (just plain text for now)</li>
-      <li>Separate scrolling team score window for display on a large screen</li>
+      <li>Export of tournament results to other file formats (just plain text for now)</li>
+      <li>Separate team score window for display on a large screen</li>
+    </ul>
+    
+    <p>Future versions of Wrestling Nerd might support the following features. Please note that
+    these are only ideas. I give no guarantee if and when they will appear in Wrestling Nerd. This
+    list may change without notice.</p>
+    
+    <ul>
+      <li>Export of tournament data to HTML format</li>
     </ul>
   
     <h1>Download</h1>
@@ -52,10 +60,12 @@
     view the documentation</a>.</p>
     
     <h1>Contact</h1>
-    <p>The author of Wrestling Nerd, Peter Parente, may be reached by email at 
-    parente@cs.unc.edu for questions and comments. For the time being bug reports and feature 
-    requests may be sent to this address. Better support for bug reports and feature requests is 
-    forthcoming.</p>
+    <p>The author of Wrestling Nerd, Peter Parente, may be reached by email at <a href="mailto:parente@cs.unc.edu">
+    parente@cs.unc.edu</a> for questions and comments. For the time being, bug reports and feature 
+    requests may be sent to this address.</p>
+    
+    <p>More information about the author is available on his web page at
+    <a href="http://www.cs.unc.edu/~parente">http://www.cs.unc.edu/~parente</a>.</p>
 
     <h1>Show Your Support</h1>
     <p>I work on Wrestling Nerd in my spare time, and am happy to provide it free of charge. But if 

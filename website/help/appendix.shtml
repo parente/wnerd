@@ -63,8 +63,12 @@
       </tr>
       <tr>
         <td>Ctrl-Page Down</td>
-        <td>Swap the currently selected seed down on entry</td>
+        <td>Swap the currently selected seed down one entry</td>
       </tr>
+      <tr>
+        <td>Ctrl-T</td>
+        <td>Swap the currently selected seed to another seed</td>
+      </tr>      
       <tr>
         <td>Ctrl-L</td>
         <td>Make the currently selected wrestler the last seeded wrestler</td>

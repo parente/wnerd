@@ -82,7 +82,9 @@ class wnDynamicText(wxMaskedTextCtrl):
     ae = [wxAcceleratorEntry(wxACCEL_CTRL, WXK_PRIOR, GUI.ID_SWAPUP_SEED_MENU),
           wxAcceleratorEntry(wxACCEL_CTRL, WXK_NEXT, GUI.ID_SWAPDOWN_SEED_MENU),
           wxAcceleratorEntry(wxACCEL_CTRL, ord('l'), GUI.ID_SETLAST_SEED_MENU),
-          wxAcceleratorEntry(wxACCEL_CTRL, ord('L'), GUI.ID_SETLAST_SEED_MENU)]
+          wxAcceleratorEntry(wxACCEL_CTRL, ord('L'), GUI.ID_SETLAST_SEED_MENU),
+          wxAcceleratorEntry(wxACCEL_CTRL, ord('t'), GUI.ID_SWAPTO_SEED_MENU),
+          wxAcceleratorEntry(wxACCEL_CTRL, ord('T'), GUI.ID_SWAPTO_SEED_MENU)]
     self.SetAcceleratorTable(wxAcceleratorTable(ae))
 
     EVT_RIGHT_UP(self, lambda e: None)
@@ -135,6 +137,7 @@ class wnSeedMenu(wxMenu):
     self.AppendSeparator()
     self.Append(GUI.ID_SWAPUP_SEED_MENU, 'Swap up\tCtrl-Page Up')
     self.Append(GUI.ID_SWAPDOWN_SEED_MENU, 'Swap down\tCtrl-Page Down')
+    self.Append(GUI.ID_SWAPTO_SEED_MENU, 'Swap to...\tCtrl-T')
     self.AppendSeparator()
     self.Append(GUI.ID_DELETE_SEED_MENU, 'Delete')
     self.Append(GUI.ID_DELETEMOVEUP_SEED_MENU, 'Delete / Move up')
@@ -150,7 +153,7 @@ class wnMatchDialog(wxDialog):
     GUI.CreateMatchDialog(self)
 
     #store important references
-    self.winner = wxPyTypeCast(self.FindWindowById(GUI.ID_WINNER_CHOICE), 'wxChoice')
+    self.winner = wxPyTypeCast(self.FindWindowById(GUI.ID_WINNER_LIST), 'wxListBox')
     self.result_type = wxPyTypeCast(self.FindWindowById(GUI.ID_RESULT_TYPE_RADIO), 'wxRadioBox')
     self.result_panel = wxPyTypeCast(self.FindWindowById(GUI.ID_RESULT_PANEL), 'wxPanel')
     self.scoring_check = wxPyTypeCast(self.FindWindowById(GUI.ID_SCOREPOINTS_CHECK), 'wxCheckBox')
@@ -179,17 +182,18 @@ class wnMatchDialog(wxDialog):
         self.result_value.SetFocus()
     
     #select the current wrestler and check is scoring appropriately
-    if winner is not None:
+    try:
       self.winner.SetStringSelection(winner.Name)
-    else:
+    except:
       self.winner.SetSelection(0)
+      
     if result is None:
       self.OnChooseWinner(None)
     else:
       self.scoring_check.SetValue(is_scoring)
     
     EVT_RADIOBOX(self, GUI.ID_RESULT_TYPE_RADIO, self.OnChooseResult)
-    EVT_CHOICE(self, GUI.ID_WINNER_CHOICE, self.OnChooseWinner) 
+    EVT_LISTBOX(self, GUI.ID_WINNER_LIST, self.OnChooseWinner) 
     EVT_BUTTON(self, GUI.wxID_OK, self.OnOK)    
     
   def OnOK(self, event):

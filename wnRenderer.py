@@ -165,7 +165,18 @@ class wnPainter(wnRenderer):
     else:
       dlg.Destroy()
       return None
-    
+      
+  def ShowSwapDialog(self, number):
+    '''Show a dialog box that lets the user enter a seed number to which a wrestler should be 
+    swapped.'''
+    dlg = wxTextEntryDialog(self.frame, 'Swap seed # %s to seed # :' % number, 'Swap to')
+
+    i = None
+    if dlg.ShowModal() == wxID_OK:
+      i = dlg.GetValue()
+        
+    dlg.Destroy()
+    return i
                              
 class wnPrinter(wnRenderer):
   def __init__(self):

@@ -63,6 +63,9 @@ class wnSeedMenuReceivable:
   
   def OnSwapDown(self, event):
     pass
+    
+  def OnSwapTo(self, event):
+    pass
 
 class wnMatchMenuReceivable:
   '''Defines an interface that must be implemented for an object to receive menu events from the
@@ -107,6 +110,7 @@ class wnEventManager(wxEvtHandler):
     EVT_MENU(frame, GUI.ID_INSERTMOVEDOWN_SEED_MENU, self.OnMenuEvent)
     EVT_MENU(frame, GUI.ID_SWAPUP_SEED_MENU, self.OnMenuEvent)
     EVT_MENU(frame, GUI.ID_SWAPDOWN_SEED_MENU, self.OnMenuEvent)
+    EVT_MENU(frame, GUI.ID_SWAPTO_SEED_MENU, self.OnMenuEvent)
     EVT_MENU(frame, GUI.ID_SETLAST_SEED_MENU, self.OnMenuEvent)
     
   def RegisterEventHandler(self, id, handler):
@@ -152,7 +156,8 @@ class wnEventManager(wxEvtHandler):
                 GUI.ID_DELETEMOVEUP_SEED_MENU : 'OnDeleteMoveUp',
                 GUI.ID_INSERTMOVEDOWN_SEED_MENU : 'OnInsertMoveDown',
                 GUI.ID_SETLAST_SEED_MENU : 'OnSetLastSeed', GUI.ID_SWAPDOWN_SEED_MENU : 'OnSwapDown',
-                GUI.ID_SWAPUP_SEED_MENU : 'OnSwapUp', GUI.ID_MOVEIN_MATCH_MENU : 'OnMoveIn'}
+                GUI.ID_SWAPUP_SEED_MENU : 'OnSwapUp', GUI.ID_MOVEIN_MATCH_MENU : 'OnMoveIn',
+                GUI.ID_SWAPTO_SEED_MENU : 'OnSwapTo'}
     
     obj = event.GetEventObject()
     
