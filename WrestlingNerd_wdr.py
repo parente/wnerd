@@ -422,10 +422,10 @@ def CreateTeamDialog( parent, call_fit = True, set_sizer = True ):
 
     item0.AddSizer( item1, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
-    item6 = wxStaticBox( parent, -1, "Text" )
+    item6 = wxStaticBox( parent, -1, "Wrestlers" )
     item5 = wxStaticBoxSizer( item6, wxVERTICAL )
     
-    item7 = wxListCtrl( parent, ID_WRESTLERS_LIST, wxDefaultPosition, wxSize(200,120), wxLC_REPORT|wxSUNKEN_BORDER )
+    item7 = wxListCtrl( parent, ID_WRESTLERS_LIST, wxDefaultPosition, wxSize(200,200), wxLC_REPORT|wxSUNKEN_BORDER )
     item5.AddWindow( item7, 0, wxALIGN_CENTER|wxALL, 5 )
 
     item0.AddSizer( item5, 0, wxALIGN_CENTER|wxALL, 5 )
@@ -574,10 +574,9 @@ def CreateMenuBar():
 
 # Bitmap functions
 
-ID_LOGO = 10047
 
 def LogoBitmaps( index ):
-    if (index == 0) or (index == ID_LOGO):
+    if index == 0:
         return wxImage( "WrestlingNerd_wdr/LogoBitmaps_0.png", wxBITMAP_TYPE_PNG ).ConvertToBitmap()
     return wxNullBitmap
 

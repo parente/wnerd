@@ -26,6 +26,7 @@ class wnFrame(wxFrame):
     
     #correct the background color
     self.SetBackgroundColour(mb.GetBackgroundColour())
+    #self.SetIcon(wxIcon(wnSettings.icon_filename, wxBITMAP_TYPE_GIF))
     
     #create a sizer to layout the window
     sizer = wxFlexGridSizer(1,2,0,0)
@@ -144,7 +145,7 @@ class wnFrame(wxFrame):
     # if the user wants to print, show the print settings dialog
     if dlg.ShowModal() == wxID_OK:
       # use the print factory to do all the printing
-      wnPrintFactory.PrintPreview(self, self.tournament, dlg.GetType(),
+      wnPrintFactory.Print(self, self.tournament, dlg.GetType(),
                            dlg.GetWeights(), dlg.GetRounds(), self.canvas.GetBracketSize())
       
     dlg.Destroy()
@@ -516,7 +517,7 @@ class wnPrintDialog(wxDialog):
     self.EndModal(wxID_OK) 
   
   def OnTypeChange(self, event):
-    '''Enable or disable the rounds box based on what's selected.'''
+    '''Enable or disable the rounds box based on what is selected.'''
     self.rounds.Enable(self.type.GetStringSelection() == 'B&outs')
     self.weights.Enable(self.type.GetStringSelection() != '&Scores')
   
@@ -643,10 +644,3 @@ class wnScoreWindow(wxFrame):
       self.scores.SetStringItem(i, 1, name)
       self.scores.SetStringItem(i, 2, str(score))
     
-if __name__ == '__main__':
-  app = wxPySimpleApp(0)
-  frame = wnFrame()
-  frame.Centre()
-  app.SetTopWindow(frame)
-  frame.Show()  
-  app.MainLoop()

@@ -582,12 +582,14 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
   def OnMouseEnter(self, event):
     '''Show a popup window with the match results if available. Highlight the entry if it can
     receive results.'''
-    if self.wrestler is not None and self.previous != []:
-      event.Control.ShowPopup(str(self.result))
-    for e in self.previous:
-      if e.Wrestler is not None:
-        event.Control.Highlight(True)
-        break
+    if self.wrestler is not None:
+      event.Control.ShowPopup(self.Wrestler.Team.Name + '\n' + str(self.result))
+      event.Control.Highlight(True)
+    else:        
+      for e in self.previous:
+        if e.Wrestler is not None:
+          event.Control.Highlight(True)
+          break
       
   def OnMouseLeave(self, event):
     '''Hide the popup window with the match results. Unhighlight the control if it was
@@ -818,7 +820,7 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
     event.Control.RefreshScores()    
     
   def Swap(self, entry, painter):
-    '''Swap this entry's values with another one.'''
+    '''Swap this entry values with another one.'''
     # store the entry values
     w1 = self.wrestler, self.is_last
     w2 = entry.Wrestler, entry.IsLast

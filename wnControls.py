@@ -107,7 +107,7 @@ class wnPopup(wxPopupWindow):
   def __init__(self, parent, text, pos, size):
     wxPopupWindow.__init__(self, parent, wxSIMPLE_BORDER)
     st = wxStaticText(self, -1, text, pos=wxPoint(5,5))
-    st.SetFont(wxFont(8, wxMODERN, wxNORMAL, wxNORMAL))
+    st.SetFont(wxFont(wnSettings.screen_font_size, wxMODERN, wxNORMAL, wxNORMAL))
     
     #compute the best position and size
     sz = st.GetBestSize()
@@ -201,9 +201,9 @@ class wnMatchDialog(wxDialog):
     '''Set if the match is scoring or not based on the winner name. If it contains the non-scoring
     prefix, then don't score the match by default.'''
     if self.GetWinner().IsScoring:
-      self.scoring_check.SetValue(False)
-    else:
       self.scoring_check.SetValue(True)
+    else:
+      self.scoring_check.SetValue(False)
     
   def OnChooseResult(self, event):
     '''Show the proper panel for the selected result type.'''    

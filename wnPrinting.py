@@ -37,9 +37,15 @@ class wnPrintFactory(object):
     frame.Show(True)
     
   def Print(cls, parent, tournament, type, weights, rounds=None, bracket_size=None):
-    #make the proper printout object
+    # make the proper printout object
     if type == 'Brackets':
       po = wnBracketPrintout(tournament, weights, bracket_size)
+    elif type == 'Scores':
+      po = wnScorePrintout(tournament)
+    elif type == 'Bouts':
+      po = wnBoutPrintout(tournament, weights, rounds)
+    elif type == 'Places':
+      po = wnPlacesPrintout(tournament, weights)
     else:
       return
     
@@ -60,7 +66,6 @@ class wnBoutPrintout(wxPrintout):
     
     # load the static bout bitmap
     self.bmp = wxBitmap(wnSettings.bout_bitmap_filename, wxBITMAP_TYPE_PNG)
-    self.normal_font = wxFont(wnSettings.print_font_size, wxMODERN, wxNORMAL, wxNORMAL)
     
   def HasPage(self, page):
     return (page <= self.pages)
@@ -71,6 +76,7 @@ class wnBoutPrintout(wxPrintout):
   def OnPrintPage(self, page):
     # get the  drawing context
     dc = self.GetDC()
+    dc.SetUserScale(1.0, 1.0)    
     
     # add the margin to the bracket size
     max_w = self.bmp.GetWidth() + 2*wnSettings.print_margin_x
@@ -82,12 +88,11 @@ class wnBoutPrintout(wxPrintout):
     sy = float(ph)/float(max_h)
     scale = min(sx, sy)
     dc.SetUserScale(scale, scale)
-    print scale
     
     # start the origin at the top and draw a line dividing the page
     dc.SetDeviceOrigin(wnSettings.print_margin_x, wnSettings.print_margin_y)    
     dc.DrawLine(0, self.bmp.GetHeight(), self.bmp.GetWidth(), self.bmp.GetHeight())
-    dc.SetFont(self.normal_font)
+    dc.SetFont(wxFont(wnSettings.print_font_size, wxMODERN, wxNORMAL, wxNORMAL))
     
     # draw two bouts per page
     i = 0
@@ -127,10 +132,6 @@ class wnPlacesPrintout(wxPrintout):
     
     # compute the number of pages
     self.pages = int(math.ceil(float(len(self.places))/wnSettings.print_place_weights_per_page))
-    
-    # store reusable fonts
-    self.normal_font = wxFont(wnSettings.print_font_size, wxMODERN, wxNORMAL, wxNORMAL)
-    self.heading_font = wxFont(wnSettings.print_heading_size, wxMODERN, wxNORMAL, wxBOLD)
 
   def HasPage(self, page):
     return (page <= self.pages)
@@ -141,27 +142,15 @@ class wnPlacesPrintout(wxPrintout):
   def OnPrintPage(self, page):
     # get the  drawing context
     dc = self.GetDC()
-    
-    # scale the drawing area to fit the page
-    #pw, ph = dc.GetSize()
-    #max_h = ph - wnSettings.print_margin_y*2
-    #max_w = pw - wnSettings.print_margin_x*2
-    #sx = float(pw)/float(max_w)
-    #sy = float(ph)/float(max_h)
-    #scale = min(sx, sy)
-    #dc.SetUserScale(scale, scale)
-    #print scale
-    print dc.GetUserScale()
-    
+    dc.SetUserScale(1.0, 1.0)
+        
     # set the origin to incorporate the margin
     dc.SetDeviceOrigin(wnSettings.print_margin_x, wnSettings.print_margin_y)
     
     # print a header on each page
-    dc.SetFont(self.heading_font)
     title = self.tournament.Name + ' Place Winners'
     w, h = dc.GetTextExtent(title)
     dc.DrawText(title, 0, 0)
-    dc.SetFont(self.normal_font)
     
     # print the place winners for this page
     index = wnSettings.print_place_weights_per_page * (page-1)
@@ -176,7 +165,7 @@ class wnPlacesPrintout(wxPrintout):
       # loop through the winners and print the results
       for j in range(len(self.places[index])):
         pw = self.places[index][j]
-        text = str(j) + ' ' + pw.Name + ', ' + pw.Team + ', ' + str(pw.Result)
+        text = str(j+1) + ' ' + pw.Name + ', ' + pw.Team + ', ' + str(pw.Result)
         dc.DrawText(text, 0, h)
         h += space[1]
       
@@ -200,10 +189,6 @@ class wnScorePrintout(wxPrintout):
     # compute the number of pages
     self.pages = int(math.ceil(float(len(self.scores))/wnSettings.print_scores_per_page))
     
-    # store reusable fonts
-    self.normal_font = wxFont(wnSettings.print_font_size, wxMODERN, wxNORMAL, wxNORMAL)
-    self.heading_font = wxFont(wnSettings.print_heading_size, wxMODERN, wxNORMAL, wxBOLD)
-  
   def HasPage(self, page):
     return (page <= self.pages)
   
@@ -213,27 +198,15 @@ class wnScorePrintout(wxPrintout):
   def OnPrintPage(self, page):
     # get the  drawing context
     dc = self.GetDC()
-    
-    # scale the drawing area to fit the page
-    #pw, ph = dc.GetSize()
-    #max_h = ph - wnSettings.print_margin_y*2
-    #max_w = pw - wnSettings.print_margin_x*2
-    #sx = float(pw)/float(max_w)
-    #sy = float(ph)/float(max_h)
-    #scale = min(sx, sy)
-    #dc.SetUserScale(scale, scale)
-    #print scale
-    print dc.GetUserScale()    
+    dc.SetUserScale(1.0, 1.0)
     
     # set the origin to incorporate the margin
     dc.SetDeviceOrigin(wnSettings.print_margin_x, wnSettings.print_margin_y)
     
     # print a header on each page
-    dc.SetFont(self.heading_font)
     title = self.tournament.Name + ' Team Scores'
     w, h = dc.GetTextExtent(title)
     dc.DrawText(title, 0, 0)
-    dc.SetFont(self.normal_font)
     
     # print the scores for this page
     index = wnSettings.print_scores_per_page * (page-1)
@@ -264,20 +237,18 @@ class wnBracketPrintout(wxPrintout):
     self.tournament = tournament
     self.weights = weights
     self.bracket_size = bracket_size
-
-    # create fonts    
-    self.normal_font = wxFont(wnSettings.print_font_size, wxMODERN, wxNORMAL, wxNORMAL)
-    self.heading_font = wxFont(wnSettings.print_heading_size, wxMODERN, wxNORMAL, wxBOLD)
+    self.pages = len(self.weights)
 
   def HasPage(self, page):
-    return (page <= len(self.weights))
+    return (page <= self.pages)
 
   def GetPageInfo(self):
-    return (1, len(self.weights), 1, len(self.weights))
+    return (1, self.pages, 1, self.pages)
 
   def OnPrintPage(self, page):
     # get the drawing context
     dc = self.GetDC()
+    dc.SetUserScale(1.0, 1.0)
     
     # build a printer renderer
     printer = wnPrinter()
@@ -287,11 +258,21 @@ class wnBracketPrintout(wxPrintout):
     # draw the header
     title = self.tournament.Name
     weight = self.weights[page-1]+' lbs'
-    dc.SetFont(self.heading_font)
+    dc.SetFont(wxFont(wnSettings.print_heading_size, wxMODERN, wxNORMAL, wxBOLD))
     printer.DrawHeader(title, weight)
-    dc.SetFont(self.normal_font)
+    dc.SetFont(wxFont(wnSettings.print_font_size, wxMODERN, wxNORMAL, wxNORMAL))
     
     # tell the tournament to print a bracket for the desired weight class
     self.tournament.Paint(printer, self.weights[page-1], True)
     
     return True
+    
+    
+    # scale the drawing area to fit the page
+    #pw, ph = dc.GetSize()
+    #max_h = ph - wnSettings.print_margin_y*2
+    #max_w = pw - wnSettings.print_margin_x*2
+    #sx = float(pw)/float(max_w)
+    #sy = float(ph)/float(max_h)
+    #scale = min(sx, sy)
+    #dc.SetUserScale(scale, scale)
