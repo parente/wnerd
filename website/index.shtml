@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Wrestling Nerd Homepage</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+
+  <body>
+    <span><img src="logo.png" alt="Wrestling Nerd" /></span>
+    <h1>About</h1>
+    <p>Wrestling Nerd is designed to help manage wrestling tournaments. It features a simple point 
+    and click interface for advancing wrestlers in a tournament. Scores are automatically calculated 
+    based on win types as the tournament progresses. The program prints brackets, bouts, scores,
+    and place winners. It also performs a number of queries like fastest
+    fall times, the number of bouts, and individual wrestler statistics.</p>
+
+    <p>Wrestling Nerd is Open Source Software. Program binaries and source code can be downloaded 
+    and used according to the terms of the <a href="license.html">license</a>.</p>
+
+    <h1>News</h1>
+    <h3>12/23/03</h3>
+    <p>The first release of open source Wrestling Nerd is nearing completion. It will be tested at 
+    the Bristol Central Invitational on January 3, 2004. If all goes well, it will be released 
+    shortly thereafter.</p>
+
+    <h1>Features</h1>
+    <p>Wrestling Nerd 3.0 has the following features:</p>
+
+    <ul>
+      <li>Point-and-click wrestler advancement</li>
+      <li>Team point calculation</li>
+      <li>Fast fall and bout count calculations</li>
+      <li>Tools to quickly swap, scratch, and move seeded wrestlers</li>
+      <li>Bracket, bout, score, and place winner printouts</li>
+      <li>Unlimited teams and wrestlers</li>
+      <li>Three built-in bracket types</li>
+      <li>Tools for swapping, scratching, and moving seeds easily</li>
+      <li>Support for user-defined brackets of any shape and size</li>
+      <li>Support for user-defined scoring systems</li>
+      <li>Exports of place winners to other file formats (just plain text for now)</li>
+      <li>Separate scrolling team score window for display on a large screen</li>
+    </ul>
+  
+    <h1>Download</h1>
+    <p>Wrestling Nerd 3.0 has not been released at this time. If you wish to look at the source 
+    code, feel free to check it out of CVS from <a href="http://www.sourceforge.net/projects/wnerd">
+    SourceForge</a>.</p>
+
+    <h1>Documentation</h1>
+    <p>The latest documentation is for Wrestling Nerd 3.0. Click here to <a href="help/index.shtml">
+    view the documentation</a>.</p>
+    
+    <h1>Contact</h1>
+    <p>The author of Wrestling Nerd, Peter Parente, may be reached by email at 
+    parente@cs.unc.edu for questions and comments. For the time being bug reports and feature 
+    requests may be sent to this address. Better support for bug reports and feature requests is 
+    forthcoming.</p>
+
+    <h1>Show Your Support</h1>
+    <p>I work on Wrestling Nerd in my spare time, and am happy to provide it free of charge. But if 
+    you really like my work, and think some compensation is in order, then feel free to make a 
+    donation. Donations give me more incentive to work on Wrestling Nerd, and more incentive means 
+    more features for you.</p>
+
+    <p>You can donate through SourceForge using your PayPal account. 
+    <a href="https://sourceforge.net/donate/index.php?group_id=83393">Click here to donate</a>.</p>
+
+    <hr />
+
+    <span><a href="http://sourceforge.net/"><img src="http://sourceforge.net/sflogo.php?group_id=83393&type=5" width="210" height="62" border="0" alt="SourceForge.net Logo"></a></span>
+  </body>
+</html>

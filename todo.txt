@@ -20,7 +20,8 @@ Refactoring
 - switch all calculations to a type of renderer (score, bouts, fast fall)
 
 Documentation
-- decide on format, location, layout
+- proofread
+- add images
 
 Web page
 parente@shell.sourceforge.net:/home/groups/p/pr/projectname/htdocs

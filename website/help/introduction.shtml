@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <title>Introduction - Wrestling Nerd Documentation</title>
-    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="../main.css" />
   </head>
 
   <body>
@@ -40,12 +40,7 @@
     <p>Wrestling Nerd may also be run on any other platform supported by Python 2.2+ and the wxPython
     2.4.2.4. Users may download the Wrestling Nerd Python source from the Wrestling Nerd homepage
     and run it with their installed Python interpreter.</p>
-    
-    <h2><a name="contacting"></a>Contacting the author</h2>
-    <p>The author of Wrestling Nerd may be contacted by email at <a href="mailto:parente@cs.unc.edu">
-    parente@cs.unc.edu</a> with questions and comments about the software. All bug reports and
-    features requests may be sent to this address too.</p>
-    
+        
     <h2><a name="license"></a>License agreement</h2>
     <p>Permission to use and distribute Wrestling Nerd is governed by the following license
     agreement:</p>
