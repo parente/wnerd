@@ -34,7 +34,7 @@ class wnRound(object):
     
     self.weight_class = None
     
-  def NewEntry(self):
+  def NewEntries(self, number, previous_round=None, win_round=None, lose_round=None):
     #how do we make it easy to set up links between rounds, at least for winners?
     #maybe pass in an optional previous and next round? won't work for swaps in losers bracket
     pass

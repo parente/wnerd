@@ -5,4 +5,6 @@
 </preference-set>
 <file name="wnData.py" url="wnData.py">
 </file>
+<file name="wnUI.py" url="wnUI.py">
+</file>
 </project>
