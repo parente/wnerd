@@ -351,6 +351,17 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable):
           if e.Wrestler == loser and e.NextLose is not None:
             e.NextLose.Wrestler = loser
             e.NextLose.Paint(event.Painter, refresh_labels=True)
+            
+  def OnRightUp(self, event):
+    '''Show the popup menu.'''
+    event.Control.ShowMenu(event.Position)
+    
+  def OnDelete(self, event):
+    '''Delete the wrestler in this entry.'''
+    self.wrestler = None
+    self.result = None
+    event.Control.SetLabel('')
+    event.Control.HidePopup()
         
 class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
   '''The seed entry class holds information about seeded wrestlers.'''
@@ -376,6 +387,15 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
                                   wnSettings.seed_length, wnSettings.seed_height,
                                   teams, self.ID, self)
     
+  def OnRightUp(self, event):
+    '''Show the popup menu.'''
+    event.Control.ShowMenu(event.Position)
+    
+  def OnDelete(self, event):
+    '''Delete the wrestler in this entry.'''
+    self.wrestler = None
+    event.Control.ClearValue()
+  
   def OnKillFocus(self, event):
     '''Store the entered value if it is valid. Give the next seed the focus, wrapping around at
     the first and last seeds.'''

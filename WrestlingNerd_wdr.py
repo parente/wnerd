@@ -6,6 +6,10 @@
 # Include wxWindows' modules
 from wxPython.wx import *
 
+# Custom source
+ID_DELETE_MATCH_MENU = wxNewId()
+ID_DELETE_SEED_MENU = wxNewId()
+
 # Window functions
 
 ID_WEIGHTS_CHOICE = 10000

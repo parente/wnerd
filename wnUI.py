@@ -79,7 +79,7 @@ class wnFrame(wxFrame):
     
   def OnClose(self, event):
     '''Handle a window close event.'''
-    self.canvas.Destroy()
+    self.canvas.Close()
     self.Destroy()
     
   def OnNew(self, event):

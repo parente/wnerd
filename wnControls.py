@@ -17,9 +17,12 @@ class wnStaticText(wxPanel):
     self.clear_color = self.ctrl.GetBackgroundColour()
     
     #register events on the text control
-    EVT_LEFT_DOWN(self.ctrl, self.OnLeftDown)
+    EVT_LEFT_DOWN(self.ctrl, self.OnPassEvent)
+    EVT_RIGHT_DOWN(self.ctrl, self.OnPassEvent)
+    EVT_LEFT_UP(self.ctrl, self.OnPassEvent)
+    EVT_RIGHT_UP(self.ctrl, self.OnPassEvent)
     
-  def OnLeftDown(self, event):
+  def OnPassEvent(self, event):
     event.SetEventObject(self)
     wxPostEvent(self, event)
     
@@ -48,6 +51,8 @@ class wnStaticText(wxPanel):
       self.ctrl.SetBackgroundColour(self.clear_color)
     self.Refresh()
 
+  def ShowMenu(self, pos):
+    self.PopupMenu(wnMatchMenu(self), pos)
       
 class wnDynamicText(wxMaskedTextCtrl):
   def __init__(self, parent, id, text, choices, pos=wxPoint(0,0), size=wxSize(-1,-1)):
@@ -75,6 +80,9 @@ class wnDynamicText(wxMaskedTextCtrl):
 
     if y < sy or y > sy+h:
       self.parent.Scroll(0, sy+y/py)
+      
+  def ShowMenu(self, pos):
+    self.PopupMenu(wnSeedMenu(self), pos)
                                      
 class wnPopup(wxPopupWindow):
   def __init__(self, parent, text, pos, size):
@@ -91,6 +99,18 @@ class wnPopup(wxPopupWindow):
     #set the proper colors
     self.SetBackgroundColour(wnSettings.popup_color)
     st.SetBackgroundColour(wnSettings.popup_color)
+    
+class wnMatchMenu(wxMenu):
+  def __init__(self, ctrl):
+    wxMenu.__init__(self)
+    self.Append(GUI.ID_DELETE_MATCH_MENU, 'Delete')
+    self.Control = ctrl
+
+class wnSeedMenu(wxMenu):
+  def __init__(self, ctrl):
+    wxMenu.__init__(self)
+    self.Append(GUI.ID_DELETE_SEED_MENU, 'Delete')
+    self.Control = ctrl
     
 class wnMatchDialog(wxDialog):
   '''Class that creates a dialog box that allows users to enter match results.'''

@@ -82,6 +82,7 @@ class wnPainter(wnRenderer):
       #hook the event manager properly
       self.event_man.RegisterMouseEvents(ctrl)
       self.event_man.RegisterFocusEvents(ctrl)
+      self.event_man.RegisterMatchMenuEvents(ctrl)
       self.event_man.RegisterEventHandler(ctrl.GetId(), handler)
       
     #if it already exists
@@ -136,6 +137,7 @@ class wnPainter(wnRenderer):
       #hook the event manager properly
       self.event_man.RegisterFocusEvents(ctrl)
       self.event_man.RegisterMouseEvents(ctrl)
+      self.event_man.RegisterSeedMenuEvents(ctrl)
       self.event_man.RegisterEventHandler(ctrl.GetId(), self.control_cache[id]['handler'])
       
     self.control_cache = {}

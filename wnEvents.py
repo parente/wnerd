@@ -3,6 +3,7 @@ The events module defines classes that help tournament objects receive events fr
 '''
 
 from wxPython.wx import *
+import WrestlingNerd_wdr as GUI
 
 class wnEvent(object):
   def __init__(self, **kwargs):
@@ -42,6 +43,19 @@ class wnFocusEventReceivable:
   def OnKillFocus(self, event):
     pass
   
+class wnSeedMenuReceivable:
+  '''Defines an interface that must be implemented for an object to receive menu events from the
+  seed popup menu.'''
+  def OnDelete(self, event):
+    pass
+
+class wnMatchMenuReceivable:
+  '''Defines an interface that must be implemented for an object to receive menu events from the
+  match popup menu.'''
+  def OnDelete(self, event):
+    pass
+  
+  
 class wnEventManager(wxEvtHandler):
   def __init__(self, painter):
     wxEvtHandler.__init__(self)
@@ -61,6 +75,12 @@ class wnEventManager(wxEvtHandler):
   def RegisterFocusEvents(self, ctrl):
     EVT_SET_FOCUS(ctrl, self.OnFocusEvent)
     EVT_KILL_FOCUS(ctrl, self.OnFocusEvent)
+    
+  def RegisterMatchMenuEvents(self, frame):
+    EVT_MENU(frame, GUI.ID_DELETE_MATCH_MENU, self.OnMenuEvent)
+    
+  def RegisterSeedMenuEvents(self, frame):
+    EVT_MENU(frame, GUI.ID_DELETE_SEED_MENU, self.OnMenuEvent)
     
   def RegisterEventHandler(self, id, handler):
     '''Register an event handler to receive callbacks from user actions on the given control.'''    
@@ -94,6 +114,20 @@ class wnEventManager(wxEvtHandler):
     if handler is not None:
       e = wnEvent(Painter=self.painter, Control=obj)
       func_name = dispatch[event.GetEventType()]
+      func = getattr(handler, func_name)
+      func(e)
+    event.Skip()
+    
+  def OnMenuEvent(self, event):
+    '''Dispatch to the proper object and function based on the event object id.'''
+    dispatch = {GUI.ID_DELETE_SEED_MENU : 'OnDelete', GUI.ID_DELETE_MATCH_MENU : 'OnDelete'}
+    
+    obj = event.GetEventObject()
+    i = obj.Control.GetId()
+    handler = self.handlers.get(i)
+    if handler is not None:
+      e = wnEvent(Painter=self.painter, Control=obj.Control)
+      func_name = dispatch[event.GetId()]
       func = getattr(handler, func_name)
       func(e)
     event.Skip()
