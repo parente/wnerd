@@ -29,9 +29,16 @@ class wnTeam(object):
   def DeleteWrestler(self, name, weight):
     '''Delete a wrestler from the team.'''
     w_list = self.wrestlers[weight]
+    
+    # search all the wrestlers in this weight class
     for i in range(len(w_list)):
       if w_list[i].Name == name:
-        del w_list[i]
+        # remove empty weight class lists
+        if len(w_list) == 1:
+          del self.wrestlers[weight]
+        # otherwise just deleted the desired wrestler
+        else:
+          del w_list[i]
         break
       
 class wnWrestler(object):

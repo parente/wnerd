@@ -393,6 +393,7 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
     
   def OnDelete(self, event):
     '''Delete the wrestler in this entry.'''
+    self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
     self.wrestler = None
     event.Control.ClearValue()
   
@@ -404,17 +405,12 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
       
   def updateData(self, event):
     '''Figure out what needs to be done to store the wrestler properly.'''
-    if event.Control.IsEmpty():
-      return
-
-    #figure out our current state and to what state we're transitioning
-    if self.wrestler is None and not event.Control.IsValid():
-      #do nothing
-      return
-    elif self.wrestler is not None and not event.Control.IsValid():
-      #delete wrestler from its team
-      self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
-      self.wrestler = None
+    # the control is invalid or empty
+    if not event.Control.IsValid() or event.Control.IsEmpty():
+      # the current wrestler should be deleted
+      if self.wrestler is not None:
+        self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
+        self.wrestler = None
       return
         
     #get the data from the control since it must be valid
@@ -422,11 +418,20 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
     w_name = w_name.strip()
     t_name = t_name.strip()
     
-    if self.wrestler is None and event.Control.IsValid():
-      #add wrestler to team and store it locally
-      self.wrestler = self.Teams[t_name].NewWrestler(w_name, self.Weight)
+    # make sure both fields are present
+    if w_name == '' or t_name == '':
+      # the current wrestler should be deleted
+      if self.wrestler is not None:
+        self.wrestler.Team.DeleteWrestler(self.wrestler.Name, self.Weight)
+        self.wrestler = None
+      return
 
-    elif self.wrestler is not None and event.Control.IsValid():
+    # add a new wrestler
+    if self.wrestler is None:
+      self.wrestler = self.Teams[t_name].NewWrestler(w_name, self.Weight)
+    
+    # replace an existing wrestler
+    elif self.wrestler is not None:
       #if the held team is equal to the new team
       if self.wrestler.Team.Name == t_name:
         #just update the wrestler in the current team

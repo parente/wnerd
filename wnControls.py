@@ -66,10 +66,10 @@ class wnDynamicText(wxMaskedTextCtrl):
     bg_color = self.parent.GetBackgroundColour()
     mask = 'N{%d} | N{%d}' % (wnSettings.max_name_length, wnSettings.max_team_length)
     wxMaskedTextCtrl.__init__(self, parent, -1, '', formatcodes='VF_><S',  mask=mask,
-                              pos=pos, size=size, emptyBackgroundColor=bg_color,
-                              validBackgroundColor=bg_color,
+                              pos=pos, size=size, validBackgroundColor=bg_color,
+                              emptyBackgroundColor=bg_color,
                               fields = {0 : Field(validRegex='^[a-zA-Z0-9]+'),
-                                        1 : Field(choices=choices, choiceRequired=True)
+                                        1 : Field(choices=choices, choiceRequired=True, autoSelect=True)
                               },
                               style = wxNO_BORDER, retainFieldValidation = True
                              )
