@@ -29,6 +29,7 @@ class wnPainter(wnRenderer):
     '''Clean out any stored controls and registered events.'''
     for ctrl in self.controls.values():
       ctrl.Destroy()
+    self.controls = {}
     del self.event_man
     self.event_man = wnEventManager(self)
       
