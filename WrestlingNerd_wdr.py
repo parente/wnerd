@@ -129,7 +129,7 @@ def WizardTeamsPanel( parent, call_fit = True, set_sizer = True ):
 
     item4 = wxBoxSizer( wxHORIZONTAL )
     
-    item5 = wxComboBox( parent, ID_TEAMS_COMBO, "", wxDefaultPosition, wxSize(200,300), [], wxCB_SIMPLE )
+    item5 = wxComboBox( parent, ID_TEAMS_COMBO, "", wxDefaultPosition, wxSize(200,300), [], wxCB_SIMPLE|wxCB_SORT )
     item4.AddWindow( item5, 0, wxGROW|wxALL, 5 )
 
     item6 = wxBoxSizer( wxVERTICAL )
@@ -174,7 +174,7 @@ def WizardWeightsPanel( parent, call_fit = True, set_sizer = True ):
 
     item4 = wxBoxSizer( wxHORIZONTAL )
     
-    item5 = wxComboBox( parent, ID_WEIGHTS_COMBO, "", wxDefaultPosition, wxSize(200,300), [], wxCB_SIMPLE )
+    item5 = wxComboBox( parent, ID_WEIGHTS_COMBO, "", wxDefaultPosition, wxSize(200,300), [], wxCB_SIMPLE|wxCB_SORT )
     item4.AddWindow( item5, 0, wxGROW|wxALL, 5 )
 
     item6 = wxBoxSizer( wxVERTICAL )
@@ -223,7 +223,7 @@ def WizardLayoutPanel( parent, call_fit = True, set_sizer = True ):
     item6 = wxStaticBox( parent, -1, "Available brackets" )
     item5 = wxStaticBoxSizer( item6, wxHORIZONTAL )
     
-    item7 = wxListBox( parent, ID_LAYOUT_LIST, wxDefaultPosition, wxSize(150,200), [], wxLB_SINGLE )
+    item7 = wxListBox( parent, ID_LAYOUT_LIST, wxDefaultPosition, wxSize(180,200), [], wxLB_SINGLE|wxLB_SORT )
     item5.AddWindow( item7, 0, wxGROW|wxALL, 5 )
 
     item4.AddSizer( item5, 0, wxGROW|wxALIGN_CENTER_HORIZONTAL|wxALL, 5 )
@@ -377,6 +377,7 @@ def CreatePrintDialog( parent, call_fit = True, set_sizer = True ):
 
 ID_POINTADJUST_TEXT = 10027
 ID_POINTADJUST_SPIN = 10028
+ID_WRESTLERS_LIST = 10029
 
 def CreateTeamDialog( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -394,16 +395,49 @@ def CreateTeamDialog( parent, call_fit = True, set_sizer = True ):
 
     item0.AddSizer( item1, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
-    item5 = wxBoxSizer( wxHORIZONTAL )
+    item6 = wxStaticBox( parent, -1, "Text" )
+    item5 = wxStaticBoxSizer( item6, wxVERTICAL )
     
-    item6 = wxButton( parent, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize, 0 )
-    item6.SetDefault()
-    item5.AddWindow( item6, 0, wxALIGN_CENTER|wxALL, 5 )
-
-    item7 = wxButton( parent, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize, 0 )
+    item7 = wxListCtrl( parent, ID_WRESTLERS_LIST, wxDefaultPosition, wxSize(200,120), wxLC_REPORT|wxSUNKEN_BORDER )
     item5.AddWindow( item7, 0, wxALIGN_CENTER|wxALL, 5 )
 
-    item0.AddSizer( item5, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+    item0.AddSizer( item5, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item8 = wxBoxSizer( wxHORIZONTAL )
+    
+    item9 = wxButton( parent, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize, 0 )
+    item9.SetDefault()
+    item8.AddWindow( item9, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item10 = wxButton( parent, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize, 0 )
+    item8.AddWindow( item10, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item0.AddSizer( item8, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
+        parent.SetSizer( item0 )
+        if call_fit == True:
+            item0.Fit( parent )
+            item0.SetSizeHints( parent )
+    
+    return item0
+
+ID_RESULTS_LIST = 10030
+
+def CreateFastFallDialog( parent, call_fit = True, set_sizer = True ):
+    item0 = wxBoxSizer( wxVERTICAL )
+    
+    item1 = wxListCtrl( parent, ID_RESULTS_LIST, wxDefaultPosition, wxSize(450,300), wxLC_REPORT|wxSUNKEN_BORDER )
+    item0.AddWindow( item1, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item2 = wxBoxSizer( wxHORIZONTAL )
+    
+    item3 = wxButton( parent, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize, 0 )
+    item3.SetDefault()
+    item2.AddWindow( item3, 0, wxALIGN_CENTER|wxALL, 5 )
+
+    item0.AddSizer( item2, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     if set_sizer == True:
         parent.SetAutoLayout( True )
@@ -416,17 +450,18 @@ def CreateTeamDialog( parent, call_fit = True, set_sizer = True ):
 
 # Menubar functions
 
-ID_NEW_MENU = 10029
-ID_OPEN_MENU = 10030
-ID_MENU = 10031
-ID_SAVE_MENU = 10032
-ID_SAVEAS_MENU = 10033
-ID_PRINT_MENU = 10034
-ID_EXIT_MENU = 10035
-ID_FILE_MENU = 10036
-ID_FASTFALL_MENU = 10037
-ID_NUMBOUTS_MENU = 10038
-ID_QUERY_MENU = 10039
+ID_NEW_MENU = 10031
+ID_OPEN_MENU = 10032
+ID_MENU = 10033
+ID_SAVE_MENU = 10034
+ID_SAVEAS_MENU = 10035
+ID_PRINT_MENU = 10036
+ID_EXIT_MENU = 10037
+ID_FILE_MENU = 10038
+ID_FASTFALL_MENU = 10039
+ID_NUMBOUTS_MENU = 10040
+ID_SCOREWIN_MENU = 10041
+ID_QUERY_MENU = 10042
 
 def CreateMenuBar():
     item0 = wxMenuBar()
@@ -444,22 +479,15 @@ def CreateMenuBar():
     item0.Append( item1, "File" )
     
     item2 = wxMenu()
-    item2.Append( ID_FASTFALL_MENU, "Fast fall", "" )
-    item2.Append( ID_NUMBOUTS_MENU, "Number of bouts", "" )
+    item2.Append( ID_FASTFALL_MENU, "&Fast fall...\tCtrl-F", "" )
+    item2.Append( ID_NUMBOUTS_MENU, "&Bout count...\tCtrl-B", "" )
+    item2.AppendSeparator()
+    item2.Append( ID_SCOREWIN_MENU, "Score &window...\tCtrl-W", "" )
     item0.Append( item2, "Query" )
     
     return item0
 
 # Toolbar functions
-
-
-def MainToolbar( parent ):
-    parent.SetMargins( [2,2] )
-    
-    item3 = wxChoice( parent, ID_WEIGHTS_CHOICE, wxDefaultPosition, wxSize(100,-1), [], 0 )
-    parent.AddControl( item3 )
-    
-    parent.Realize()
 
 # Bitmap functions
 

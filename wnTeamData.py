@@ -2,6 +2,7 @@
 The team data module contains classes that hold team and wrestler information.
 '''
 import wnSettings
+from wnScoreData import wnResultPin
 
 class wnTeam(object):
   '''The team class holds wrestlers and points.'''
@@ -13,6 +14,18 @@ class wnTeam(object):
     
   def __repr__(self):
     return '<Team Name: %s Wrestlers: %s>' % (self.name, self.wrestlers)
+   
+  def GetWrestlers(self):
+    '''Flatten all the wrestlers in each weight class into one list.'''
+    wrestlers = []
+    order = self.wrestlers.keys()
+    order.sort()
+    
+    for i in order:
+      for w in self.wrestlers[i]:
+        wrestlers.append(w)
+      
+    return wrestlers
    
   def GetName(self):
     return self.name
@@ -28,6 +41,21 @@ class wnTeam(object):
     
   def GetPointAdjust(self):
     return self.point_adjust
+  
+  def CalcFastFall(self):
+    '''Go through all the wrestlers on this team and compute their fast fall results.'''
+    wrestlers = []
+    for weight in self.wrestlers:
+      weight_list = self.wrestlers[weight]
+      for wrestler in weight_list:
+        data = wrestler.CalcFastFall()
+        data.append(wrestler.Name)
+        data.append(self.name)
+        data.append(weight)
+        
+        wrestlers.append(data)
+        
+    return wrestlers
   
   def SetWeightScore(self, weight_name, value):
     '''Set the score for a weight to a certain value.'''
@@ -59,6 +87,7 @@ class wnTeam(object):
   Name = property(fget=GetName)  
   Score = property(fget=GetTotalScore)
   PointAdjust = property(fget=GetPointAdjust, fset=SetPointAdjust)
+  Wrestlers = property(fget=GetWrestlers)
       
 class wnWrestler(object):
   '''The wrestler class holds information about individuals in a tournament.'''
@@ -66,6 +95,7 @@ class wnWrestler(object):
     self.name = name
     self.weight = weight
     self.team = team
+    self.results = {}
     
   def __repr__(self):
     return '<Wrestler Name: %s Weight: %s Team: %s>' % (self.name, self.weight, self.team.Name)
@@ -83,6 +113,29 @@ class wnWrestler(object):
       return (self.name != w.name or self.team != w.team)
     except:
       return False
+    
+  def StoreResult(self, id, result):
+    '''Store a result for a particular match ID.'''
+    self.results[id] = result
+    
+  def DeleteResult(self, id):
+    '''Delete a result for a particular match ID.'''
+    try:
+      del self.results[id]
+    except:
+      pass
+    
+  def CalcFastFall(self):
+    '''Get the total number of pins and pin times.'''
+    total = [0, 0, '']
+    for r in self.results.values():
+      if r.Name == 'Pin':
+        total[0] += 1
+        total[1] += r.Value
+    
+    total[2] = wnResultPin(total[1]).TextValue
+        
+    return total
     
   def GetFormattedName(self):
     n_fill = wnSettings.max_name_length - len(self.name)

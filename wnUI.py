@@ -8,6 +8,7 @@ from wxPython.wizard import *
 from wnBuilder import *
 from wnRenderer import *
 import WrestlingNerd_wdr as GUI
+import wnSettings
 import cPickle
 
 class wnFrame(wxFrame):
@@ -65,16 +66,10 @@ class wnFrame(wxFrame):
     EVT_MENU(self, GUI.ID_SAVEAS_MENU, self.OnSaveAs)
     EVT_MENU(self, GUI.ID_OPEN_MENU, self.OnOpen)
     EVT_MENU(self, GUI.ID_PRINT_MENU, self.OnPrint)
+    EVT_MENU(self, GUI.ID_NUMBOUTS_MENU, self.OnCountBouts)
+    EVT_MENU(self, GUI.ID_FASTFALL_MENU, self.OnFastFall)
     EVT_CHOICE(self, GUI.ID_WEIGHTS_CHOICE, self.OnSelectWeight)
     EVT_LIST_ITEM_ACTIVATED(self, GUI.ID_TEAMS_LIST, self.OnSelectTeam)
-    
-    #EVT_BUTTON(self, GUI.ID_TEAM_DEBUG, self.OnTeamDebug)
-    
-  #def OnTeamDebug(self, event):
-  #  for t in self.tournament.teams.values():
-  #    print t.Name
-  #    print t.wrestlers
-  #    print
     
   def OnClose(self, event):
     '''Handle a window close event.'''
@@ -148,6 +143,26 @@ class wnFrame(wxFrame):
       printer = wxPrinter()
       printer.Print(self, None, True)
       
+    dlg.Destroy()
+    
+  def OnCountBouts(self, event):
+    '''Count the number of bouts and show the result in a simple dialog.'''
+    i = self.tournament.CountBouts()
+    
+    if i == 1:
+      msg = 'There is 1 bout in the tournament.'
+    else:
+      msg = 'There are ' + str(i) + ' bouts in the tournament.'
+    
+    dlg = wxMessageDialog(self, msg, 'Bout count')
+    dlg.ShowModal()
+    dlg.Destroy()
+    
+  def OnFastFall(self, event):
+    '''Show the fast fall dialog.'''
+    dlg = wnFastFallDialog(self, self.tournament.CalcFastFall())
+    dlg.CentreOnScreen()
+    dlg.ShowModal()
     dlg.Destroy()
       
   def OnSelectWeight(self, event):
@@ -360,7 +375,7 @@ class wnNewTournamentWizard(wxWizard):
   def OnAddTeam(self, event):
     t = self.teams.GetValue()
     if self.teams.FindString(t) != -1 or t == '': return
-    self.teams.Append(t)
+    self.teams.Append(t[0:wnSettings.max_team_length])
     self.teams.SetValue('')
   
   def OnRemoveTeam(self, event):
@@ -477,10 +492,23 @@ class wnTeamDialog(wxDialog):
     
     # get important references
     self.pa_text = wxPyTypeCast(self.FindWindowById(GUI.ID_POINTADJUST_TEXT), 'wxTextCtrl')
+    self.wrestlers = wxPyTypeCast(self.FindWindowById(GUI.ID_WRESTLERS_LIST), 'wxListCtrl')
+    
+    # store the team for later reference
     self.team = team
     
-    # set the point value
+    # set up the list control
+    self.wrestlers.InsertColumn(0, 'Weight', width=-2)
+    self.wrestlers.InsertColumn(1, 'Name', width=100)
+    
+    # show the current team stats
     self.pa_text.SetValue(str(self.team.PointAdjust))
+    
+    wrestlers = self.team.Wrestlers
+    for i in range(len(wrestlers)):
+      w = wrestlers[i]
+      self.wrestlers.InsertStringItem(i, w.Weight)
+      self.wrestlers.SetStringItem(i, 1, w.Name)      
     
     # set events
     EVT_SPIN_UP(self, GUI.ID_POINTADJUST_SPIN, self.OnPointUp)
@@ -496,6 +524,30 @@ class wnTeamDialog(wxDialog):
   
   def OnPointDown(self, event):
     self.pa_text.SetValue(str(float(self.pa_text.GetValue()) - 0.5))
+    
+class wnFastFallDialog(wxDialog):
+  def __init__(self, parent, table):
+    wxDialog.__init__(self, parent, -1, 'Fast fall results')
+    GUI.CreateFastFallDialog(self)
+    
+    # get a reference to the results list control
+    self.results = wxPyTypeCast(self.FindWindowById(GUI.ID_RESULTS_LIST), 'wxListCtrl')
+    
+    # set up the list control
+    self.results.InsertColumn(0, 'Name', width=100)
+    self.results.InsertColumn(1, 'Team', width=100)
+    self.results.InsertColumn(2, 'Weight', width=-2)
+    self.results.InsertColumn(3, 'Pins', width=-2)
+    self.results.InsertColumn(4, 'Time', width=-2)
+    
+    # show the results
+    for i in range(len(table)):
+      num, time, time_str, name, team, weight = table[i]
+      self.results.InsertStringItem(i, name)
+      self.results.SetStringItem(i, 1, team)
+      self.results.SetStringItem(i, 2, weight)
+      self.results.SetStringItem(i, 3, str(num))
+      self.results.SetStringItem(i, 4, time_str)
 
 class wnScoreWindow(wxFrame):
   '''Class the creates a standalone frame for displaying team scores. Teams scroll past at a regular

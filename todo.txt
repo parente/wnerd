@@ -1,11 +1,10 @@
 Todo
 
 UI
+- scrolling score window
 
 Data
 - test scoring algorithm
-- fast fall
-- number of bouts
 
 Printing
 - print brackets

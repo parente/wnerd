@@ -98,8 +98,8 @@ class wnBCInvitationalConfig:
             wnRoundSetup('Fifth Place', wnPoints(0,0), 1)]
 
 class wnCTChampionshipConfig:
-  Name = 'Connecticut State Tournament'
-  Description = 'The bracket format used in the Connecticut State Championships and the Connecticut State Open. The outbracket has 32 seed slots, and double-elimination begins in the round of sixteen.'
+  Name = 'Connecticut State Championships'
+  Description = 'The bracket format used in the Connecticut State Division Championship tournaments. The outbracket has 32 seed slots, and double-elimination begins in the round of sixteen.'
   Seeds = [1, 32, 17, 16, 9, 24, 25, 8, 5, 28, 21, 12, 13, 20, 29, 4,
            3, 30, 19, 14, 11, 22, 27, 6, 7, 26, 23, 10, 15, 18, 31, 2]
   Rounds = [wnRoundSetup('Rat-Tails Champion', wnPoints(0,0),
@@ -131,6 +131,35 @@ class wnCTChampionshipConfig:
             
             wnRoundSetup('Finals Fifth', wnPoints(0,0), 2, 'Fifth Place', [0,0]),
             wnRoundSetup('Fifth Place', wnPoints(0,0), 1)]
+  
+class wnCTOpenConfig:
+  Name = 'Connecticut State Open'  
+  Description = 'The bracket format used in the Connecticut State Open tournament. The outbracket has 16 seed slots, and double-elimination begins immediately.'
+  Seeds = [1, 16, 9, 8, 5, 12, 13, 4, 3, 14, 11, 6, 7, 10, 15, 2]
+  Rounds = [wnRoundSetup('Sixteen Champion', wnPoints(2,0),
+                         [1, 16, 9, 8, 5, 12, 13, 4, 3, 14, 11, 6, 7, 10, 15, 2],
+                         'Quarter-Finals Champion', [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7],
+                         'Rat-Tails Consolation', [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7]),
+            wnRoundSetup('Quarter-Finals Champion', wnPoints(2,0), 8, 'Semi-Finals Champion',
+                         [0,0,1,1,2,2,3,3], 'Eight Consolation', [1,1,3,3,5,5,7,7]),
+            wnRoundSetup('Semi-Finals Champion', wnPoints(2,0), 4, 'Finals Champion',
+                         [0,0,1,1], 'Semi-Finals Consolation', [3,3,1,1]),
+            wnRoundSetup('Finals Champion', wnPoints(2,0), 2, 'First Place', [0, 0]),
+            wnRoundSetup('First Place', wnPoints(0,0), 1),
+            
+            wnRoundSetup('Rat-Tails Consolation', wnPoints(1,0), 8,
+                        'Eight Consolation', [0,0,2,2,4,4,6,6]),
+            wnRoundSetup('Eight Consolation', wnPoints(1,0), 8,
+                        'Quarter-Finals Consolation', [0,0,1,1,2,2,3,3]),
+            wnRoundSetup('Quarter-Finals Consolation', wnPoints(1,0), 4,
+                        'Semi-Finals Consolation', [0,0,2,2]),
+            wnRoundSetup('Semi-Finals Consolation', wnPoints(1,0), 4, 'Finals Consolation',
+                         [0,0,1,1], 'Finals Fifth', [0,0,1,1]),
+            wnRoundSetup('Finals Consolation', wnPoints(1,0), 2, 'Third Place', [0,0]),
+            wnRoundSetup('Third Place', wnPoints(0,0), 1),
+            
+            wnRoundSetup('Finals Fifth', wnPoints(0,0), 2, 'Fifth Place', [0,0]),
+            wnRoundSetup('Fifth Place', wnPoints(0,0), 1)]  
 
 if __name__ == '__main__':
   b = wnBuilder()

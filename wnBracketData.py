@@ -83,6 +83,28 @@ class wnTournament(wnNode):
     score_table.sort()
     score_table.reverse()
     return score_table
+  
+  def CalcFastFall(self):
+    '''Compute the fast fall results over all teams and their wrestlers.'''
+    results = []
+    for t in self.teams.values():
+      results += t.CalcFastFall()
+      
+    # sort first by pins
+    results.sort()
+    results.reverse()
+    
+    # now sort by times
+    
+    return results
+  
+  def CountBouts(self):
+    '''Get a count of the total number of bouts.'''
+    i = 0
+    for w in self.weight_classes.values():
+      i += w.CountBouts()
+      
+    return i
 
   def GetWeights(self):
     '''Return a list of all the weight classes in ascending order.'''
@@ -171,6 +193,14 @@ class wnWeightClass(wnNode):
       
     # return a dictionary of team/score pairs
     return scores
+  
+  def CountBouts(self):
+    '''Get a count of the total number of bouts.'''
+    i = 0
+    for r in self.rounds.values():
+      i += r.CountBouts()
+     
+    return i  
   
   def GetRoundNames(self):
     return self.order
@@ -306,6 +336,14 @@ class wnRound(wnNode):
         # store the result for this team so far
         tn = entry.Wrestler.Team.Name
         scores[tn] = scores.get(tn, 0.0) + thread_score
+
+  def CountBouts(self):
+    '''Get a count of the total number of bouts.'''
+    i = 0
+    for e in self.entries:
+      i += e.CountBouts()
+     
+    return i          
           
   NumEntries = property(fget=GetNumberOfEntries)
   Entries = property(fget=GetEntries)
@@ -385,6 +423,14 @@ class wnEntry(wnNode):
       else:
         return []
 
+
+  def CountBouts(self):
+    '''Get a count of the total number of bouts.'''
+    if self.result is None:
+      return 0
+    else:
+      return 1
+  
   ID = property(fget=GetID)
   NextLose = property(fget=GetNextLose, fset=SetNextLose)
   NextWin = property(fget=GetNextWin, fset=SetNextWin)
@@ -441,12 +487,20 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
     opponents = [entry.Wrestler for entry in self.previous if entry.Wrestler is not None]
     result = event.Painter.ShowMatchDialog(opponents, self.result, self.is_scoring)
     
+    # remove any old result first
+    if self.wrestler is not None:
+      self.wrestler.DeleteResult(self.ID)
+    
+    # store the result here
     if result is not None:
       winner, loser, result_type, result_value, self.is_scoring = result
     
-      #store the information
+      #store the information in the entry
       self.result = wnResultFactory.Create(result_type, result_value)
       self.wrestler = winner
+      
+      #store the result for the wrestler
+      self.wrestler.StoreResult(self.ID, self.result)
       
       #show the new winner name
       event.Control.SetLabel(self.wrestler.Name)
@@ -464,6 +518,7 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
     
   def OnDelete(self, event):
     '''Delete the wrestler in this entry.'''
+    self.wrestler.DeleteResult(self.ID)
     self.wrestler = None
     self.result = None
     event.Control.SetLabel('')
@@ -581,11 +636,19 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
     temp.Paint = lambda painter, refresh_labels, full: full
     
     # go through the list and swap wrestlers down
-    for i in range(int(self.name)-1, self.parent.NumEntries-1):
+    for i in range(int(self.name)-1, self.parent.NumEntries):
       self.parent.Entries[i].Swap(temp, event.Painter)
       
       # stop when the wrestler is none
       if temp.Wrestler is None: break
+      
+    # if the temp wrestler is not none, get rid of it from the team
+    # this happens when the insert overflows the bracket
+    if temp.wrestler is not None and temp.wrestler.Team is not None:
+      temp.wrestler.Team.DeleteWrestler(temp.wrestler.Name, self.Weight)
+    
+    # refresh all scores
+    event.Control.RefreshScores()
   
   def OnKillFocus(self, event):
     '''Store the entered value if it is valid. Give the next seed the focus, wrapping around at
