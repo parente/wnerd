@@ -11,6 +11,11 @@ class wnTeam(object):
     
     self.tournament = None
     
+  def GetName(self):
+    return self.name
+  
+  Name = property(fget=GetName)
+  
   def NewWrestler(self, name, weight):
     w = wnWrestler(str(name), str(weight))
     w.team = self

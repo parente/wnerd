@@ -86,7 +86,7 @@ class wnPainter(wnRenderer):
       #set the current text
       #ctrl.SetLabel(text)
    
-  def DrawSeedTextControl(self, text, x, y, length, height, id, handler):
+  def DrawSeedTextControl(self, text, x, y, length, height, choices, id, handler):
     '''Draw a dynamic text control that let's the user enter text directly into it. Register the new
     event handler to receive events from the user.'''
     
@@ -94,7 +94,7 @@ class wnPainter(wnRenderer):
     if not self.controls.has_key(id):
       #don't create the text control immediately, delay until later so they can be defined in the
       #proper tabbing order
-      self.control_cache[id] = {'args' : (self.canvas, -1, text, wxPoint(x,y),
+      self.control_cache[id] = {'args' : (self.canvas, -1, text, choices, wxPoint(x,y),
                                           wxSize(length, height)), 'handler' : handler}
       
     #if it already exists

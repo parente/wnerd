@@ -24,7 +24,7 @@ class wnTournament(wnNode):
     wnNode.__init__(self, None)
     self.name = name
     self.seeds = seeds
-    self.teams = {}
+    self.teams = []
     self.weight_classes = {}
         
   def NewWeightClass(self, name):
@@ -36,17 +36,15 @@ class wnTournament(wnNode):
   def NewTeam(self, name):
     t = wnTeam(name)
     t.tournament = self
-    self.teams[str(name)] = t
+    self.teams.append(t)
     
     return t
 
-  def GetTeam(self, name):
-    return self.teams.get(name)
-  
+ 
   def GetWeightClass(self, name):
     return self.weight_classes.get(name)
   
-  def Paint(self, painter, weight):
+  def Paint(self, painter, weight, refresh_labels):
     '''Draw the specified weight class to the screen. Pass the provided painter object to the
     weight class being drawn. Draw the seed numbers in the given order first.
     '''
@@ -57,14 +55,14 @@ class wnTournament(wnNode):
     except:
       return
       
-    return wc.Paint(painter, (0, wnSettings.seed_start), wnSettings.initial_step)
+    return wc.Paint(painter, (0, wnSettings.seed_start), wnSettings.initial_step, refresh_labels)
   
   def CalcScores(self, painter):
     '''Calculate all the scores across this tournament.'''
     #for now, just return zero always
     scores = []
-    for name in self.teams.keys():
-      scores.append((name, 0.0))
+    for t in self.teams:
+      scores.append((t.Name, 0.0))
         
     painter.DrawTeamScores(scores)
 
@@ -74,11 +72,15 @@ class wnTournament(wnNode):
     k.sort()
     return k
   
+  def GetTeams(self):
+    return self.teams
+  
   def GetName(self):
     '''Return the tournament name.'''
     return self.name
   
   Weights = property(fget=GetWeights)
+  Teams = property(fget=GetTeams)
   Name = property(fget=GetName)
   
 class wnWeightClass(wnNode):
@@ -101,7 +103,7 @@ class wnWeightClass(wnNode):
   def GetRound(self, name):
     return self.rounds.get(name)
   
-  def Paint(self, painter, start, initial_step):
+  def Paint(self, painter, start, initial_step, refresh_labels):
     '''Go through all of the rounds and draw their bracket lines.'''
 
     step = initial_step
@@ -135,7 +137,7 @@ class wnWeightClass(wnNode):
       else:
         length = wnSettings.entry_length
 
-      start, mx, my = curr.Paint(painter, start, length, step)
+      start, mx, my = curr.Paint(painter, start, length, step, refresh_labels)
       
       if curr.NumEntries != next_num:
         step *= 2
@@ -207,7 +209,7 @@ class wnRound(wnNode):
       #link the entry in this round to the proper entry in the next round
       self.entries[i].NextLose = round.Entries[to_map[i]]
 
-  def Paint(self, painter, start, length, step):
+  def Paint(self, painter, start, length, step, refresh_labels):
     '''Draw the bracket for this round only. Return the next starting position so the next round
     knows where to draw itself.'''
     
@@ -215,7 +217,7 @@ class wnRound(wnNode):
     x,y = start
     for i in range(self.NumEntries):
       painter.DrawLine(x,y,x+length,y)
-      self.entries[i].Paint(painter, (x,y), length)
+      self.entries[i].Paint(painter, (x,y), length, refresh_labels)
       y += step
 
     #store the maximum positions so the scrollbars can be set properly
@@ -272,15 +274,16 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
     wnEntry.__init__(self, name, parent)
     self.result = None
 
-  def Paint(self, painter, pos, length):
+  def Paint(self, painter, pos, length, refresh_labels):
     '''Paint all of the text controls.'''
     if self.wrestler is None: text = ''
     else: text = self.wrestler.Name
     
-    painter.DrawMatchTextControl(text,
-                                 pos[0]+wnSettings.entry_offset, pos[1]-wnSettings.entry_height,
-                                 length-wnSettings.entry_offset*2, wnSettings.entry_height,
-                                 self.ID, self)
+    if refresh_labels:
+      painter.DrawMatchTextControl(text,
+                                   pos[0]+wnSettings.entry_offset, pos[1]-wnSettings.entry_height,
+                                   length-wnSettings.entry_offset*2, wnSettings.entry_height,
+                                   self.ID, self)
     
   def OnMouseEnter(self, event):
     '''Show a popup window with the match results if available.'''
@@ -301,7 +304,7 @@ class wnSeedEntry(wnEntry, wnFocusEventReceivable):
   def __init__(self, name, parent):
     wnEntry.__init__(self, name, parent)
     
-  def Paint(self, painter, pos, length):
+  def Paint(self, painter, pos, length, refresh_labels):
     '''Paint all of the text controls.'''
     if self.wrestler is None: text = ''
     else: text = self.wrestler.Name
@@ -310,9 +313,13 @@ class wnSeedEntry(wnEntry, wnFocusEventReceivable):
     painter.DrawText(str(self.name), pos[0], pos[1]-wnSettings.seed_height)
  
     #draw the text control
-    painter.DrawSeedTextControl(text,
-                                pos[0]+wnSettings.seed_offset, pos[1]-wnSettings.seed_height,
-                                wnSettings.seed_length, wnSettings.seed_height, self.ID, self)
+    if refresh_labels:
+      #get the available teams from the round->weight->tournament
+      teams = [t.Name for t in self.Parent.Parent.Parent.Teams]
+      painter.DrawSeedTextControl(text,
+                                  pos[0]+wnSettings.seed_offset, pos[1]-wnSettings.seed_height,
+                                  wnSettings.seed_length, wnSettings.seed_height,
+                                  teams, self.ID, self)
     
   def OnKillFocus(self, event):
     '''Don't let a match entry steal the focus. Immediately set it back to the first available

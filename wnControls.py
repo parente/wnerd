@@ -45,7 +45,7 @@ class wnStaticText(wxPanel):
 
       
 class wnDynamicText(wxMaskedTextCtrl):
-  def __init__(self, parent, id, text, pos=wxPoint(0,0), size=wxSize(-1,-1)):
+  def __init__(self, parent, id, text, choices, pos=wxPoint(0,0), size=wxSize(-1,-1)):
     self.parent = parent
     self.bg_color = self.parent.GetBackgroundColour()
     wxMaskedTextCtrl.__init__(self, parent, -1, '', formatcodes='VF_',  mask='N{18} | N{18}',

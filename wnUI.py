@@ -202,6 +202,7 @@ class wnBracketCanvas(wxScrolledWindow):
   def __init__(self, parent):
     wxScrolledWindow.__init__(self, parent, -1, style=wxNO_FULL_REPAINT_ON_RESIZE)
     self.parent = parent
+    self.old_weight = ''
     
     EVT_PAINT(self, self.OnPaint)
     
@@ -215,10 +216,11 @@ class wnBracketCanvas(wxScrolledWindow):
     if t is not None and w is not None:
       p = self.parent.GetPainter()    
       p.SetDC(dc)      
-      xmax, ymax = t.Paint(p, w)
+      xmax, ymax = t.Paint(p, w, w != self.old_weight)
       p.Flush()
       p.SetDC(None)
         
+      self.old_weight = w
       self.SetVirtualSize(wxSize(xmax, ymax))
       self.SetScrollRate(5,5)      
    
