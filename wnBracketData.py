@@ -549,7 +549,7 @@ class wnEntry(wnNode):
 
   def CountBouts(self):
     '''Get a count of the total number of bouts.'''
-    if self.result is None:
+    if self.result is None or self.result.Name is 'Bye':
       return 0
     else:
       return 1

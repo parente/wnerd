@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Customizing Wrestling Nerd - Wrestling Nerd Documentation</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+
+  <body>
+    <div class="nav">
+      <a href="tutorial.shtml">< Back: Tutorial: Running a Tournament</a> |
+      <a href="index.shtml">Up: Table of Contents</a> |
+      Next: None >
+    </div>
+    
+    <h1>Customizing Wrestling Nerd</h1>
+    
+    <h2><a name="new_layouts"></a>Creating new tournament layouts</h2>
+    <p>To be written...</p>
+
+  </body>
+</html>

@@ -1,0 +1,55 @@
+body {
+  background-color: #ffffff;
+  margin: 5mm 5mm 5mm 5mm;
+  font-family: Arial, sans-serif;
+  font-size: 10pt;
+  border: 1px solid black;
+  padding: 3mm;
+}
+
+div {
+  background-color: #dddddd;
+  border: 1px solid black;
+  padding: 4px;
+}
+
+h1 {
+  font-size: 20pt;
+}
+
+h2 {
+  font-size: 16pt;  
+}
+
+h3 {
+  font-size: 12pt;
+  font-style: italic;
+  font-weight: normal;
+}
+
+th {
+  text-align: left;
+}
+
+td {
+  border-top: 1px solid black;
+  padding-top: 3mm;
+  padding-bottom: 3mm;
+  padding-right: 5mm;
+}
+
+a {
+  text-decoration: none;  
+}
+
+a:link {
+  color: #3333ff;
+}
+
+a:visited {
+  color: #3333ff;
+}
+
+a:active {
+  color: #ff3333;
+}

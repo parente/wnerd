@@ -3,13 +3,28 @@
 <project kpf_version="2" name="WrestlingNerd">
 <preference-set id="">
 </preference-set>
-<file name="wnUI.py" url="wnUI.py">
+<folder name="help">
+<file name="index.shtml" url="help/index.shtml">
 </file>
-<file name="wnRenderer.py" url="wnRenderer.py">
+<file name="introduction.shtml" url="help/introduction.shtml">
+</file>
+<file name="tutorial.shtml" url="help/tutorial.shtml">
+</file>
+</folder>
+<folder name="installer">
+<file name="setup.py" url="setup.py">
+</file>
+<file name="installer.nsi" url="installer.nsi">
+</file>
+<file name="setup.cfg" url="setup.cfg">
+</file>
+</folder>
+<folder name="source">
+<preference-set id="">
+</preference-set>
+<file name="wnBracketData.py" url="wnBracketData.py">
 </file>
 <file name="wnBuilder.py" url="wnBuilder.py">
-</file>
-<file name="wnSettings.py" url="wnSettings.py">
 </file>
 <file name="wnControls.py" url="wnControls.py">
 <preference-set id="">
@@ -19,18 +34,23 @@
 </file>
 <file name="wnEvents.py" url="wnEvents.py">
 </file>
-<file name="wnScoreData.py" url="wnScoreData.py">
-</file>
-<file name="wnTeamData.py" url="wnTeamData.py">
-</file>
-<file name="wnBracketData.py" url="wnBracketData.py">
+<file name="wnExport.py" url="wnExport.py">
 </file>
 <file name="wnPrinting.py" url="wnPrinting.py">
 </file>
+<file name="wnRenderer.py" url="wnRenderer.py">
+</file>
+<file name="wnScoreData.py" url="wnScoreData.py">
+</file>
+<file name="wnSettings.py" url="wnSettings.py">
+</file>
+<file name="wnTeamData.py" url="wnTeamData.py">
+</file>
 <file name="wnTempData.py" url="wnTempData.py">
 </file>
-<file name="setup.py" url="setup.py">
+<file name="wnUI.py" url="wnUI.py">
 </file>
 <file name="WrestlingNerd.py" url="WrestlingNerd.py">
 </file>
+</folder>
 </project>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xshtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Wrestling Nerd Documentation</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+
+  <body>
+    <div class="nav"><a href="../index.shtml">Back to the Wrestling Nerd Homepage</a></div>
+    <h1>Wrestling Nerd 3.0 Documentation</h1>
+    <h2>by Peter Parente</h2>
+    
+    <h2>Table of Contents</h2>
+    <ol>
+      <li><a href="introduction.shtml">Introduction</a></li>
+      <ol>
+        <li><a href="introduction.shtml#what">What is Wrestling Nerd?</a></li>
+        <li><a href="introduction.shtml#starting">Getting started</a></li>
+        <ol>
+          <li><a href="introduction.shtml#windows">Windows 95, 98, ME, NT, 2000, XP</a></li>
+          <li><a href="introduction.shtml#other">Other platforms</a></li>
+        </ol>
+        <li><a href="introduction.shtml#contacting">Contacting the author</a></li>
+        <li><a href="introduction.shtml#license">License agreement</a></li>
+      </ol>
+      <li><a href="tutorial.shtml">Tutorial: Running a Tournament</a></li>
+        <ol>
+        <li><a href="tutorial.shtml#creating">Creating a new tournament</a></li>
+        <ol>
+          <li><a href="tutorial.shtml#naming">Naming the tournament</a></li>
+          <li><a href="tutorial.shtml#teams">Entering teams</a></li>
+          <li><a href="tutorial.shtml#weights">Entering weight classes</a></li>
+          <li><a href="tutorial.shtml#layout">Selecting a tournament layout</a></li>
+        </ol>
+        <li><a href="tutorial.shtml#navigating">Navigating the interface</a></li>
+        <ol>
+          <li><a href="tutorial.shtml#bracket_window">Viewing the bracket</a></li>
+          <li><a href="tutorial.shtml#weight_list">Selecting a weight class</a></li>
+          <li><a href="tutorial.shtml#scores_list">Viewing team scores</a></li>
+        </ol>
+        <li><a href="tutorial.shtml#seeding">Seeding wrestlers</a></li>
+        <ol>
+          <li><a href="tutorial.shtml#entering">Entering wrestler names and teams</a></li>
+          <li><a href="tutorial.shtml#non-scoring">Entering non-scoring wrestlers</a></li>
+          <li><a href="tutorial.shtml#scratching">Scratching wrestlers</a></li>          
+          <li><a href="tutorial.shtml#swapping">Swapping wrestlers</a></li>
+          <li><a href="tutorial.shtml#last">Selecting the last seed</a></li>
+          <li><a href="tutorial.shtml#moveup">Scratching seeds and moving the rest up</a></li>
+          <li><a href="tutorial.shtml#movedown">Inserting seeds and moving the rest down</a></li>
+        </ol>
+        <li><a href="tutorial.shtml#advancing">Advancing wrestlers</a></li>
+        <ol>
+          <li><a href="tutorial.shtml#winners">Selecting winners</a></li>
+          <li><a href="tutorial.shtml#results">Entering and changing results</a></li>
+          <li><a href="tutorial.shtml#deleting">Deleting results</a></li>
+          <li><a href="tutorial.shtml#popups">Viewing results</a></li>
+          <li><a href="tutorial.shtml#unpaired">Advancing unpaired wrestlers</a></li>
+        </ol>
+        <li><a href="tutorial.shtml#querying">Querying for special results</a></li>
+        <ol>
+          <li><a href="tutorial.shtml#fastfall">Showing fast fall stats</a></li>
+          <li><a href="tutorial.shtml#boutcount">Showing the bout count</a></li>
+          <li><a href="tutorial.shtml#scores">Showing team scores in a separate window</a></li>          
+        </ol>
+        <li><a href="tutorial.shtml#printing">Printing results</a></li>
+        <ol>
+          <li><a href="tutorial.shtml#print_bouts">Printing bouts</a></li>
+          <li><a href="tutorial.shtml#print_brackets">Printing brackets</a></li>
+          <li><a href="tutorial.shtml#print_scores">Printing team scores</a></li>
+          <li><a href="tutorial.shtml#print_places">Printing place winners</a></li>
+        </ol>
+        <li><a href="tutorial.shtml#storing">Storing results</a></li>
+        <ol>
+          <li><a href="tutorial.shtml#saving">Saving a tournament</a></li>
+          <li><a href="tutorial.shtml#opening">Opening a saved tournament</a></li>
+          <li><a href="tutorial.shtml#exporting">Exporting plain text results</a></li>
+        </ol>
+      </ol>
+      <li><a href="customizing.shtml">Customizing Wrestling Nerd</a></li>
+      <ol>
+        <li><a href="customizing.shtml#new_layouts">Creating new tournament layouts</a></li>
+      </ol>
+      <li><a href="appendix.shtml">Appendix</a></li>
+      <ol>
+        <li><a href="appendix.shtml#shortcuts">Keyboard shortcuts</a></li>
+      </ol>
+    </ol>
+  </body>
+</html>
