@@ -6,6 +6,7 @@ class wnStaticTextWithEvents(wxPanel):
     wxPanel.__init__(self, parent, id, pos, size, style=wxTRANSPARENT_WINDOW)
     
     self.parent = parent
+    self.popup = None
 
     #make the actual static text control
     self.ctrl = wxStaticText(self, -1, text, wxPoint(0,0), size,
@@ -31,8 +32,10 @@ class wnStaticTextWithEvents(wxPanel):
     self.popup.Show(True)
     
   def HidePopup(self):
-    self.popup.Show(False)
-    self.popup.Destroy()
+    if self.popup is not None:
+      self.popup.Show(False)
+      self.popup.Destroy()
+      self.popup = None
                                
 class wnPopup(wxPopupWindow):
   def __init__(self, parent, text, pos, size):
@@ -44,7 +47,6 @@ class wnPopup(wxPopupWindow):
     p = wxPoint(pos.x, pos.y+size.GetHeight())
     self.SetPosition(p)
     self.SetSize(wxSize(sz.width+20, sz.height+20))
-    #self.Fit()
     
     #set the proper colors
     self.SetBackgroundColour(wnSettings.popup_color)

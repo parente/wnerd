@@ -67,9 +67,28 @@ class wnPainter(wnRenderer):
       #set the current text
       ctrl.SetLabel(text)
    
-  def DrawDynamicTextControl(self, text, x, y, length, id, handler):
-    pass
-  
+  def DrawDynamicTextControl(self, text, x, y, length, height, id, handler):
+    '''Draw a dynamic text control that let's the user enter text directly into it. Register the new
+    event handler to receive events from the user.'''
+    
+    #check to see if a static text control already exists for this entry
+    if not self.controls.has_key(id):
+      ctrl = wxTextCtrl(self.canvas, -1, text, pos=wxPoint(x,y), size=wxSize(length, height),
+                        style = wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB)
+      self.controls[id] = ctrl
+      
+      #hook the event manager properly
+      self.event_man.RegisterFocusEvents(ctrl)
+      self.event_man.RegisterEventHandler(ctrl.GetId(), handler)
+      
+    #if it already exists
+    else:
+      ctrl = self.controls[id]
+      #hook the event manager
+      self.event_man.RegisterEventHandler(ctrl.GetId(), handler)
+      #set the current text
+      ctrl.SetValue(text)
+      
   def DrawTeamScores(self, items):
     self.team_scores.DeleteAllItems()
     for i in range(len(items)):
@@ -77,6 +96,14 @@ class wnPainter(wnRenderer):
       self.team_scores.InsertStringItem(i, name)
       self.team_scores.SetStringItem(i, 1, str(score))
 
+  def SetKeyboardFocus(self, id):
+    '''Set the focus to the control associated with the given ID.'''
+    try:
+      ctrl = self.controls[id]
+    except:
+      return
+    
+    ctrl.SetFocus()
 
 class wnPrinter(wnRenderer):
   pass

@@ -5,7 +5,6 @@ the main frame, the bracket canvas, and the side panel.
 
 from wxPython.wx import *
 from wxPython.wizard import *
-from wxPython.lib.scrolledpanel import wxScrolledPanel
 from wnBuilder import *
 from wnRenderer import *
 import WrestlingNerd_wdr as GUI
@@ -204,7 +203,7 @@ class wnFrame(wxFrame):
   
 class wnBracketCanvas(wxScrolledWindow):
   def __init__(self, parent):
-    wxScrolledWindow.__init__(self, parent, -1)
+    wxScrolledWindow.__init__(self, parent, -1, style=wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE)
     self.parent = parent
     
     EVT_PAINT(self, self.OnPaint)

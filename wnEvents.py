@@ -5,31 +5,8 @@ The events module defines classes that help tournament objects receive events fr
 from wxPython.wx import *
 
 class wnEvent(object):
-  def __init__(self, painter, pos, ctrl):
-    self.painter = painter
-    self.pos = pos
-    self.ctrl = ctrl
-    
-  def GetPainter(self):
-    return self.painter
-  
-  def GetX(self):
-    return self.pos[0]
-  
-  def GetY(self):
-    return self.pos[1]
-  
-  def GetPosition(self):
-    return self.pos
-  
-  def GetControl(self):
-    return self.ctrl
-  
-  Painter = property(fget=GetPainter)
-  X = property(fget=GetX)
-  Y = property(fget=GetY)
-  Position = property(fget=GetPosition)
-  Control = property(fget=GetControl)
+  def __init__(self, **kwargs):
+    self.__dict__.update(kwargs)
 
 class wnEventReceivable:
   '''Defines an interface that must be implemented for an object to receive events from the event
@@ -49,6 +26,12 @@ class wnEventReceivable:
   def OnMouseLeave(self, event):
     pass
   
+  def OnSetFocus(self, event):
+    pass
+  
+  def OnKillFocus(self, event):
+    pass
+  
 class wnEventManager(wxEvtHandler):
   def __init__(self, painter):
     wxEvtHandler.__init__(self)
@@ -62,6 +45,10 @@ class wnEventManager(wxEvtHandler):
     EVT_LEFT_DCLICK(ctrl, self.OnMouseEvent)
     EVT_ENTER_WINDOW(ctrl, self.OnMouseEvent)
     EVT_LEAVE_WINDOW(ctrl, self.OnMouseEvent)
+    
+  def RegisterFocusEvents(self, ctrl):
+    EVT_SET_FOCUS(ctrl, self.OnFocusEvent)
+    EVT_KILL_FOCUS(ctrl, self.OnFocusEvent)
     
   def RegisterTextEvents(self, ctrl):
     '''Begin watching for text events on the given control.'''
@@ -82,7 +69,20 @@ class wnEventManager(wxEvtHandler):
     i = obj.GetId()
     handler = self.handlers.get(i)
     if handler is not None:
-      e = wnEvent(self.painter, event.GetPosition(), obj)
+      e = wnEvent(Painter=self.painter, Position=event.GetPosition(), Control=obj)
+      func_name = dispatch[event.GetEventType()]
+      func = getattr(handler, func_name)
+      func(e)
+      
+  def OnFocusEvent(self, event):
+    '''Dispatch to the proper object and function based on the event object and event type.'''
+    dispatch = {wxEVT_SET_FOCUS : 'OnSetFocus', wxEVT_KILL_FOCUS : 'OnKillFocus'}
+    
+    obj = event.GetEventObject()
+    i = obj.GetId()
+    handler = self.handlers.get(i)
+    if handler is not None:
+      e = wnEvent(Painter=self.painter, Control=obj)
       func_name = dispatch[event.GetEventType()]
       func = getattr(handler, func_name)
       func(e)

@@ -126,12 +126,10 @@ class wnWeightClass(object):
       #make the outermost lines long to fit a full name and team name
       if i == 0:
         length = wnSettings.seed_length
-        type = 'dynamic'
       else:
         length = wnSettings.entry_length
-        type = 'static'
 
-      start, mx, my = curr.Paint(painter, start, length, step, type)
+      start, mx, my = curr.Paint(painter, start, length, step)
       
       if curr.NumEntries != next_num:
         step *= 2
@@ -166,8 +164,17 @@ class wnRound(object):
   Name = property(fget=GetName)
         
   def NewEntries(self, number):
-    for i in range(number):
-      self.entries.append(wnEntry(i, self))
+    #check if we're making new entries based on an order defined in a list
+    #if the order is defined, these must be seeds
+    if type(number) == list or type(number) == tuple:
+      for i in number:
+        self.entries.append(wnSeedEntry(i, self))
+    
+    #otherwise, define them in order
+    #if a number is given, these must be matches
+    else:
+      for i in range(number):
+        self.entries.append(wnMatchEntry(i, self))
       
   def SetNextWinRound(self, round, to_map):
     if len(to_map) != self.NumEntries:
@@ -179,7 +186,7 @@ class wnRound(object):
     #link the entries between rounds
     for i in range(self.NumEntries):
       #link the entry in this round to the proper entry in the next round
-      self.entries[i].next_win = round.Entries[to_map[i]]
+      self.entries[i].NextWin = round.Entries[to_map[i]]
       
   def SetNextLoseRound(self, round, to_map):
     if len(to_map) != self.NumEntries:
@@ -191,17 +198,17 @@ class wnRound(object):
     #link the entries between rounds
     for i in range(self.NumEntries):
       #link the entry in this round to the proper entry in the next round
-      self.entries[i].next_lose = round.Entries[to_map[i]]
+      self.entries[i].NextLose = round.Entries[to_map[i]]
 
-  def Paint(self, painter, start, length, step, type):
+  def Paint(self, painter, start, length, step):
     '''Draw the bracket for this round only. Return the next starting position so the next round
     knows where to draw itself.'''
     
-    #draw the horizontal lines
+    #draw the horizontal lines and entries
     x,y = start
     for i in range(self.NumEntries):
       painter.DrawLine(x,y,x+length,y)
-      self.entries[i].Paint(painter, (x,y-wnSettings.entry_height), length, type)
+      self.entries[i].Paint(painter, (x,y-wnSettings.entry_height), length)
       y += step
 
     #store the maximum positions so the scrollbars can be set properly
@@ -219,34 +226,58 @@ class wnRound(object):
     
     return new_start, max_x, max_y
       
-class wnEntry(object, wnEventReceivable):
+class wnEntry(object):
   '''The entry class holds individual match results.'''
   def __init__(self, name, round):
     self.name = name
     self.wrestler = None
-    self.result = None
     self.next_win = None
     self.next_lose = None
     
     self.round = round
     
-  def Paint(self, painter, pos, length, type):
-    '''Paint all of the text controls, static or editable depending on the given flag.'''
-    if type == 'static':
-      if self.wrestler is None: text = str(self.name)
-      else: text = self.wrestler.Name
-      
-      painter.DrawStaticTextControl(text, pos[0]+wnSettings.entry_offset, pos[1],
-                                    length-wnSettings.entry_offset*2, wnSettings.entry_height,
-                                    self.ID, self)
-      
-    elif type == 'dynamic':
-      pass
+  def GetID(self):
+    '''Return the ID of this entry. This ID must be exactly the same as the ID of similar entries
+    in other weight classes since it is used to construct text controls by the painter. If the ID
+    is exactly the same, then the controls can be reused across weight classes.'''
+    return (self.name, self.round.Name)
+  
+  def GetNextLose(self):
+    return self.next_lose
+  
+  def SetNextLose(self, entry):
+    self.next_lose = entry
+    
+  def GetNextWin(self):
+    return self.next_win
+  
+  def SetNextWin(self, entry):
+    self.next_win = entry
+  
+  ID = property(fget=GetID)
+  NextLose = property(fget=GetNextLose, fset=SetNextLose)
+  NextWin = property(fget=GetNextWin, fset=SetNextWin)
+    
+class wnMatchEntry(wnEntry, wnEventReceivable):
+  '''The match entry class hold individual match results.'''
+  def __init__(self, name, round):
+    wnEntry.__init__(self, name, round)
+    self.result = None
+
+  def Paint(self, painter, pos, length):
+    '''Paint all of the text controls.'''
+    if self.wrestler is None: text = str(self.name)
+    else: text = self.wrestler.Name
+    
+    painter.DrawStaticTextControl(text, pos[0]+wnSettings.entry_offset, pos[1],
+                                  length-wnSettings.entry_offset*2, wnSettings.entry_height,
+                                  self.ID, self)
     
   def OnMouseEnter(self, event):
     '''Highlight the text control under the cursor.'''
     event.Control.Highlight()
-    event.Control.ShowPopup('Peter Parente\nBristol Central\nMajor\n15-5')
+    if self.wrestler is not None:
+      event.Control.ShowPopup(str(self.result))
     event.Control.Refresh()
     
   def OnMouseLeave(self, event):
@@ -258,16 +289,40 @@ class wnEntry(object, wnEventReceivable):
   def OnLeftDoubleClick(self, event):
     '''Display the dialog box that allows a user to enter result information, if there is at least
     one wrestler in the preceeding entries.'''
+    pass
+
+class wnSeedEntry(wnEntry, wnEventReceivable):
+  '''The seed entry class holds information about seeded wrestlers.'''
+  def __init__(self, name, round):
+    wnEntry.__init__(self, name, round)
+    self.next_peer = None
     
-    
-  def GetID(self):
-    '''Return the ID of this entry. This ID must be exactly the same as the ID of similar entries
-    in other weight classes since it is used to construct text controls by the painter. If the ID
-    is exactly the same, then the controls can be reused across weight classes.'''
-    return (self.name, self.round.Name)
+  def GetNextPeer(self):
+    return self.next_peer
   
-  ID = property(fget=GetID)
+  def SetNextPeer(self, entry):
+    self.next_peer = entry
     
+  NextPeer = property(fget=GetNextPeer, fset=SetNextPeer)
+    
+  def Paint(self, painter, pos, length):
+    '''Paint all of the text controls.'''
+    if self.wrestler is None: text = str(self.name)
+    else: text = self.wrestler.Name
+      
+    painter.DrawDynamicTextControl(text, pos[0]+wnSettings.seed_offset, pos[1],
+                                   length-wnSettings.seed_offset*2, wnSettings.entry_height,
+                                   self.ID, self)
+    
+  #def OnKillFocus(self, event):
+  #  '''Set the focus to the next entry in the seeding order.'''
+  #  try:
+  #    e = self.round.Entries[self.name]
+  #  except:
+  #    e = self.round.Entries[0]
+  #  
+  #  event.Painter.SetKeyboardFocus(self.round.Entries[e.name-1].ID)
+        
 class wnPoints(object):
   def __init__(self, adv_pts=0, place_pts=0):
     self.adv_points = adv_pts

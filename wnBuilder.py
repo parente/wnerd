@@ -2,7 +2,7 @@ from wnData import *
 
 class wnRoundSetup(object):
   def __init__(self, name, points, num_entries, next_win = None, win_map = None, next_lose = None,
-               lose_map = None):
+               lose_map = None, order = None):
     self.Name = name
     self.Points = points
     self.NumEntries = num_entries
@@ -15,7 +15,6 @@ class wnBuilder(object):
   def GetTournaments(self):
     '''Return the tournaments currently supported.'''
     configs = [v for k, v in globals().items() if k.find('Config') > -1]
-    #configs =  [wnBCInvitationalConfig, wnCTChampionshipConfig]
     
     return configs
   
@@ -71,7 +70,10 @@ class wnBCInvitationalConfig:
   Description = 'The bracket format used in the Bristol Central Invitational tournaments. The outbracket has 32 seed slots, and double-elimination begins in the quarter finals.'
   Seeds = [1, 32, 17, 16, 9, 24, 25, 8, 5, 28, 21, 12, 13, 20, 29, 4,
            3, 30, 19, 14, 11, 22, 27, 6, 7, 26, 23, 10, 15, 18, 31, 2]
-  Rounds = [wnRoundSetup('Rat-Tails', wnPoints(0,0), 32, 'Sixteen Champion',
+  Rounds = [wnRoundSetup('Rat-Tails', wnPoints(0,0),
+                         [1, 32, 17, 16, 9, 24, 25, 8, 5, 28, 21, 12, 13, 20, 29, 4,
+                          3, 30, 19, 14, 11, 22, 27, 6, 7, 26, 23, 10, 15, 18, 31, 2],
+                         'Sixteen Champion',
                          [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,
                           14,14,15,15]),
             wnRoundSetup('Sixteen Champion', wnPoints(2,0), 16, 'Quarter-Finals Champion',
@@ -98,7 +100,10 @@ class wnCTChampionshipConfig:
   Description = 'The bracket format used in the Connecticut State Championships and the Connecticut State Open. The outbracket has 32 seed slots, and double-elimination begins in the round of sixteen.'
   Seeds = [1, 32, 17, 16, 9, 24, 25, 8, 5, 28, 21, 12, 13, 20, 29, 4,
            3, 30, 19, 14, 11, 22, 27, 6, 7, 26, 23, 10, 15, 18, 31, 2]
-  Rounds = [wnRoundSetup('Rat-Tails Champion', wnPoints(0,0), 32, 'Sixteen Champion',
+  Rounds = [wnRoundSetup('Rat-Tails Champion', wnPoints(0,0),
+                         [1, 32, 17, 16, 9, 24, 25, 8, 5, 28, 21, 12, 13, 20, 29, 4,
+                          3, 30, 19, 14, 11, 22, 27, 6, 7, 26, 23, 10, 15, 18, 31, 2],
+                         'Sixteen Champion',
                          [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,
                           14,14,15,15]),
             wnRoundSetup('Sixteen Champion', wnPoints(2,0), 16, 'Quarter-Finals Champion',
