@@ -55,7 +55,6 @@ class wnMatchMenuReceivable:
   def OnDelete(self, event):
     pass
   
-  
 class wnEventManager(wxEvtHandler):
   def __init__(self, painter):
     wxEvtHandler.__init__(self)

@@ -171,11 +171,8 @@ class wnFrame(wxFrame):
     #show the tournament name in the window titlebar
     self.SetTitle('Wrestling Nerd - '+self.tournament.name)
         
-    #clean out the old controls
-    self.painter.ResetControls()
-    self.canvas.DestroyChildren()
-    
     #reset and draw the bracket
+    self.painter.ResetControls()
     self.canvas.Reset()
     self.canvas.Refresh()
      

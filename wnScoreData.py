@@ -10,18 +10,18 @@ class wnPoints(object):
   
 class wnResultFactory(object):
   def Create(cls, type, args=None):
-    dispatch = {'None' : None, 'Pin' : wnResultPin, 'Decision' : wnResultDecision,
-                'Bye' : wnResultBye, 'Default' : wnResultDefault}
     
-    klass = dispatch[type]
-    
-    if klass == None:
+    if type == 'None':
       return None
-    elif args is not None:
-      return klass()
-    else:
-      return apply(klass.__init__, args)
-  
+    elif type == 'Pin':
+      return wnResultPin(args)
+    elif type == 'Decision':
+      return wnResultDecision(args[0], args[1])
+    elif type == 'Bye':
+      return wnResultBye()
+    elif type == 'Default':
+      return wnResultDefault()
+      
   Create = classmethod(Create)
   
 class wnResult(object):
@@ -31,8 +31,16 @@ class wnResult(object):
   
   def GetPoints(self):
     return 0
+  
+  def GetTextValue(self):
+    return None
+  
+  def GetValue(self):
+    return None
     
   Points = property(fget=GetPoints)
+  TextValue = property(fget=GetTextValue)
+  Value = property(fget=GetValue)
     
 class wnResultPin(wnResult):
   '''This class holds information about a pin win.'''
@@ -49,8 +57,16 @@ class wnResultPin(wnResult):
   def GetName(self):
     return 'Pin'
   
+  def GetTextValue(self):
+    return str(self.pin_time/60) + ':' + str(self.pin_time%60)
+  
+  def GetValue(self):
+    return self.pin_time
+  
   Points = property(fget=GetPoints)
   Name = property(fget=GetName)
+  Value = property(fget=GetValue)
+  TextValue = property(fget=GetTextValue)
 
 class wnResultDecision(wnResult):
   '''This class holds information about a decision.'''
@@ -61,7 +77,10 @@ class wnResultDecision(wnResult):
     
   def __str__(self):
     return 'Decision\n%d-%d' % (self.win_score, self.lose_score)
-    
+
+  def GetTextValue(self):
+    return str(self.win_score) + '-' + str(self.lose_score)
+   
   def GetPoints(self):
     diff = self.win_score - self.lose_score
     if diff >= 15:
@@ -73,7 +92,8 @@ class wnResultDecision(wnResult):
 
   def GetName(self):
     return 'Decision'
-    
+
+  TextValue = property(fget=GetTextValue)
   Points = property(fget=GetPoints)
   Name = property(fget=GetName)    
     

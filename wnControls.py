@@ -22,9 +22,15 @@ class wnStaticText(wxPanel):
     EVT_LEFT_UP(self.ctrl, self.OnPassEvent)
     EVT_RIGHT_UP(self.ctrl, self.OnPassEvent)
     
+    EVT_CLOSE(self, self.OnClose)
+    
   def OnPassEvent(self, event):
     event.SetEventObject(self)
     wxPostEvent(self, event)
+    
+  def OnClose(self, event):
+    self.ctrl.Destroy()
+    self.Destroy()
     
   def SetLabel(self, text):
     self.ctrl.SetLabel(text)
@@ -125,7 +131,7 @@ class wnMatchDialog(wxDialog):
     
     #store the references
     self.wrestlers = wrestlers
-    self.result = result
+    self.result_value = None
     
     #list the wrestlers
     for w in self.wrestlers:
@@ -143,27 +149,27 @@ class wnMatchDialog(wxDialog):
     
   def OnOK(self, event):
     '''Make sure all values are filled in properly.'''
-    if self.result is not None and not self.result.IsValid():
-      dlg = wxMessageDialog(self, -1, 'Please enter a valid result.', 'Invalid result')
+    if self.result_value is not None and not self.result_value.IsValid():
+      dlg = wxMessageDialog(self, 'Please enter a valid result.', 'Invalid result', style=wxOK)
       dlg.ShowModal()
       dlg.Close()
     else:
-      self.Close()
+      self.EndModal(wxID_OK)
     
   def OnChooseResult(self, event):
     '''Show the proper panel for the selected result type.'''    
     self.result_panel.DestroyChildren()    
     if self.result_type.GetStringSelection() == 'Pin':
       bg_color = self.GetBackgroundColour()
-      self.result = wxMaskedTextCtrl(self.result_panel, -1, '', formatcodes='RrF', mask='##:##',
-                                     validRegex='[0-9 ][0-9]:[0-9][0-9]')
+      self.result_value = wxMaskedTextCtrl(self.result_panel, -1, '', formatcodes='RrF',
+                                           mask='##:##', validRegex='[0-9 ][0-9]:[0-5][0-9]')
+      self.result_value.SetFocus()
 
     elif self.result_type.GetStringSelection() == 'Decision':
-      bg_color = self.parent.GetBackgroundColour()
-      self.result = wxMaskedTextCtrl(self.result_panel, -1, '', formatcodes='RrF', mask='##-##',
-                                     validRegex='[0-9][0-9]-[0-5][0-9]')
-    else:
-      self.result is None
+      bg_color = self.GetBackgroundColour()
+      self.result_value = wxMaskedTextCtrl(self.result_panel, -1, '', formatcodes='RrF',
+                                           mask='##-##', validRegex='[0-9 ][0-9]-[0-9 ][0-9]')
+      self.result_value.SetFocus()
     
   def GetWinner(self):
     return self.wrestlers[self.winner.GetSelection()]
@@ -180,9 +186,15 @@ class wnMatchDialog(wxDialog):
     return self.result_type.GetStringSelection()
   
   def GetResultValue(self):
-    '''Hardwired values for testing.'''
+    '''Return the value of the entered result.'''
     if self.result_type.GetStringSelection() == 'Pin':
-      return 100
-    elif self.result_type.GetStringSelection == 'Decision':
-      return (10, 2)
-  
+      val = self.result_value.GetValue()
+      min, sec = [int(v) for v in val.split(':')]
+      return min*60 + sec
+    
+    elif self.result_type.GetStringSelection() == 'Decision':
+      val = self.result_value.GetValue()
+      scores = [int(v) for v in val.split('-')]
+      scores.sort()
+      scores.reverse()
+      return scores

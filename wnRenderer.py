@@ -23,17 +23,11 @@ class wnPainter(wnRenderer):
     self.controls = {}
     self.event_man = wnEventManager(self)
     
-  def __del__(self):
-    '''Clean out any stored controls and registered events.'''
-    for ctrl in self.controls.values():
-      ctrl.Destroy()
-    del self.event_man
-    del self.control_cache
-    
+
   def ResetControls(self):
     '''Clean out any stored controls and registered events.'''
-    for ctrl in self.controls.values():
-      ctrl.Destroy()
+    for c in self.controls.values():
+      c.Close()
     self.controls = {}
     self.control_cache = {}
     del self.event_man
@@ -150,6 +144,7 @@ class wnPainter(wnRenderer):
       winner = dlg.GetWinner()
       loser = dlg.GetLoser()
       result_type = dlg.GetResultType()
+      result_value = dlg.GetResultValue()
       dlg.Destroy()
       return winner, loser, result_type, result_value
     else:
