@@ -64,10 +64,13 @@ class wnWeightClass(object):
   
   def Paint(self, painter):
     '''Go through all of the rounds and draw their brackets.'''
-    pt = (0,20)
+    start = (0,20)
+    length = 120
     step = 30
     for key in self.order:
-      start, length, step = self.rounds[key].Paint(painter)
+      print key
+      print start
+      start, length, step = self.rounds[key].Paint(painter, start, length, step)
   
 class wnRound(object):
   '''The round class is responsible for holding onto individual matches and their results.'''
@@ -125,9 +128,10 @@ class wnRound(object):
       painter.DrawLine(x,y,x+length,y)
       y += step
     
-    for i in range(self.NumEntries-1):
+    x,y = start
+    for i in range(0,self.NumEntries-1,2):
       painter.DrawLine(x+length,y,x+length,y+step)
-      y += step
+      y += step*2
       
     #compute the next start, length, and step
     new_start = start[0] + length, start[1] + step/2

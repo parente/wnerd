@@ -8,24 +8,14 @@ from wxPython.wx import *
 
 # Window functions
 
-ID_BRACKET = 10000
-ID_TEAM_LIST = 10001
+ID_TEAM_LIST = 10000
 
-def CreateMainFrame( parent, call_fit = true, set_sizer = true ):
-    item0 = wxFlexGridSizer( 1, 0, 0, 0 )
-    item0.AddGrowableCol( 0 )
-    item0.AddGrowableRow( 0 )
+def ScoreFrame( parent, call_fit = true, set_sizer = true ):
+    item1 = wxStaticBox( parent, -1, "Score" )
+    item0 = wxStaticBoxSizer( item1, wxVERTICAL )
     
-    item1 = wxScrolledWindow(parent, ID_BRACKET)
-    item0.AddWindow( item1, 0, wxGROW|wxALL, 5 )
-
-    item3 = wxStaticBox( parent, -1, "Teams" )
-    item2 = wxStaticBoxSizer( item3, wxVERTICAL )
-    
-    item4 = wxListCtrl( parent, ID_TEAM_LIST, wxDefaultPosition, wxSize(180,120), wxLC_REPORT|wxSUNKEN_BORDER )
-    item2.AddWindow( item4, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-
-    item0.AddSizer( item2, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+    item2 = wxListCtrl( parent, ID_TEAM_LIST, wxDefaultPosition, wxSize(180,120), wxLC_REPORT|wxSUNKEN_BORDER )
+    item0.AddWindow( item2, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     if set_sizer == true:
         parent.SetAutoLayout( true )
@@ -36,9 +26,9 @@ def CreateMainFrame( parent, call_fit = true, set_sizer = true ):
     
     return item0
 
-ID_TEXT = 10002
-ID_START_CAPTION = 10003
-ID_LINE = 10004
+ID_TEXT = 10001
+ID_START_CAPTION = 10002
+ID_LINE = 10003
 
 def WizardStartPanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -62,8 +52,8 @@ def WizardStartPanel( parent, call_fit = true, set_sizer = true ):
     
     return item0
 
-ID_NAME_CAPTION = 10005
-ID_NAME_TEXT = 10006
+ID_NAME_CAPTION = 10004
+ID_NAME_TEXT = 10005
 
 def WizardNamePanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -93,10 +83,10 @@ def WizardNamePanel( parent, call_fit = true, set_sizer = true ):
     
     return item0
 
-ID_TEAMS_CAPTION = 10007
-ID_TEAMS_COMBO = 10008
-ID_ADD_TEAM_BUT = 10009
-ID_REMOVE_TEAM_BUT = 10010
+ID_TEAMS_CAPTION = 10006
+ID_TEAMS_COMBO = 10007
+ID_ADD_TEAM_BUT = 10008
+ID_REMOVE_TEAM_BUT = 10009
 
 def WizardTeamsPanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -137,11 +127,11 @@ def WizardTeamsPanel( parent, call_fit = true, set_sizer = true ):
     
     return item0
 
-ID_WEIGHTS_CAPTION = 10011
-ID_WEIGHTS_COMBO = 10012
-ID_ADD_WEIGHT_BUT = 10013
-ID_REMOVE_WEIGHT_BUT = 10014
-ID_ADD_STAND_WEIGHTS_BUT = 10015
+ID_WEIGHTS_CAPTION = 10010
+ID_WEIGHTS_COMBO = 10011
+ID_ADD_WEIGHT_BUT = 10012
+ID_REMOVE_WEIGHT_BUT = 10013
+ID_ADD_STAND_WEIGHTS_BUT = 10014
 
 def WizardWeightsPanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -185,9 +175,9 @@ def WizardWeightsPanel( parent, call_fit = true, set_sizer = true ):
     
     return item0
 
-ID_LAYOUT_CAPTION = 10016
-ID_LAYOUT_LIST = 10017
-ID_TEXTCTRL = 10018
+ID_LAYOUT_CAPTION = 10015
+ID_LAYOUT_LIST = 10016
+ID_TEXTCTRL = 10017
 
 def WizardLayoutPanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -232,7 +222,7 @@ def WizardLayoutPanel( parent, call_fit = true, set_sizer = true ):
     
     return item0
 
-ID_FINISHED_CAPTION = 10019
+ID_FINISHED_CAPTION = 10018
 
 def WizardFinishedPanel( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
@@ -258,16 +248,16 @@ def WizardFinishedPanel( parent, call_fit = true, set_sizer = true ):
 
 # Menubar functions
 
-ID_NEW_MENU = 10020
-ID_OPEN_MENU = 10021
-ID_MENU = 10022
-ID_SAVE_MENU = 10023
-ID_SAVEAS_MENU = 10024
-ID_EXIT_MENU = 10025
-ID_FILE_MENU = 10026
-ID_FASTFALL_MENU = 10027
-ID_NUMBOUTS_MENU = 10028
-ID_QUERY_MENU = 10029
+ID_NEW_MENU = 10019
+ID_OPEN_MENU = 10020
+ID_MENU = 10021
+ID_SAVE_MENU = 10022
+ID_SAVEAS_MENU = 10023
+ID_EXIT_MENU = 10024
+ID_FILE_MENU = 10025
+ID_FASTFALL_MENU = 10026
+ID_NUMBOUTS_MENU = 10027
+ID_QUERY_MENU = 10028
 
 def CreateMenuBar():
     item0 = wxMenuBar()
@@ -291,7 +281,7 @@ def CreateMenuBar():
 
 # Toolbar functions
 
-ID_WEIGHT_CLASSES = 10030
+ID_WEIGHT_CLASSES = 10029
 
 def CreateToolbar( parent ):
     parent.SetMargins( [2,2] )

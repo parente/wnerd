@@ -1,3 +1,5 @@
+from wxPython.wx import *
+
 class wnRenderer(object):
   pass
   
@@ -9,10 +11,10 @@ class wnPainter(wnRenderer):
   def SetDC(self, dc):
     self.dc = dc
     
-  def DrawLine(self, pt1, pt2):
+  def DrawLine(self, x1, y1, x2, y2):
     if self.dc is None: return
     
-    self.dc.DrawLine(pt1[0], pt1[1], pt2[0], pt2[1])
+    self.dc.DrawLine(x1, y1, x2, y2)
   
   def CreateTextBox(self, pt, handler):
     wxStaticText(self.canvas, -1, 'Entry', point=wxPoint(pt[0], pt[1]), size=wxSize(100,20))

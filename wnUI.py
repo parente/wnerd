@@ -1,6 +1,6 @@
 from wxPython.wx import *
 from wxPython.wizard import *
-#from wxPython.lib.scrolledpanel import wxScrolledPanel
+from wxPython.lib.scrolledpanel import wxScrolledPanel
 from wnFactory import *
 from wnRenderer import *
 import WrestlingNerd_wdr as GUI
@@ -11,7 +11,8 @@ class wnFrame(wxFrame):
   def __init__(self):
     '''Initialize.
     '''
-    wxFrame.__init__(self, None, -1, 'Wrestling Nerd')
+    wxFrame.__init__(self, None, -1, 'Wrestling Nerd',
+                     style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
   
     #set the menu bar
     mb = GUI.CreateMenuBar()
@@ -20,10 +21,23 @@ class wnFrame(wxFrame):
     #correct the background color
     self.SetBackgroundColour(mb.GetBackgroundColour())
     
-    #create the components of the main frame
-    GUI.CreateMainFrame(self)
+    #create a sizer to layout the window
+    sizer = wxFlexGridSizer(1,2,0,0)
+    sizer.AddGrowableCol(0)
+    sizer.AddGrowableRow(0)
+  
+    #create an OpenGL canvas
+    self.canvas = wnBracketPanel(self)
+    sizer.AddWindow(self.canvas, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM|wxTOP, 5)
+
+    #create a frame housing the layer components
+    score_frame = GUI.ScoreFrame(self, False, False)
+    sizer.AddSizer(score_frame, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM|wxTOP, 5)
     
-    self.canvas = wxPyTypeCast()
+    #add the sizer to the window
+    self.SetSizer(sizer)    
+    
+    self.tournament = None
 
     #disable menu items
     mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(False)
@@ -31,14 +45,13 @@ class wnFrame(wxFrame):
     mb.FindItemById(GUI.ID_SAVE_MENU).Enable(False)
     mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(False)
     
-    self.painter = wnPainter(self)
-    
+    EVT_CLOSE(self, self.OnClose)
     EVT_MENU(self, GUI.ID_EXIT_MENU, self.OnClose)
     EVT_MENU(self, GUI.ID_NEW_MENU, self.OnNew)
-    EVT_PAINT(self.canvas, self.OnPaint)
     
   def OnClose(self, event):
     '''Handle a window close event.'''
+    self.canvas.Destroy()
     self.Destroy()
     
   def OnNew(self, event):
@@ -49,13 +62,31 @@ class wnFrame(wxFrame):
     options = factory.GetTournaments()
     self.tournament = factory.Create(options[0], 'Test Tournament',
                                      [95,103,112], ['BC', 'BE', 'WI'])
+    self.canvas.Refresh()
+    
+  def GetTournament(self):
+    return self.tournament
+
+class wnBracketPanel(wxScrolledPanel):
+  def __init__(self, parent):
+    wxScrolledPanel.__init__(self, parent, -1)
+    self.parent = parent
+    self.painter = wnPainter(self)
+    
+    EVT_PAINT(self, self.OnPaint)
     
   def OnPaint(self, event):
-    dc = wxCreateDC(self)
+    dc = wxPaintDC(self)
     dc.BeginDrawing()
+
     self.painter.SetDC(dc)
-    self.tournament.Paint(self.painter)
+    t = self.parent.GetTournament()
+    if t is not None:
+      t.Paint(self.painter, '103')
+
+    self.painter.SetDC(None)
     dc.EndDrawing()
+    
 
 class wnNewTournamentWizard(wxWizard):
   '''Class that creates a wizard that assists users in setting up new
