@@ -11,10 +11,16 @@ class wnEvent(object):
 class wnMouseEventReceivable:
   '''Defines an interface that must be implemented for an object to receive mouse events from the
   event manager.'''
-  def OnLeftClick(self, event):
+  def OnLeftDown(self, event):
     pass
   
-  def OnRightClick(self, event):
+  def OnLeftUp(self, event):
+    pass
+  
+  def OnRightDown(self, event):
+    pass
+  
+  def OnRightUp(self, event):
     pass
   
   def OnLeftDoubleClick(self, event):
@@ -46,6 +52,8 @@ class wnEventManager(wxEvtHandler):
     '''Begin watching for events on the given control.'''
     EVT_LEFT_DOWN(ctrl, self.OnMouseEvent)
     EVT_RIGHT_DOWN(ctrl, self.OnMouseEvent)
+    EVT_LEFT_UP(ctrl, self.OnMouseEvent)
+    EVT_RIGHT_UP(ctrl, self.OnMouseEvent)
     EVT_LEFT_DCLICK(ctrl, self.OnMouseEvent)
     EVT_ENTER_WINDOW(ctrl, self.OnMouseEvent)
     EVT_LEAVE_WINDOW(ctrl, self.OnMouseEvent)
@@ -61,9 +69,10 @@ class wnEventManager(wxEvtHandler):
     
   def OnMouseEvent(self, event):
     '''Dispatch to the proper object and function based on the event object and event type.'''
-    dispatch = {wxEVT_LEFT_DOWN : 'OnLeftClick', wxEVT_RIGHT_DOWN : 'OnRightClick',
+    dispatch = {wxEVT_LEFT_DOWN : 'OnLeftDown', wxEVT_RIGHT_DOWN : 'OnRightDown',
                 wxEVT_LEFT_DCLICK : 'OnLeftDoubleClick', wxEVT_ENTER_WINDOW : 'OnMouseEnter',
-                wxEVT_LEAVE_WINDOW : 'OnMouseLeave'}
+                wxEVT_LEAVE_WINDOW : 'OnMouseLeave', wxEVT_LEFT_UP : 'OnLeftUp',
+                wxEVT_RIGHT_UP : 'OnRightUp'}
 
     obj = event.GetEventObject()
     i = obj.GetId()

@@ -81,7 +81,7 @@ class wnBCInvitationalConfig:
             wnRoundSetup('Sixteen Champion', wnPoints(2,0), 16, 'Quarter-Finals Champion',
                          [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7]),
             wnRoundSetup('Quarter-Finals Champion', wnPoints(2,0), 8, 'Semi-Finals Champion',
-                         [0,0,1,1,2,2,3,3], 'Semi-Finals Consolation', [0,0,1,1,2,2,3,3]),
+                         [0,0,1,1,2,2,3,3], 'Quarter-Finals Consolation', [0,0,1,1,2,2,3,3]),
             wnRoundSetup('Semi-Finals Champion', wnPoints(2,0), 4, 'Finals Champion',
                          [0,0,1,1], 'Semi-Finals Consolation', [3,3,1,1]),
             wnRoundSetup('Finals Champion', wnPoints(2,0), 2, 'First Place', [0, 0]),

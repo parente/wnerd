@@ -274,6 +274,9 @@ class wnEntry(wnNode):
   def GetWrestler(self):
     '''Get the wrestler stored at this entry.'''
     return self.wrestler
+  def SetWrestler(self, wrestler):
+    '''Set the wrestler stored at this entry.'''
+    self.wrestler = wrestler
   
   ID = property(fget=GetID)
   NextLose = property(fget=GetNextLose, fset=SetNextLose)
@@ -281,15 +284,15 @@ class wnEntry(wnNode):
   Previous = property(fget=GetPrevious, fset=SetPrevious)
   Teams = property(fget=GetTeams)
   Weight = property(fget=GetWeight)
-  Wrestler = property(fget=GetWrestler)
+  Wrestler = property(fget=GetWrestler, fset=SetWrestler)
   
-class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
+class wnMatchEntry(wnEntry, wnMouseEventReceivable):
   '''The match entry class hold individual match results.'''
   def __init__(self, name, parent):
     wnEntry.__init__(self, name, parent)
     self.result = None
     
-  def Paint(self, painter, pos, length, refresh_labels):
+  def Paint(self, painter, pos=(0,0), length=100, refresh_labels=False):
     '''Paint all of the text controls.'''
     if self.wrestler is None: text = ''
     else: text = self.wrestler.Name
@@ -316,7 +319,7 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
     event.Control.HidePopup()
     event.Control.Highlight(False)
     
-  def OnLeftClick(self, event):
+  def OnLeftDown(self, event):
     '''Display the dialog box that allows a user to enter result information, if there is at least
     one wrestler in the preceeding entries.'''
     enabled = False
@@ -329,11 +332,11 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
     if not enabled: return
     
     #show the results dialog, providing the wrestlers and current results
-    wrestlers = [entry.Wrestler for entry in self.previous if entry.Wrestler is not None]
-    result = event.Painter.ShowMatchDialog(wrestlers, self.result)
+    opponents = [entry.Wrestler for entry in self.previous if entry.Wrestler is not None]
+    result = event.Painter.ShowMatchDialog(opponents, self.result)
     
     if result is not None:
-      winner, result_type = result
+      winner, loser, result_type = result
     
       #store the information
       self.result = wnResultFactory.Create(result_type)
@@ -341,8 +344,15 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
       
       #show the new winner name
       event.Control.SetLabel(self.wrestler.Name)
+      
+      #move the loser if he exists and isn't eliminated
+      if loser is not None:
+        for e in self.previous:
+          if e.Wrestler == loser and e.NextLose is not None:
+            e.NextLose.Wrestler = loser
+            e.NextLose.Paint(event.Painter, refresh_labels=True)
         
-class wnSeedEntry(wnEntry, wnFocusEventReceivable):
+class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
   '''The seed entry class holds information about seeded wrestlers.'''
   def __init__(self, name, parent):
     wnEntry.__init__(self, name, parent)
@@ -418,7 +428,8 @@ class wnSeedEntry(wnEntry, wnFocusEventReceivable):
           event.Painter.SetFocus(self.Parent.Entries[1].ID)
         elif self.name == self.Parent.NumEntries:
           event.Painter.SetFocus(self.Parent.Entries[0].ID)
-
+      else:
+        event.Painter.SetFocus(next_id)
 
 if __name__ == '__main__':
   pass

@@ -135,6 +135,7 @@ class wnPainter(wnRenderer):
       
       #hook the event manager properly
       self.event_man.RegisterFocusEvents(ctrl)
+      self.event_man.RegisterMouseEvents(ctrl)
       self.event_man.RegisterEventHandler(ctrl.GetId(), self.control_cache[id]['handler'])
       
     self.control_cache = {}
@@ -145,9 +146,10 @@ class wnPainter(wnRenderer):
     dlg = wnMatchDialog(self.frame, wrestlers, result)
     if dlg.ShowModal() == wxID_OK:
       winner = dlg.GetWinner()
+      loser = dlg.GetLoser()
       result_type = dlg.GetResultType()
       dlg.Destroy()
-      return winner, result_type
+      return winner, loser, result_type
     else:
       dlg.Destroy()
       return None

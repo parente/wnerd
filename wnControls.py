@@ -64,14 +64,18 @@ class wnDynamicText(wxMaskedTextCtrl):
                              )
     self.SetValue(text)
     
-    EVT_SET_FOCUS(self, self.OnSetFocus)
+    EVT_RIGHT_UP(self, lambda e: None)
     
-  def OnSetFocus(self, event):
+  def SetFocus(self):
+    wxMaskedTextCtrl.SetFocus(self)    
     x,y = self.GetPosition()
     px, py = self.parent.GetScrollPixelsPerUnit()
     sx, sy = self.parent.GetViewStart()
-    self.parent.Scroll(0, sy+y/py)
-                               
+    w, h = self.parent.GetClientSize()
+
+    if y < sy or y > sy+h:
+      self.parent.Scroll(0, sy+y/py)
+                                     
 class wnPopup(wxPopupWindow):
   def __init__(self, parent, text, pos, size):
     wxPopupWindow.__init__(self, parent, wxSIMPLE_BORDER)
@@ -118,3 +122,11 @@ class wnMatchDialog(wxDialog):
   
   def GetResultType(self):
     return self.result_type.GetStringSelection()
+  
+  def GetLoser(self):
+    if self.winner.GetCount() > 1:
+      i = self.winner.GetSelection()
+      if i == 0:
+        return self.wrestlers[1]
+      else:
+        return self.wrestlers[0]
