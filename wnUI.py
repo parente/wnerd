@@ -27,7 +27,7 @@ class wnFrame(wxFrame):
     sizer.AddGrowableRow(0)
   
     #create an OpenGL canvas
-    self.canvas = wnBracketPanel(self)
+    self.canvas = wnBracketCanvas(self)
     sizer.AddWindow(self.canvas, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM|wxTOP, 5)
 
     #create a frame housing the layer components
@@ -67,9 +67,9 @@ class wnFrame(wxFrame):
   def GetTournament(self):
     return self.tournament
 
-class wnBracketPanel(wxScrolledPanel):
+class wnBracketCanvas(wxScrolledWindow):
   def __init__(self, parent):
-    wxScrolledPanel.__init__(self, parent, -1)
+    wxScrolledWindow.__init__(self, parent, -1)
     self.parent = parent
     self.painter = wnPainter(self)
     
@@ -77,14 +77,18 @@ class wnBracketPanel(wxScrolledPanel):
     
   def OnPaint(self, event):
     dc = wxPaintDC(self)
+    self.PrepareDC(dc)
     dc.BeginDrawing()
 
-    self.painter.SetDC(dc)
     t = self.parent.GetTournament()
     if t is not None:
-      t.Paint(self.painter, '103')
+      self.painter.SetDC(dc)
+      xmax, ymax = t.Paint(self.painter, '103')
+      self.painter.SetDC(None)
+      
+      self.SetVirtualSize(wxSize(xmax, ymax))
+      self.SetScrollRate(5,5)      
 
-    self.painter.SetDC(None)
     dc.EndDrawing()
     
 

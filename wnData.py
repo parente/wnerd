@@ -39,7 +39,7 @@ class wnTournament(object):
     except:
       return
     
-    wc.Paint(painter)
+    return wc.Paint(painter)
     
   
 class wnWeightClass(object):
@@ -63,14 +63,35 @@ class wnWeightClass(object):
     return self.rounds.get(name)
   
   def Paint(self, painter):
-    '''Go through all of the rounds and draw their brackets.'''
+    '''Go through all of the rounds and draw their bracket lines.'''
     start = (0,20)
     length = 120
     step = 30
+    
+    prev_num = 1e300
+    reset_height = 0
+    
+    #go through all the rounds in this weight class
     for key in self.order:
-      print key
-      print start
-      start, length, step = self.rounds[key].Paint(painter, start, length, step)
+      curr_round = self.rounds[key]
+      
+      #if this round has fewer entries than the previous, reset drawing to the left side of the
+      #bracket window, but below the first entry
+      if curr_round.NumEntries > prev_num:
+        start = (0, reset_height)
+        step = 30
+        reset_height = 0
+      
+      start, length, step, max_x, max_y = curr_round.Paint(painter, start, length, step)
+
+      #store the number of entries that are in this round for next time
+      prev_num = curr_round.NumEntries
+      
+      #if reset height is zero, store this height
+      if reset_height == 0:
+        reset_height = max_y
+      
+    return max_x, max_y
   
 class wnRound(object):
   '''The round class is responsible for holding onto individual matches and their results.'''
@@ -127,18 +148,22 @@ class wnRound(object):
     for i in range(self.NumEntries):
       painter.DrawLine(x,y,x+length,y)
       y += step
+      
+    max_x = x+length
     
     x,y = start
     for i in range(0,self.NumEntries-1,2):
       painter.DrawLine(x+length,y,x+length,y+step)
       y += step*2
       
+    max_y = y+step*2
+      
     #compute the next start, length, and step
     new_start = start[0] + length, start[1] + step/2
     new_length = length
     new_step = step*2
     
-    return new_start, new_length, new_step
+    return new_start, new_length, new_step, max_x, max_y
       
 class wnEntry(object):
   '''The entry class holds individual match results.'''
