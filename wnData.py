@@ -12,8 +12,7 @@ class wnTournament(object):
     self.weight_classes = {}
         
   def NewWeightClass(self, name):
-    wc = wnWeightClass(str(name))
-    wc.tournament = self
+    wc = wnWeightClass(str(name), self)
     self.weight_classes[str(name)] = wc
     
     return wc
@@ -43,7 +42,7 @@ class wnTournament(object):
       return
     
     #draw the numbers for each seed
-    step = 40
+    step = 30
     y = 0
     
     for num in self.seeds:
@@ -72,16 +71,15 @@ class wnTournament(object):
   
 class wnWeightClass(object):
   '''The weight class is responsible for holding rounds.'''
-  def __init__(self, name):
+  def __init__(self, name, tournament):
     self.name = name
     self.rounds = {}
     self.order = []
     
-    self.tournament = None
+    self.tournament = tournament
     
   def NewRound(self, name, points):
-    r = wnRound(str(name), points)
-    r.weight_class = self
+    r = wnRound(str(name), points, self)
     self.rounds[str(name)] = r
     self.order.append(str(name))
     
@@ -122,10 +120,14 @@ class wnWeightClass(object):
         start = (0, max_y+step*2)
         
       #make the outermost lines long to fit a full name and team name
-      if i == 0: length = length_l
-      else: length = length_s
+      if i == 0:
+        length = length_l
+        type = 'dynamic'
+      else:
+        length = length_s
+        type = 'static'
 
-      start, mx, my = curr.Paint(painter, start, length, step)
+      start, mx, my = curr.Paint(painter, start, length, step, type)
       
       if curr.NumEntries != next_num:
         step *= 2
@@ -137,14 +139,14 @@ class wnWeightClass(object):
   
 class wnRound(object):
   '''The round class is responsible for holding onto individual matches and their results.'''
-  def __init__(self, name, points):
+  def __init__(self, name, points, weight_class):
     self.name = name
     self.points = points    
     self.entries = []
     self.next_win = None
     self.next_lose = None
     
-    self.weight_class = None
+    self.weight_class = weight_class
     
   def GetNumberOfEntries(self):
     return len(self.entries)
@@ -152,12 +154,16 @@ class wnRound(object):
   def GetEntries(self):
     return self.entries
   
+  def GetName(self):
+    return self.name
+  
   NumEntries = property(fget=GetNumberOfEntries)
   Entries = property(fget=GetEntries)
+  Name = property(fget=GetName)
         
   def NewEntries(self, number):
     for i in range(number):
-      self.entries.append(wnEntry())
+      self.entries.append(wnEntry(i, self))
       
   def SetNextWinRound(self, round, to_map):
     if len(to_map) != self.NumEntries:
@@ -183,17 +189,22 @@ class wnRound(object):
       #link the entry in this round to the proper entry in the next round
       self.entries[i].next_lose = round.Entries[to_map[i]]
 
-  def Paint(self, painter, start, length, step):
+  def Paint(self, painter, start, length, step, type):
     '''Draw the bracket for this round only. Return the next starting position so the next round
     knows where to draw itself.'''
+    
+    #draw the horizontal lines
     x,y = start
     for i in range(self.NumEntries):
       painter.DrawLine(x,y,x+length,y)
+      self.entries[i].Paint(painter, (x,y-20), length, type)
       y += step
 
+    #store the maximum positions so the scrollbars can be set properly
     max_y = y-step
     max_x = x+length
-      
+  
+    #draw the vertical lines
     x,y = start
     for i in range(0,self.NumEntries-1,2):
       painter.DrawLine(x+length,y,x+length,y+step)
@@ -206,13 +217,26 @@ class wnRound(object):
       
 class wnEntry(object):
   '''The entry class holds individual match results.'''
-  def __init__(self):
+  def __init__(self, name, round):
+    self.name = name
     self.wrestler = None
     self.result = None
     self.next_win = None
     self.next_lose = None
     
-    self.round = None
+    self.round = round
+    
+  def Paint(self, painter, pos, length, type):
+    '''Paint all of the text controls, static or editable depending on the given flag.'''
+    if type == 'static':
+      if self.wrestler is None: text = ''
+      else: pass
+      
+      painter.DrawStaticTextControl(text, pos[0]+5, pos[1], length-10,
+                                    (self.name, self.round.Name), None)
+      
+    elif type == 'dynamic':
+      pass
     
 class wnPoints(object):
   def __init__(self, adv_pts=0, place_pts=0):
