@@ -1,4 +1,6 @@
-from wnData import *
+from wnBracketData import *
+from wnScoreData import *
+from wnTeamData import *
 
 class wnRoundSetup(object):
   def __init__(self, name, points, num_entries, next_win = None, win_map = None, next_lose = None,

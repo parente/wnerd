@@ -1,13 +1,27 @@
 '''
-The data module defines the classes that store tournament data. These objects are also responsible
-for rendering themselves using a draw object and a print object.
+The bracket data module defines the classes that store information about an entire tournament. The
+classes define the weight classes, rounds, seeds, and matches of the tournament. These objects are
+responsible for rendering themselves and responding to events using renderers provided at run time.
 '''
 from wnEvents import wnMouseEventReceivable, wnFocusEventReceivable
+from wnScoreData import *
+from wnTeamData import *
 import wnSettings
 
-class wnTournament(object):
+class wnNode(object):
+  '''The node class provides navigation from child nodes to parent nodes.'''
+  def __init__(self, parent):
+    self.parent = parent
+    
+  def GetParent(self):
+    return self.parent
+  
+  Parent = property(fget=GetParent)
+
+class wnTournament(wnNode):
   '''The tournament class is responsible for holding weight classes and teams.'''
   def __init__(self, name, seeds):
+    wnNode.__init__(self, None)
     self.name = name
     self.seeds = seeds
     self.teams = {}
@@ -42,14 +56,6 @@ class wnTournament(object):
       wc = self.weight_classes[weight]
     except:
       return
-    
-    ##draw the numbers for each seed
-    #step = wnSettings.initial_step + 10
-    #y = 0
-    #
-    #for num in self.seeds:
-    #  painter.DrawText(str(num), 0, y)
-    #  y += step
       
     return wc.Paint(painter, (0, wnSettings.seed_start), wnSettings.initial_step)
   
@@ -75,14 +81,15 @@ class wnTournament(object):
   Weights = property(fget=GetWeights)
   Name = property(fget=GetName)
   
-class wnWeightClass(object):
+class wnWeightClass(wnNode):
   '''The weight class is responsible for holding rounds.'''
-  def __init__(self, name, tournament):
+  def __init__(self, name, parent):
+    wnNode.__init__(self, parent)    
     self.name = name
     self.rounds = {}
     self.order = []
     
-    self.tournament = tournament
+    #self.tournament = tournament
     
   def NewRound(self, name, points):
     r = wnRound(str(name), points, self)
@@ -138,16 +145,17 @@ class wnWeightClass(object):
       
     return max_x, max_y+initial_step
   
-class wnRound(object):
+class wnRound(wnNode):
   '''The round class is responsible for holding onto individual matches and their results.'''
-  def __init__(self, name, points, weight_class):
+  def __init__(self, name, points, parent):
+    wnNode.__init__(self, parent)
     self.name = name
     self.points = points    
     self.entries = []
     self.next_win = None
     self.next_lose = None
     
-    self.weight_class = weight_class
+    #self.weight_class = weight_class
     
   def GetNumberOfEntries(self):
     return len(self.entries)
@@ -225,21 +233,22 @@ class wnRound(object):
     
     return new_start, max_x, max_y
       
-class wnEntry(object):
+class wnEntry(wnNode):
   '''The entry class holds individual match results.'''
-  def __init__(self, name, round):
+  def __init__(self, name, parent):
+    wnNode.__init__(self, parent)
     self.name = name
     self.wrestler = None
     self.next_win = None
     self.next_lose = None
     
-    self.round = round
+    #self.round = round
     
   def GetID(self):
     '''Return the ID of this entry. This ID must be exactly the same as the ID of similar entries
     in other weight classes since it is used to construct text controls by the painter. If the ID
     is exactly the same, then the controls can be reused across weight classes.'''
-    return (self.name, self.round.Name)
+    return (self.name, self.Parent.Name)
   
   def GetNextLose(self):
     return self.next_lose
@@ -259,8 +268,8 @@ class wnEntry(object):
     
 class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
   '''The match entry class hold individual match results.'''
-  def __init__(self, name, round):
-    wnEntry.__init__(self, name, round)
+  def __init__(self, name, parent):
+    wnEntry.__init__(self, name, parent)
     self.result = None
 
   def Paint(self, painter, pos, length):
@@ -289,8 +298,8 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
     
 class wnSeedEntry(wnEntry, wnFocusEventReceivable):
   '''The seed entry class holds information about seeded wrestlers.'''
-  def __init__(self, name, round):
-    wnEntry.__init__(self, name, round)
+  def __init__(self, name, parent):
+    wnEntry.__init__(self, name, parent)
     
   def Paint(self, painter, pos, length):
     '''Paint all of the text controls.'''
@@ -313,72 +322,9 @@ class wnSeedEntry(wnEntry, wnFocusEventReceivable):
 
     if next_id[1] != self.ID[1]:
       if self.name == 1:
-        event.Painter.SetFocus(self.round.Entries[1].ID)
-      elif self.name == self.round.NumEntries:
-        event.Painter.SetFocus(self.round.Entries[0].ID)        
-        
-class wnPoints(object):
-  def __init__(self, adv_pts=0, place_pts=0):
-    self.adv_points = adv_pts
-    self.place_pts = place_pts
-  
-class wnResult(object):
-  '''The result class holds a reference to its entry.'''
-  def __init__(self):
-    self.entry = None
-    
-class wnResultPin(wnResult):
-  '''This class holds information about a pin win.'''
-  def __init__(self):
-    wnResult.__init__(self)
-    self.pin_time = 0
+        event.Painter.SetFocus(self.Parent.Entries[1].ID)
+      elif self.name == self.Parent.NumEntries:
+        event.Painter.SetFocus(self.Parent.Entries[0].ID)        
 
-class wnResultDecision(wnResult):
-  '''This class holds information about a decision.'''
-  def __init__(self):
-    wnResult.__init__(self)    
-    self.win_score = 0
-    self.lose_score = 0
-    
-class wnResultBye(wnResult):
-  '''This class holds information about a bye.'''
-  def __init__(self):
-    wnResult.__init__(self)
-    
-class wnResultDefault(wnResult):
-  '''This class holds information about a default win.'''
-  def __init__(self):
-    wnResult.__init__(self)    
-  
-class wnTeam(object):
-  '''The team class holds wrestlers and points.'''
-  def __init__(self, name):
-    self.name = name    
-    self.wrestlers = {}
-    self.point_adjust = 0
-    
-    self.tournament = None
-    
-  def NewWrestler(self, name, weight):
-    w = wnWrestler(str(name), str(weight))
-    w.team = self
-    self.wrestlers[str(weight)] = w
-    
-    return w
-      
-class wnWrestler(object):
-  '''The wrestler class holds information about individuals in a tournament.'''
-  def __init__(self):
-    self.name = ''
-    self.weight = ''
-    self.is_scoring = True
-    
-    self.team = None
-    
-  def GetName(self):
-    return self.name
-  
-  Name = property(fget=GetName)
-    
 if __name__ == '__main__':
   pass
