@@ -82,20 +82,20 @@ class wnBCInvitationalConfig:
                          [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7]),
             wnRoundSetup('Quarter-Finals Champion', wnPoints(2,0), 8, 'Semi-Finals Champion',
                          [0,0,1,1,2,2,3,3], 'Quarter-Finals Consolation', [0,0,1,1,2,2,3,3]),
-            wnRoundSetup('Semi-Finals Champion', wnPoints(2,0), 4, 'Finals Champion',
+            wnRoundSetup('Semi-Finals Champion', wnPoints(2,3), 4, 'Finals Champion',
                          [0,0,1,1], 'Semi-Finals Consolation', [3,3,1,1]),
-            wnRoundSetup('Finals Champion', wnPoints(2,0), 2, 'First Place', [0, 0]),
-            wnRoundSetup('First Place', wnPoints(0,0), 1),
+            wnRoundSetup('Finals Champion', wnPoints(2,9), 2, 'First Place', [0, 0]),
+            wnRoundSetup('First Place', wnPoints(0,4), 1),
             
             wnRoundSetup('Quarter-Finals Consolation', wnPoints(1,0), 4,
                          'Semi-Finals Consolation', [0,0,2,2]),
-            wnRoundSetup('Semi-Finals Consolation', wnPoints(1,0), 4, 'Finals Consolation',
+            wnRoundSetup('Semi-Finals Consolation', wnPoints(1,3), 4, 'Finals Consolation',
                          [0,0,1,1], 'Finals Fifth', [0,0,1,1]),
-            wnRoundSetup('Finals Consolation', wnPoints(1,0), 2, 'Third Place', [0,0]),
-            wnRoundSetup('Third Place', wnPoints(0,0), 1),
+            wnRoundSetup('Finals Consolation', wnPoints(1,4), 2, 'Third Place', [0,0]),
+            wnRoundSetup('Third Place', wnPoints(0,2), 1),
             
             wnRoundSetup('Finals Fifth', wnPoints(0,0), 2, 'Fifth Place', [0,0]),
-            wnRoundSetup('Fifth Place', wnPoints(0,0), 1)]
+            wnRoundSetup('Fifth Place', wnPoints(0,2), 1)]
 
 class wnCTChampionshipConfig:
   Name = 'Connecticut State Championships'
@@ -113,10 +113,10 @@ class wnCTChampionshipConfig:
                          [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7]),
             wnRoundSetup('Quarter-Finals Champion', wnPoints(2,0), 8, 'Semi-Finals Champion',
                          [0,0,1,1,2,2,3,3], 'Eight Consolation', [1,1,3,3,5,5,7,7]),
-            wnRoundSetup('Semi-Finals Champion', wnPoints(2,0), 4, 'Finals Champion',
+            wnRoundSetup('Semi-Finals Champion', wnPoints(2,3), 4, 'Finals Champion',
                          [0,0,1,1], 'Semi-Finals Consolation', [3,3,1,1]),
-            wnRoundSetup('Finals Champion', wnPoints(2,0), 2, 'First Place', [0, 0]),
-            wnRoundSetup('First Place', wnPoints(0,0), 1),
+            wnRoundSetup('Finals Champion', wnPoints(2,9), 2, 'First Place', [0, 0]),
+            wnRoundSetup('First Place', wnPoints(0,4), 1),
             
             wnRoundSetup('Rat-Tails Consolation', wnPoints(1,0), 8,
                         'Eight Consolation', [0,0,2,2,4,4,6,6]),
@@ -124,13 +124,13 @@ class wnCTChampionshipConfig:
                         'Quarter-Finals Consolation', [0,0,1,1,2,2,3,3]),
             wnRoundSetup('Quarter-Finals Consolation', wnPoints(1,0), 4,
                         'Semi-Finals Consolation', [0,0,2,2]),
-            wnRoundSetup('Semi-Finals Consolation', wnPoints(1,0), 4, 'Finals Consolation',
+            wnRoundSetup('Semi-Finals Consolation', wnPoints(1,3), 4, 'Finals Consolation',
                          [0,0,1,1], 'Finals Fifth', [0,0,1,1]),
-            wnRoundSetup('Finals Consolation', wnPoints(1,0), 2, 'Third Place', [0,0]),
-            wnRoundSetup('Third Place', wnPoints(0,0), 1),
+            wnRoundSetup('Finals Consolation', wnPoints(1,4), 2, 'Third Place', [0,0]),
+            wnRoundSetup('Third Place', wnPoints(0,2), 1),
             
             wnRoundSetup('Finals Fifth', wnPoints(0,0), 2, 'Fifth Place', [0,0]),
-            wnRoundSetup('Fifth Place', wnPoints(0,0), 1)]
+            wnRoundSetup('Fifth Place', wnPoints(0,2), 1)]
   
 class wnCTOpenConfig:
   Name = 'Connecticut State Open'  
@@ -142,10 +142,10 @@ class wnCTOpenConfig:
                          'Rat-Tails Consolation', [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7]),
             wnRoundSetup('Quarter-Finals Champion', wnPoints(2,0), 8, 'Semi-Finals Champion',
                          [0,0,1,1,2,2,3,3], 'Eight Consolation', [1,1,3,3,5,5,7,7]),
-            wnRoundSetup('Semi-Finals Champion', wnPoints(2,0), 4, 'Finals Champion',
+            wnRoundSetup('Semi-Finals Champion', wnPoints(2,3), 4, 'Finals Champion',
                          [0,0,1,1], 'Semi-Finals Consolation', [3,3,1,1]),
-            wnRoundSetup('Finals Champion', wnPoints(2,0), 2, 'First Place', [0, 0]),
-            wnRoundSetup('First Place', wnPoints(0,0), 1),
+            wnRoundSetup('Finals Champion', wnPoints(2,9), 2, 'First Place', [0, 0]),
+            wnRoundSetup('First Place', wnPoints(0,4), 1),
             
             wnRoundSetup('Rat-Tails Consolation', wnPoints(1,0), 8,
                         'Eight Consolation', [0,0,2,2,4,4,6,6]),
@@ -153,13 +153,13 @@ class wnCTOpenConfig:
                         'Quarter-Finals Consolation', [0,0,1,1,2,2,3,3]),
             wnRoundSetup('Quarter-Finals Consolation', wnPoints(1,0), 4,
                         'Semi-Finals Consolation', [0,0,2,2]),
-            wnRoundSetup('Semi-Finals Consolation', wnPoints(1,0), 4, 'Finals Consolation',
+            wnRoundSetup('Semi-Finals Consolation', wnPoints(1,3), 4, 'Finals Consolation',
                          [0,0,1,1], 'Finals Fifth', [0,0,1,1]),
-            wnRoundSetup('Finals Consolation', wnPoints(1,0), 2, 'Third Place', [0,0]),
-            wnRoundSetup('Third Place', wnPoints(0,0), 1),
+            wnRoundSetup('Finals Consolation', wnPoints(1,4), 2, 'Third Place', [0,0]),
+            wnRoundSetup('Third Place', wnPoints(0,2), 1),
             
             wnRoundSetup('Finals Fifth', wnPoints(0,0), 2, 'Fifth Place', [0,0]),
-            wnRoundSetup('Fifth Place', wnPoints(0,0), 1)]  
+            wnRoundSetup('Fifth Place', wnPoints(0,2), 1)]  
 
 if __name__ == '__main__':
   b = wnBuilder()

@@ -367,8 +367,11 @@ class wnRound(wnNode):
     bouts = []
 
     for i in range(0, len(self.entries), 2):
-      e1 = self.entries[i]
-      e2 = self.entries[i+1]
+      try:
+        e1 = self.entries[i]
+        e2 = self.entries[i+1]
+      except:
+        continue
       
       # it's only a bout of two consecutive entries have wrestlers
       if e1.Wrestler is not None and e2.Wrestler is not None:

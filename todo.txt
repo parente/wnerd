@@ -4,15 +4,21 @@ UI
 - scrolling score window
 
 Data
-- test scoring algorithm
+- test scoring algorithm in more than one weight class
+- export data to text file
+- export data to HTML page with bracket images
+- add/remove team from tournament
+- change wrestler
+- auto move in
 
 Printing
-- print bouts
 - print place winners
+- fix wrong scale for scores
 
-Enhancements
+Refactoring
 - switch to renderer providing setting information instead of static values
-- move Round CalcScores to a separate function/object
+- move round CalcScores to a separate function/object?
+- switch all calculations to a type of renderer (score, bouts, fast fall)
 
 Web page
 parente@shell.sourceforge.net:/home/groups/p/pr/projectname/htdocs

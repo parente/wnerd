@@ -57,6 +57,7 @@ class wnBoutPrintout(wxPrintout):
     
     # load the static bout bitmap
     self.bmp = wxBitmap(wnSettings.bout_bitmap_filename, wxBITMAP_TYPE_PNG)
+    self.normal_font = wxFont(wnSettings.print_font_size, wxMODERN, wxNORMAL, wxNORMAL)
     
   def HasPage(self, page):
     return (page <= self.pages)
@@ -67,10 +68,11 @@ class wnBoutPrintout(wxPrintout):
   def OnPrintPage(self, page):
     # get the  drawing context
     dc = self.GetDC()
+    dc.SetFont(self.normal_font)
     
     # add the margin to the bracket size
-    max_w = 800 + 2*wnSettings.print_margin_x
-    max_h = 500 + 2*wnSettings.print_margin_y
+    max_w = self.bmp.GetWidth() + 2*wnSettings.print_margin_x
+    max_h = self.bmp.GetHeight() + 2*wnSettings.print_margin_y
     
     # scale the drawing area to fit the page
     pw, ph = dc.GetSize()
@@ -81,7 +83,7 @@ class wnBoutPrintout(wxPrintout):
     
     # start the origin at the top and draw a line dividing the page
     dc.SetDeviceOrigin(wnSettings.print_margin_x, wnSettings.print_margin_y)    
-    dc.DrawLine(0, 500, 800, 500)
+    dc.DrawLine(0, self.bmp.GetHeight(), self.bmp.GetWidth(), self.bmp.GetHeight())
     
     # draw two bouts per page
     i = 0
@@ -91,8 +93,17 @@ class wnBoutPrintout(wxPrintout):
       dc.DrawBitmap(self.bmp, 0, 0, False)
       
       # fill in the weight and round
+      dc.DrawText(self.bouts[index].Weight, 220, 10)
+      dc.DrawText(self.bouts[index].Round, 220, 40)
       
       # fill in the two wrestlers
+      dc.DrawText(self.bouts[index].Wrestler1.Name, 3, 100)
+      w, h = dc.GetTextExtent(self.bouts[index].Wrestler1.Name)
+      dc.DrawText(self.bouts[index].Wrestler1.Team.Name, 3, 100+h)
+      
+      dc.DrawText(self.bouts[index].Wrestler2.Name, 3, 170)
+      w, h = dc.GetTextExtent(self.bouts[index].Wrestler1.Name)
+      dc.DrawText(self.bouts[index].Wrestler2.Team.Name, 3, 170+h)
       
       # increase the index and move to the bottom half of the page
       i += 1
@@ -112,7 +123,9 @@ class wnScorePrintout(wxPrintout):
     
     # get the scores from the tournament
     self.scores = self.tournament.CalcScores()
-    self.index = 0
+    
+    # compute the number of pages
+    self.pages = int(math.ceil(float(len(self.scores))/wnSettings.print_scores_per_page))
     
     # store reusable fonts
     self.normal_font = wxFont(wnSettings.print_font_size, wxMODERN, wxNORMAL, wxNORMAL)
@@ -122,22 +135,22 @@ class wnScorePrintout(wxPrintout):
     return (self.index != (len(self.scores)-1))
   
   def GetPageInfo(self):
-    return (1,100,1,100)
+    return (1,self.pages,1,self.pages)
   
   def OnPrintPage(self, page):
     # get the  drawing context
     dc = self.GetDC()
     
-    # print the time
-    dc.SetFont(self.normal_font)
-    text = time.asctime()
-    tw, th = dc.GetTextExtent(text)
-    dc.DrawText(text, 0, 0)
-    
-    # set the origin properly
+    # scale the drawing area to fit the page
     pw, ph = dc.GetSize()
-    ph -= wnSettings.print_margin_y*2
-    pw -= wnSettings.print_margin_x*2
+    max_h = ph - wnSettings.print_margin_y*2
+    max_w = pw - wnSettings.print_margin_x*2
+    sx = float(pw)/float(max_w)
+    sy = float(ph)/float(max_h)
+    scale = min(sx, sy)
+    dc.SetUserScale(scale, scale)
+    
+    # set the origin to incorporate the margin
     dc.SetDeviceOrigin(wnSettings.print_margin_x, wnSettings.print_margin_y)
     
     # print a header on each page
@@ -147,19 +160,24 @@ class wnScorePrintout(wxPrintout):
     dc.DrawText(title, 0, 0)
     dc.SetFont(self.normal_font)
     
-    # print the scores in decending order all the way to the bottom of the page
-    for i in range(self.index, len(self.scores)):
-      if h >= ph: break
-      
+    # print the scores for this page
+    index = wnSettings.print_scores_per_page * (page-1)
+    i = 0
+    while (i < wnSettings.print_scores_per_page and index < len(self.scores)):
+      # get the team info      
       p = str(i+1)
       s = str(self.scores[i][0])
       t = str(self.scores[i][1])
       
+      # print the team info
       text = p + ' '*(8-len(p)) + s + ' '*(8-len(s)) + t
       space = dc.GetTextExtent(text)
       dc.DrawText(text, 0, h)
+      
+      # increment position on page, counter, and index
       h += space[1]
-      self.index += 1
+      index += 1
+      i += 1
     
     return True
 
@@ -185,12 +203,6 @@ class wnBracketPrintout(wxPrintout):
   def OnPrintPage(self, page):
     # get the drawing context
     dc = self.GetDC()
-    
-    # print the time
-    dc.SetFont(self.normal_font)
-    text = time.asctime()
-    tw, th = dc.GetTextExtent(text)
-    dc.DrawText(text, 0, 0)
     
     # build a printer renderer
     printer = wnPrinter()

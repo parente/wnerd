@@ -9,6 +9,7 @@ match_offset = 3
 
 initial_step = 25
 
+screen_font_size = 8
 highlight_color = '#FFFFC1'
 popup_color = '#FFFFC1'
 
@@ -19,9 +20,8 @@ no_scoring_prefix = 'JV'
 
 print_margin_x = 10
 print_margin_y = 30
-
-screen_font_size = 8
 print_font_size = 10
 print_heading_size = 12
+print_scores_per_page = 50
 
 bout_bitmap_filename = 'WrestlingNerd_wdr/bout.png'
