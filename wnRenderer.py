@@ -10,7 +10,8 @@ class wnRenderer(object):
   pass
   
 class wnPainter(wnRenderer):
-  def __init__(self, canvas, team_scores):
+  def __init__(self, frame, canvas, team_scores):
+    self.frame = frame
     self.canvas = canvas
     self.team_scores = team_scores
     self.control_cache = {}
@@ -138,6 +139,11 @@ class wnPainter(wnRenderer):
       
     self.control_cache = {}
     
-
+  def ShowMatchDialog(self, wrestlers, result):
+    '''Show a dialog box that let's the user enter match results. Initialize the box to the values
+    provided by the entry.'''
+    pass
+    
+                             
 class wnPrinter(wnRenderer):
   pass

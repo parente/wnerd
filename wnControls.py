@@ -8,9 +8,6 @@ class wnStaticText(wxPanel):
     
     self.parent = parent
     self.popup = None
-    
-    EVT_ENTER_WINDOW(self, self.OnMouseEnter)
-    EVT_LEAVE_WINDOW(self, self.OnMouseLeave)
 
     #make the actual static text control
     self.ctrl = wxStaticText(self, -1, text, wxPoint(0,0), size,
@@ -35,13 +32,12 @@ class wnStaticText(wxPanel):
       self.popup.Destroy()
       self.popup = None
   
-  def OnMouseEnter(self, event):
-    self.ctrl.SetBackgroundColour(wnSettings.highlight_color)
+  def Highlight(self, flag=True):
+    if flag:
+      self.ctrl.SetBackgroundColour(wnSettings.highlight_color)
+    else:
+      self.ctrl.SetBackgroundColour(self.clear_color)
     self.Refresh()
-    
-  def OnMouseLeave(self, event):
-    self.ctrl.SetBackgroundColour(self.clear_color)
-    self.ctrl.Refresh()
 
       
 class wnDynamicText(wxMaskedTextCtrl):
@@ -52,7 +48,7 @@ class wnDynamicText(wxMaskedTextCtrl):
     wxMaskedTextCtrl.__init__(self, parent, -1, '', formatcodes='VF_<S',  mask=mask,
                               pos=pos, size=size, emptyBackgroundColor=self.bg_color,
                               validBackgroundColor=self.bg_color,
-                              fields = {0 : Field(validRegex='[a-zA-Z0-9]+'),
+                              fields = {0 : Field(validRegex='^[a-zA-Z0-9]+'),
                                         1 : Field(choices=choices, choiceRequired=True)
                               },
                               style = wxNO_BORDER, retainFieldValidation = True

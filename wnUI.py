@@ -51,7 +51,7 @@ class wnFrame(wxFrame):
     self.teams = wxPyTypeCast(self.FindWindowById(GUI.ID_TEAMS_LIST), 'wxListCtrl')
     
     #make a painter object
-    self.painter = wnPainter(self.canvas, self.teams)
+    self.painter = wnPainter(self, self.canvas, self.teams)
     
     #set up the list control
     self.teams.InsertColumn(0, 'Team', width=-2)
@@ -242,8 +242,7 @@ class wnBracketCanvas(wxScrolledWindow):
       if refresh: p.SetInitialFocus()        
    
 class wnNewTournamentWizard(wxWizard):
-  '''Class that creates a wizard that assists users in setting up new
-  tournaments.'''
+  '''Class that creates a wizard that assists users in setting up new tournaments.'''
   
   def __init__(self, parent):
     '''Initialize an instance of the wizard.
@@ -395,6 +394,18 @@ class wnNewTournamentWizard(wxWizard):
   def GetLayout(self):
     i = self.layouts.GetSelection()
     return self.layouts.GetClientData(i)
+
+class wnMatchDialog(wxDialog):
+  '''Class that creates a dialog box that allows users to enter match results.'''
+  def __init__(self, parent, wrestlers, result):
+    wxDialog.__init__(self, parent, -1, 'Match results')
+    GUI.CreateMatchDialog(self)
+    
+    #set to the current values
+    
+    #store important references
+    
+    #register events
 
 class wnScoreWindow(wxFrame):
   '''Class the creates a standalone frame for displaying team scores. Teams scroll past at a regular

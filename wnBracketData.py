@@ -187,6 +187,8 @@ class wnRound(wnNode):
     for i in range(self.NumEntries):
       #link the entry in this round to the proper entry in the next round
       self.entries[i].NextWin = round.Entries[to_map[i]]
+      #link the entry in the next round to this entry
+      round.Entries[to_map[i]].Previous = self.entries[i]
       
   def SetNextLoseRound(self, round, to_map):
     if len(to_map) != self.NumEntries:
@@ -233,6 +235,7 @@ class wnEntry(wnNode):
     self.wrestler = None
     self.next_win = None
     self.next_lose = None
+    self.previous = []
     
   def GetID(self):
     '''Return the ID of this entry. This ID must be exactly the same as the ID of similar entries
@@ -251,6 +254,12 @@ class wnEntry(wnNode):
   
   def SetNextWin(self, entry):
     self.next_win = entry
+    
+  def GetPrevious(self):
+    return self.previous
+  
+  def SetPrevious(self, entry):
+    self.previous.append(entry)
   
   def GetTeams(self):
     '''Get the available teams from the tournament. Encapsulate how we get this data using
@@ -262,11 +271,17 @@ class wnEntry(wnNode):
     properties.'''
     return self.Parent.Parent.Name
   
+  def GetWrestler(self):
+    '''Get the wrestler stored at this entry.'''
+    return self.wrestler
+  
   ID = property(fget=GetID)
   NextLose = property(fget=GetNextLose, fset=SetNextLose)
   NextWin = property(fget=GetNextWin, fset=SetNextWin)
+  Previous = property(fget=GetPrevious, fset=SetPrevious)
   Teams = property(fget=GetTeams)
   Weight = property(fget=GetWeight)
+  Wrestler = property(fget=GetWrestler)
   
 class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
   '''The match entry class hold individual match results.'''
@@ -286,18 +301,33 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
                                    self.ID, self)
     
   def OnMouseEnter(self, event):
-    '''Show a popup window with the match results if available.'''
+    '''Show a popup window with the match results if available. Highlight the entry if it can
+    receive results.'''
     if self.wrestler is not None:
       event.Control.ShowPopup(str(self.result))
+    for e in self.previous:
+      if e.Wrestler is not None:
+        event.Control.Highlight(True)
+        break
       
   def OnMouseLeave(self, event):
-    '''Hide the popup window with the match results.'''
+    '''Hide the popup window with the match results. Unhighlight the control if it was
+    highlighted.'''
     event.Control.HidePopup()
+    event.Control.Highlight(False)
     
-  def OnLeftDoubleClick(self, event):
+  def OnLeftClick(self, event):
     '''Display the dialog box that allows a user to enter result information, if there is at least
     one wrestler in the preceeding entries.'''
-    pass
+    enabled = False
+    for e in self.previous:
+      if e.Wrestler is not None:
+        enabled = True
+        break
+    
+    if not enabled: return
+    
+    event.Painter.
     
 class wnSeedEntry(wnEntry, wnFocusEventReceivable):
   '''The seed entry class holds information about seeded wrestlers.'''

@@ -12,7 +12,7 @@ ID_WEIGHTS_CHOICE = 10000
 ID_TEAMS_LIST = 10001
 ID_TEAM_DEBUG = 10002
 
-def ScoreFrame( parent, call_fit = true, set_sizer = true ):
+def CreateScoreFrame( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
     
     item2 = wxStaticBox( parent, -1, "Weight" )
@@ -262,18 +262,55 @@ def WizardFinishedPanel( parent, call_fit = true, set_sizer = true ):
     
     return item0
 
+ID_WINNER = 10021
+ID_WIN_TYPE_RADIO = 10022
+
+def CreateMatchDialog( parent, call_fit = true, set_sizer = true ):
+    item0 = wxBoxSizer( wxVERTICAL )
+    
+    item2 = wxStaticBox( parent, -1, "Winner" )
+    item1 = wxStaticBoxSizer( item2, wxVERTICAL )
+    
+    item3 = wxChoice( parent, ID_WINNER, wxDefaultPosition, wxSize(150,-1), [], 0 )
+    item1.AddWindow( item3, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    item0.AddSizer( item1, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    item4 = wxBoxSizer( wxVERTICAL )
+    
+    item5 = wxRadioBox( parent, ID_WIN_TYPE_RADIO, "Win type", wxDefaultPosition, wxDefaultSize, 
+        ["None","Decision","Pin","Default","Bye"] , 2, wxRA_SPECIFY_ROWS )
+    item4.AddWindow( item5, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    item0.AddSizer( item4, 0, wxALIGN_CENTRE|wxALL, 5 )
+
+    item7 = wxStaticBox( parent, -1, "Result" )
+    item6 = wxStaticBoxSizer( item7, wxVERTICAL )
+    parent.result_sizer = item6
+    
+    item0.AddSizer( item6, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+
+    if set_sizer == true:
+        parent.SetAutoLayout( true )
+        parent.SetSizer( item0 )
+        if call_fit == true:
+            item0.Fit( parent )
+            item0.SetSizeHints( parent )
+    
+    return item0
+
 # Menubar functions
 
-ID_NEW_MENU = 10021
-ID_OPEN_MENU = 10022
-ID_MENU = 10023
-ID_SAVE_MENU = 10024
-ID_SAVEAS_MENU = 10025
-ID_EXIT_MENU = 10026
-ID_FILE_MENU = 10027
-ID_FASTFALL_MENU = 10028
-ID_NUMBOUTS_MENU = 10029
-ID_QUERY_MENU = 10030
+ID_NEW_MENU = 10023
+ID_OPEN_MENU = 10024
+ID_MENU = 10025
+ID_SAVE_MENU = 10026
+ID_SAVEAS_MENU = 10027
+ID_EXIT_MENU = 10028
+ID_FILE_MENU = 10029
+ID_FASTFALL_MENU = 10030
+ID_NUMBOUTS_MENU = 10031
+ID_QUERY_MENU = 10032
 
 def CreateMenuBar():
     item0 = wxMenuBar()

@@ -11,13 +11,19 @@ class wnPoints(object):
 class wnResult(object):
   '''The result class holds a reference to its entry.'''
   def __init__(self):
-    self.entry = None
+      pass
+    
+  def GetPoints(self):
+    return 0
     
 class wnResultPin(wnResult):
   '''This class holds information about a pin win.'''
   def __init__(self):
     wnResult.__init__(self)
     self.pin_time = 0
+    
+  def GetPoints(self):
+    return 2
 
 class wnResultDecision(wnResult):
   '''This class holds information about a decision.'''
@@ -25,6 +31,15 @@ class wnResultDecision(wnResult):
     wnResult.__init__(self)    
     self.win_score = 0
     self.lose_score = 0
+    
+  def GetPoints(self):
+    diff = self.win_score - self.lose_score
+    if diff >= 15:
+      return 1.5
+    elif diff >=8:
+      return 1.0
+    else:
+      return 0
     
 class wnResultBye(wnResult):
   '''This class holds information about a bye.'''
@@ -34,5 +49,7 @@ class wnResultBye(wnResult):
 class wnResultDefault(wnResult):
   '''This class holds information about a default win.'''
   def __init__(self):
-    wnResult.__init__(self)    
-  
+    wnResult.__init__(self)
+    
+  def GetPoints(self):
+    return 2
