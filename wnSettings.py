@@ -22,4 +22,5 @@ max_team_length = 18                                  # maximum length of team n
 no_scoring_prefix = 'JV'                              # prefix that defaults wrestler to no scoring
 bout_bitmap_filename = 'WrestlingNerd_wdr/bout.png'   # filename of bout sheet image
 icon_filename = 'WrestlingNerd_wdr/nerd16.ico'        # filename of the program icon
+layouts_path = './layouts'                            # folder holding tournament configurations
 splash_bitmap_filename = 'WrestlingNerd_wdr/LogoBitmaps_0.png'

@@ -1,32 +1,34 @@
-from wxPython.wx import *
-from wxPython.lib.maskededit import Field, wxMaskedTextCtrl
+import wx
+import wx.lib.masked
+#from wx.lib.masked import TextCtrl, Field
+#from wxPython.lib.maskededit import Field, wxMaskedTextCtrl
 import wnSettings
 import WrestlingNerd_wdr as GUI
 
-class wnStaticText(wxPanel):
-  def __init__(self, parent, id, text, pos=wxPoint(0,0), size=wxSize(100,20)):
-    wxPanel.__init__(self, parent, id, pos, size, style=wxTRANSPARENT_WINDOW)
+class wnStaticText(wx.Panel):
+  def __init__(self, parent, id, text, pos=wx.Point(0,0), size=wx.Size(100,20)):
+    wx.Panel.__init__(self, parent, id, pos, size, style=wx.TRANSPARENT_WINDOW)
     
     self.parent = parent
     self.popup = None
 
     #make the actual static text control
-    self.ctrl = wxStaticText(self, -1, text, wxPoint(0,0), size,
-                             style=wxST_NO_AUTORESIZE|wxALIGN_LEFT)
-    self.ctrl.SetFont(wxFont(wnSettings.screen_font_size, wxMODERN, wxNORMAL, wxNORMAL))
+    self.ctrl = wx.StaticText(self, -1, text, wx.Point(0,0), size,
+                             style=wx.ST_NO_AUTORESIZE|wx.ALIGN_LEFT)
+    self.ctrl.SetFont(wx.Font(wnSettings.screen_font_size, wx.MODERN, wx.NORMAL, wx.NORMAL))
     self.clear_color = self.ctrl.GetBackgroundColour()
 
     #register events on the text control
-    EVT_LEFT_DOWN(self.ctrl, self.OnPassEvent)
-    EVT_RIGHT_DOWN(self.ctrl, self.OnPassEvent)
-    EVT_LEFT_UP(self.ctrl, self.OnPassEvent)
-    EVT_RIGHT_UP(self.ctrl, self.OnPassEvent)
+    wx.EVT_LEFT_DOWN(self.ctrl, self.OnPassEvent)
+    wx.EVT_RIGHT_DOWN(self.ctrl, self.OnPassEvent)
+    wx.EVT_LEFT_UP(self.ctrl, self.OnPassEvent)
+    wx.EVT_RIGHT_UP(self.ctrl, self.OnPassEvent)
     
-    EVT_CLOSE(self, self.OnClose)
+    wx.EVT_CLOSE(self, self.OnClose)
     
   def OnPassEvent(self, event):
     event.SetEventObject(self)
-    wxPostEvent(self, event)
+    wx.PostEvent(self, event)
     
   def OnClose(self, event):
     self.ctrl.Destroy()
@@ -39,9 +41,9 @@ class wnStaticText(wxPanel):
     return self.ctrl.GetLabel(text)
     
   def ShowPopup(self, text):    
-    p = self.parent.ClientToScreen(self.GetPosition())
+    #p = self.parent.ClientToScreen(self.GetPosition())
     s = self.GetClientSize()
-    self.popup = wnPopup(self, text, p, s)
+    self.popup = wnPopup(self, text, wx.Point(0,0), s)
     self.popup.Show(True)
     
   def HidePopup(self):
@@ -61,36 +63,36 @@ class wnStaticText(wxPanel):
     self.PopupMenu(wnMatchMenu(self), pos)
   
   def RefreshScores(self):
-    wxCallAfter(self.parent.RefreshScores)
+    wx.CallAfter(self.parent.RefreshScores)
 
-class wnDynamicText(wxMaskedTextCtrl):
-  def __init__(self, parent, id, text, choices, pos=wxPoint(0,0), size=wxSize(-1,-1)):
+class wnDynamicText(wx.lib.masked.TextCtrl):
+  def __init__(self, parent, id, text, choices, pos=wx.Point(0,0), size=wx.Size(-1,-1)):
     self.parent = parent
     bg_color = self.parent.GetBackgroundColour()
     mask = 'X{%d} | X{%d}' % (wnSettings.max_name_length, wnSettings.max_team_length)
-    wxMaskedTextCtrl.__init__(self, parent, -1, '', formatcodes='VF_><S',  mask=mask,
+    wx.lib.masked.TextCtrl.__init__(self, parent, -1, '', formatcodes='V_><S',  mask=mask,
                               pos=pos, size=size, validBackgroundColour=bg_color,
                               emptyBackgroundColour=bg_color,
-                              fields = {0 : Field(validRegex='^\S+'),
-                                        1 : Field(choices=choices, choiceRequired=True, autoSelect=True)
+                              fields = {0 : wx.lib.masked.Field(validRegex='^\S+'),
+                                        1 : wx.lib.masked.Field(choices=choices, choiceRequired=True, autoSelect=True)
                               },
-                              style = wxNO_BORDER, retainFieldValidation = True
+                              style = wx.NO_BORDER, retainFieldValidation = True
                              )
     self.SetValue(text)
     
     # make an accelerator table that allows short cuts for some seed operations
-    ae = [wxAcceleratorEntry(wxACCEL_CTRL, WXK_PRIOR, GUI.ID_SWAPUP_SEED_MENU),
-          wxAcceleratorEntry(wxACCEL_CTRL, WXK_NEXT, GUI.ID_SWAPDOWN_SEED_MENU),
-          wxAcceleratorEntry(wxACCEL_CTRL, ord('l'), GUI.ID_SETLAST_SEED_MENU),
-          wxAcceleratorEntry(wxACCEL_CTRL, ord('L'), GUI.ID_SETLAST_SEED_MENU),
-          wxAcceleratorEntry(wxACCEL_CTRL, ord('t'), GUI.ID_SWAPTO_SEED_MENU),
-          wxAcceleratorEntry(wxACCEL_CTRL, ord('T'), GUI.ID_SWAPTO_SEED_MENU)]
-    self.SetAcceleratorTable(wxAcceleratorTable(ae))
+    ae = [wx.AcceleratorEntry(wx.ACCEL_CTRL, wx.WXK_PRIOR, GUI.ID_SWAPUP_SEED_MENU),
+          wx.AcceleratorEntry(wx.ACCEL_CTRL, wx.WXK_NEXT, GUI.ID_SWAPDOWN_SEED_MENU),
+          wx.AcceleratorEntry(wx.ACCEL_CTRL, ord('l'), GUI.ID_SETLAST_SEED_MENU),
+          wx.AcceleratorEntry(wx.ACCEL_CTRL, ord('L'), GUI.ID_SETLAST_SEED_MENU),
+          wx.AcceleratorEntry(wx.ACCEL_CTRL, ord('t'), GUI.ID_SWAPTO_SEED_MENU),
+          wx.AcceleratorEntry(wx.ACCEL_CTRL, ord('T'), GUI.ID_SWAPTO_SEED_MENU)]
+    self.SetAcceleratorTable(wx.AcceleratorTable(ae))
 
-    EVT_RIGHT_UP(self, lambda e: None)
+    wx.EVT_RIGHT_UP(self, lambda e: None)
 
   def SetFocus(self):
-    wxMaskedTextCtrl.SetFocus(self)
+    wx.lib.masked.TextCtrl.SetFocus(self)
     x,y = self.GetPosition()
     px, py = self.parent.GetScrollPixelsPerUnit()
     sx, sy = self.parent.GetViewStart()
@@ -103,39 +105,39 @@ class wnDynamicText(wxMaskedTextCtrl):
     self.PopupMenu(wnSeedMenu(self, is_last), pos)
   
   def RefreshScores(self):
-    wxCallAfter(self.parent.RefreshScores)
+    wx.CallAfter(self.parent.RefreshScores)
     
   def RefreshBracket(self):
-    wxCallAfter(self.parent.RefreshBracket)
+    wx.CallAfter(self.parent.RefreshBracket)
                                      
-class wnPopup(wxPopupWindow):
+class wnPopup(wx.PopupWindow):
   def __init__(self, parent, text, pos, size):
-    wxPopupWindow.__init__(self, parent, wxSIMPLE_BORDER)
-    st = wxStaticText(self, -1, text, pos=wxPoint(5,5))
-    st.SetFont(wxFont(wnSettings.screen_font_size, wxMODERN, wxNORMAL, wxNORMAL))
+    wx.PopupWindow.__init__(self, parent, wx.SIMPLE_BORDER)
+    st = wx.StaticText(self, -1, text, pos=wx.Point(5,5))
+    st.SetFont(wx.Font(wnSettings.screen_font_size, wx.MODERN, wx.NORMAL, wx.NORMAL))
     
     #compute the best position and size
     sz = st.GetBestSize()
-    p = wxPoint(pos.x, pos.y+size.GetHeight())
+    p = wx.Point(pos.x, pos.y+size.GetHeight())
     self.SetPosition(p)
-    self.SetSize(wxSize(sz.width+10, sz.height+10))
+    self.SetSize(wx.Size(sz.width+10, sz.height+10))
     
     #set the proper colors
     self.SetBackgroundColour(wnSettings.popup_color)
     st.SetBackgroundColour(wnSettings.popup_color)
     
-class wnMatchMenu(wxMenu):
+class wnMatchMenu(wx.Menu):
   def __init__(self, ctrl):
-    wxMenu.__init__(self)
+    wx.Menu.__init__(self)
     self.Append(GUI.ID_MOVEIN_MATCH_MENU, 'Move in')
     self.AppendSeparator()
     self.Append(GUI.ID_DELETE_MATCH_MENU, 'Delete')
     self.Append(GUI.ID_DELETEALL_MATCH_MENU, 'Delete all')
     self.Control = ctrl
 
-class wnSeedMenu(wxMenu):
+class wnSeedMenu(wx.Menu):
   def __init__(self, ctrl, is_last):
-    wxMenu.__init__(self)
+    wx.Menu.__init__(self)
     self.AppendCheckItem(GUI.ID_SETLAST_SEED_MENU, 'Last seed\tCtrl-L')
     self.AppendSeparator()
     self.Append(GUI.ID_SWAPUP_SEED_MENU, 'Swap up\tCtrl-Page Up')
@@ -149,17 +151,17 @@ class wnSeedMenu(wxMenu):
     
     self.Control = ctrl
     
-class wnMatchDialog(wxDialog):
+class wnMatchDialog(wx.Dialog):
   '''Class that creates a dialog box that allows users to enter match results.'''
   def __init__(self, parent, wrestlers, winner, result, is_scoring):
-    wxDialog.__init__(self, parent, -1, 'Match results')
+    wx.Dialog.__init__(self, parent, -1, 'Match results')
     GUI.CreateMatchDialog(self)
 
     #store important references
-    self.winner = wxPyTypeCast(self.FindWindowById(GUI.ID_WINNER_LIST), 'wxListBox')
-    self.result_type = wxPyTypeCast(self.FindWindowById(GUI.ID_RESULT_TYPE_RADIO), 'wxRadioBox')
-    self.result_panel = wxPyTypeCast(self.FindWindowById(GUI.ID_RESULT_PANEL), 'wxPanel')
-    self.scoring_check = wxPyTypeCast(self.FindWindowById(GUI.ID_SCOREPOINTS_CHECK), 'wxCheckBox')
+    self.winner = self.FindWindowById(GUI.ID_WINNER_LIST)
+    self.result_type = self.FindWindowById(GUI.ID_RESULT_TYPE_RADIO)
+    self.result_panel = self.FindWindowById(GUI.ID_RESULT_PANEL)
+    self.scoring_check = self.FindWindowById(GUI.ID_SCOREPOINTS_CHECK)
     
     #store the references
     self.parent = parent
@@ -195,20 +197,20 @@ class wnMatchDialog(wxDialog):
     else:
       self.scoring_check.SetValue(is_scoring)
     
-    EVT_RADIOBOX(self, GUI.ID_RESULT_TYPE_RADIO, self.OnChooseResult)
-    EVT_LISTBOX(self, GUI.ID_WINNER_LIST, self.OnChooseWinner) 
-    EVT_BUTTON(self, GUI.wxID_OK, self.OnOK)    
+    wx.EVT_RADIOBOX(self, GUI.ID_RESULT_TYPE_RADIO, self.OnChooseResult)
+    wx.EVT_LISTBOX(self, GUI.ID_WINNER_LIST, self.OnChooseWinner) 
+    wx.EVT_BUTTON(self, wx.ID_OK, self.OnOK)    
     
   def OnOK(self, event):
     '''Make sure all values are filled in properly.'''
     if self.result_value is not None and not self.result_value.IsValid():
-      dlg = wxMessageDialog(self, 'Please enter a valid result.', 'Invalid result', style=wxOK)
+      dlg = wx.MessageDialog(self, 'Please enter a valid result.', 'Invalid result', style=wx.OK)
       dlg.ShowModal()
       dlg.Close()
     else:
       # instruct the parent to update its scores
-      wxCallAfter(self.parent.RefreshScores)
-      self.EndModal(wxID_OK)
+      wx.CallAfter(self.parent.RefreshScores)
+      self.EndModal(wx.ID_OK)
     
   def OnChooseWinner(self, event):
     '''Set if the match is scoring or not based on the winner name. If it contains the non-scoring
@@ -225,14 +227,14 @@ class wnMatchDialog(wxDialog):
     
     if self.result_type.GetStringSelection() == 'Pin':
       bg_color = self.GetBackgroundColour()
-      self.result_value = wxMaskedTextCtrl(self.result_panel, -1, '', formatcodes='RF',
+      self.result_value = wx.lib.masked.TextCtrl(self.result_panel, -1, '', formatcodes='RF',
                                            mask='##:##', validRegex='[0-9 ][0-9]:[0-5][0-9]',
                                            emptyInvalid = True)
       self.result_value.SetFocus()
 
     elif self.result_type.GetStringSelection() == 'Decision':
       bg_color = self.GetBackgroundColour()
-      self.result_value = wxMaskedTextCtrl(self.result_panel, -1, '', formatcodes='RrF',
+      self.result_value = wx.lib.masked.TextCtrl(self.result_panel, -1, '', formatcodes='RrF',
                                            mask='##-##', validRegex='[0-9 ][0-9]-[0-9 ][0-9]',
                                            emptyInvalid = True)
       self.result_value.SetFocus()

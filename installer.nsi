@@ -7,8 +7,8 @@
 ;Configuration
 
   ;General
-  Name "Wrestling Nerd 3.1.1"
-  OutFile "WrestlingNerd-3.1.1-win32.exe"
+  Name "Wrestling Nerd 3.2"
+  OutFile "WrestlingNerd-3.2-win32.exe"
   Icon "WrestlingNerd_wdr\nerd.ico"
 
   ;Folder selection page
@@ -60,10 +60,10 @@ SectionEnd
 
 Section "Shortcuts"
   CreateDirectory "$SMPROGRAMS\Wrestling Nerd"
-  CreateShortcut "$SMPROGRAMS\Wrestling Nerd\Wrestling Nerd 3.1.lnk" "$INSTDIR\WrestlingNerd.exe"
+  CreateShortcut "$SMPROGRAMS\Wrestling Nerd\Wrestling Nerd 3.2.lnk" "$INSTDIR\WrestlingNerd.exe"
   CreateShortcut "$SMPROGRAMS\Wrestling Nerd\LICENSE.lnk" "$INSTDIR\LICENSE.txt"
   CreateShortcut "$SMPROGRAMS\Wrestling Nerd\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
-  CreateShortcut "$DESKTOP\Wrestling Nerd 3.1.lnk" "$INSTDIR\WrestlingNerd.exe"
+  CreateShortcut "$DESKTOP\Wrestling Nerd 3.2.lnk" "$INSTDIR\WrestlingNerd.exe"
 SectionEnd
 
 ;--------------------------------
@@ -78,8 +78,8 @@ Section "Uninstall"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\WrestlingNerd"
 
   ; delete shortcuts
-  Delete "$DESKTOP\Wrestling Nerd\Wrestling Nerd 3.1.lnk"
-  Delete "$SMPROGRAMS\Wrestling Nerd\Wrestling Nerd 3.1.lnk"
+  Delete "$DESKTOP\Wrestling Nerd\Wrestling Nerd 3.2.lnk"
+  Delete "$SMPROGRAMS\Wrestling Nerd\Wrestling Nerd 3.2.lnk"
   Delete "$SMPROGRAMS\Wrestling Nerd\LICENSE.lnk"
   Delete "$SMPROGRAMS\Wrestling Nerd\Uninstall.lnk"
   RMDir "$SMPROGRAMS\Wrestling Nerd"

@@ -18,7 +18,7 @@ class wnBout(object):
     self.Wrestler2 = wrestler2
     
 class wnFastFall(object):
-  '''The fast fall class hold info about a wrestler's fast fall results. It also defines methods
+  '''The fast fall class hold info about a wrestlers fast fall results. It also defines methods
   that make sorting easier.'''
   def __init__(self, wrestler, pins, pin_time):
     self.Name = wrestler.Name

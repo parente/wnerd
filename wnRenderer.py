@@ -2,11 +2,13 @@
 The renderer module defines classes that render tournament info to the screen and printer. These
 objects are used to do all rendering operations.
 '''
-from wxPython.wx import *
+import wx
 from wnEvents import *
 from wnControls import *
 from wnTempData import wnMatchData
 import wnSettings
+
+# TODO: switch to renderer providing setting information instead of static values
 
 class wnRenderer(object):
   def DrawLine(self, x1, y1, x2, y2):
@@ -63,7 +65,7 @@ class wnPainter(wnRenderer):
       pass
     
   def GetFocus(self):
-    ctrl = wxWindow_FindFocus()
+    ctrl = wx.Window_FindFocus()
     reverse = dict([(v,k) for k,v in self.controls.items()])
     return reverse.get(ctrl)
     
@@ -73,7 +75,7 @@ class wnPainter(wnRenderer):
   
   def DrawText(self, text, x, y):
     if self.dc is None: return
-    self.dc.SetFont(wxSWISS_FONT)
+    self.dc.SetFont(wx.SWISS_FONT)
     self.dc.DrawText(text, x, y)
     
   def DrawMatchTextControl(self, text, x, y, length, height, id, obj):
@@ -82,7 +84,7 @@ class wnPainter(wnRenderer):
     
     #check to see if a static text control already exists for this entry
     if not self.controls.has_key(id):
-      ctrl = wnStaticText(self.canvas, -1, text, pos=wxPoint(x,y), size=wxSize(length, height))
+      ctrl = wnStaticText(self.canvas, -1, text, pos=wx.Point(x,y), size=wx.Size(length, height))
       self.controls[id] = ctrl
       
       #hook the event manager properly
@@ -107,8 +109,8 @@ class wnPainter(wnRenderer):
     if not self.controls.has_key(id):
       #don't create the text control immediately, delay until later so they can be defined in the
       #proper tabbing order
-      self.control_cache[id] = {'args' : (self.canvas, -1, text, choices, wxPoint(x,y),
-                                          wxSize(length, height)), 'handler' : obj}
+      self.control_cache[id] = {'args' : (self.canvas, -1, text, choices, wx.Point(x,y),
+                                          wx.Size(length, height)), 'handler' : obj}
       
     #if it already exists
     else:
@@ -154,7 +156,7 @@ class wnPainter(wnRenderer):
     dlg = wnMatchDialog(self.frame, wrestlers, winner, result, is_scoring)
     dlg.CentreOnScreen()
     
-    if dlg.ShowModal() == wxID_OK:
+    if dlg.ShowModal() == wx.ID_OK:
       winner = dlg.GetWinner()
       loser = dlg.GetLoser()
       result_type = dlg.GetResultType()
@@ -169,10 +171,10 @@ class wnPainter(wnRenderer):
   def ShowSwapDialog(self, number):
     '''Show a dialog box that lets the user enter a seed number to which a wrestler should be 
     swapped.'''
-    dlg = wxTextEntryDialog(self.frame, 'Swap seed # %s to seed # :' % number, 'Swap to')
+    dlg = wx.TextEntryDialog(self.frame, 'Swap seed # %s to seed # :' % number, 'Swap to')
 
     i = None
-    if dlg.ShowModal() == wxID_OK:
+    if dlg.ShowModal() == wx.ID_OK:
       i = dlg.GetValue()
         
     dlg.Destroy()

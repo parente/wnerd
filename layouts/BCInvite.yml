@@ -1,0 +1,77 @@
+---
+Name: Bristol Central Invitational
+Description: The bracket format used in the Bristol Central Invitational tournaments. The outbracket has 32 seed slots, and double-elimination begins in the quarter finals. There are six places.
+Seeds: &seeds [1, 32, 17, 16, 9, 24, 25, 8, 5, 28, 21, 12, 13, 20, 29, 4, 3, 30, 19, 14, 11, 22, 27, 6, 7, 26, 23, 10, 15, 18, 31, 2]
+Rounds:
+  - Name: Rat-Tails
+    Adv Points: 0
+    Place Points: 0
+    Entries: *seeds
+    Win Round: Sixteen Champion
+    Win Order: [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15]
+  - Name: Sixteen Champion
+    Adv Points: 2
+    Place Points: 0
+    Entries: 16
+    Win Round: Quarter-Finals Champion
+    Win Order: [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7]  
+  - Name: Quarter-Finals Champion
+    Adv Points: 2
+    Place Points: 0
+    Entries: 8
+    Win Round: Semi-Finals Champion
+    Win Order: [0, 0, 1, 1, 2, 2, 3, 3]
+    Lose Round: Quarter-Finals Consolation
+    Lose Order: [0, 0, 1, 1, 2, 2, 3, 3]
+  - Name: Semi-Finals Champion
+    Adv Points: 2
+    Place Points: 3
+    Entries: 4
+    Win Round: Finals Champion
+    Win Order: [0, 0, 1, 1]
+    Lose Round: Semi-Finals Consolation
+    Lose Order: [3, 3, 1, 1]
+  - Name: Finals Champion
+    Adv Points: 2
+    Place Points: 9
+    Entries: 2
+    Win Round: First Place
+    Win Order: [0, 0]
+  - Name: First Place
+    Adv Points: 0
+    Place Points: 4
+    Entries: 1
+  - Name: Quarter-Finals Consolation
+    Adv Points: 1
+    Place Points: 0
+    Entries: 4
+    Win Round: Semi-Finals Consolation
+    Win Order: [0, 0, 2, 2]
+  - Name: Semi-Finals Consolation
+    Adv Points: 1
+    Place Points: 3
+    Entries: 4
+    Win Round: Finals Consolation
+    Win Order: [0, 0, 1, 1]
+    Lose Round: Finals Fifth
+    Lose Order: [0, 0, 1, 1]
+  - Name: Finals Consolation
+    Adv Points: 1
+    Place Points: 4
+    Entries: 2
+    Win Round: Third Place
+    Win Order: [0, 0]
+  - Name: Third Place
+    Adv Points: 0
+    Place Points: 2
+    Entries: 1
+  - Name: Finals Fifth
+    Adv Points: 0
+    Place Points: 0
+    Entries: 2
+    Win Round: Fifth Place
+    Win Order: [0, 0]
+  - Name: Fifth Place
+    Adv Points: 0
+    Place Points: 2
+    Entries: 1

@@ -4,7 +4,6 @@ The team data module contains classes that hold team and wrestler information.
 from wnTempData import *
 import wnSettings
 
-
 class wnTeam(object):
   '''The team class holds wrestlers and points.'''
   def __init__(self, name, tournament):

@@ -10,6 +10,8 @@ from wnTeamData import *
 from wnTempData import *
 import wnSettings
 
+# TODO: switch all calculations to a type of renderer (score, bouts, fast fall)
+
 class wnNode(object):
   '''The node class provides navigation from child nodes to parent nodes.'''
   def __init__(self, parent, name):
@@ -21,8 +23,11 @@ class wnNode(object):
   
   def GetName(self):
     return self.name
+    
+  def SetName(self, val):
+    self.name = val
   
-  Name = property(fget=GetName)
+  Name = property(fget=GetName, fset=SetName)
   Parent = property(fget=GetParent)
 
 class wnTournament(wnNode):
@@ -723,7 +728,7 @@ class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSee
       teams = self.Teams.keys()      
       painter.DrawSeedTextControl(text,
                                   pos[0]+wnSettings.seed_offset, pos[1]-wnSettings.seed_height,
-                                  wnSettings.seed_length, wnSettings.seed_height,
+                                  wnSettings.seed_length-wnSettings.seed_offset, wnSettings.seed_height,
                                   teams, self.ID, self)
     
   def OnRightUp(self, event):

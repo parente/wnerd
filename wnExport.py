@@ -2,6 +2,8 @@
 The export module defines classes that support the export of tournament data to formats other than
 the wrestling nerd format. This includes plain text files or HTML documents.'''
 
+# TODO: support export to HTML or some other richer format
+
 class wnExportPlainText(object):
   '''Class that exports team scores and place winners to a plain text file.'''
   def __init__(self, filename, tournament):

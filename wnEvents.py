@@ -2,7 +2,7 @@
 The events module defines classes that help tournament objects receive events from the user.
 '''
 
-from wxPython.wx import *
+import wx
 import WrestlingNerd_wdr as GUI
 
 class wnEvent(object):
@@ -79,39 +79,60 @@ class wnMatchMenuReceivable:
   def OnDeleteAll(self, event):
     pass
   
-class wnEventManager(wxEvtHandler):
+class wnEventManager(wx.EvtHandler):
   def __init__(self, painter):
-    wxEvtHandler.__init__(self)
+    wx.EvtHandler.__init__(self)
     self.painter = painter
     self.handlers = {}
+    self.mouse_dispatch = {wx.EVT_LEFT_DOWN.evtType[0] : 'OnLeftDown',
+                           wx.EVT_RIGHT_DOWN.evtType[0] : 'OnRightDown',
+                           wx.EVT_LEFT_DCLICK.evtType[0] : 'OnLeftDoubleClick',
+                           wx.EVT_ENTER_WINDOW.evtType[0] : 'OnMouseEnter',
+                           wx.EVT_LEAVE_WINDOW.evtType[0] : 'OnMouseLeave',
+                           wx.EVT_LEFT_UP.evtType[0] : 'OnLeftUp',
+                           wx.EVT_RIGHT_UP.evtType[0] : 'OnRightUp'}
+
+    self.focus_dispatch = {wx.EVT_SET_FOCUS.evtType[0] : 'OnSetFocus',
+                           wx.EVT_KILL_FOCUS.evtType[0] : 'OnKillFocus'}
+                           
+    self.menu_dispatch = {GUI.ID_DELETE_SEED_MENU : 'OnDelete',
+                          GUI.ID_DELETE_MATCH_MENU : 'OnDelete',
+                          GUI.ID_DELETEALL_MATCH_MENU : 'OnDeleteAll', 
+                          GUI.ID_DELETEMOVEUP_SEED_MENU : 'OnDeleteMoveUp',
+                          GUI.ID_INSERTMOVEDOWN_SEED_MENU : 'OnInsertMoveDown',
+                          GUI.ID_SETLAST_SEED_MENU : 'OnSetLastSeed',
+                          GUI.ID_SWAPDOWN_SEED_MENU : 'OnSwapDown',
+                          GUI.ID_SWAPUP_SEED_MENU : 'OnSwapUp', 
+                          GUI.ID_MOVEIN_MATCH_MENU : 'OnMoveIn',
+                          GUI.ID_SWAPTO_SEED_MENU : 'OnSwapTo'}
 
   def RegisterMouseEvents(self, ctrl):
     '''Begin watching for events on the given control.'''
-    EVT_LEFT_DOWN(ctrl, self.OnMouseEvent)
-    EVT_RIGHT_DOWN(ctrl, self.OnMouseEvent)
-    EVT_LEFT_UP(ctrl, self.OnMouseEvent)
-    EVT_RIGHT_UP(ctrl, self.OnMouseEvent)
-    EVT_LEFT_DCLICK(ctrl, self.OnMouseEvent)
-    EVT_ENTER_WINDOW(ctrl, self.OnMouseEvent)
-    EVT_LEAVE_WINDOW(ctrl, self.OnMouseEvent)
+    wx.EVT_LEFT_DOWN(ctrl, self.OnMouseEvent)
+    wx.EVT_RIGHT_DOWN(ctrl, self.OnMouseEvent)
+    wx.EVT_LEFT_UP(ctrl, self.OnMouseEvent)
+    wx.EVT_RIGHT_UP(ctrl, self.OnMouseEvent)
+    wx.EVT_LEFT_DCLICK(ctrl, self.OnMouseEvent)
+    wx.EVT_ENTER_WINDOW(ctrl, self.OnMouseEvent)
+    wx.EVT_LEAVE_WINDOW(ctrl, self.OnMouseEvent)
     
   def RegisterFocusEvents(self, ctrl):
-    EVT_SET_FOCUS(ctrl, self.OnFocusEvent)
-    EVT_KILL_FOCUS(ctrl, self.OnFocusEvent)
+    wx.EVT_SET_FOCUS(ctrl, self.OnFocusEvent)
+    wx.EVT_KILL_FOCUS(ctrl, self.OnFocusEvent)
     
   def RegisterMatchMenuEvents(self, frame):
-    EVT_MENU(frame, GUI.ID_DELETE_MATCH_MENU, self.OnMenuEvent)
-    EVT_MENU(frame, GUI.ID_DELETEALL_MATCH_MENU, self.OnMenuEvent)
-    EVT_MENU(frame, GUI.ID_MOVEIN_MATCH_MENU, self.OnMenuEvent)
+    wx.EVT_MENU(frame, GUI.ID_DELETE_MATCH_MENU, self.OnMenuEvent)
+    wx.EVT_MENU(frame, GUI.ID_DELETEALL_MATCH_MENU, self.OnMenuEvent)
+    wx.EVT_MENU(frame, GUI.ID_MOVEIN_MATCH_MENU, self.OnMenuEvent)
     
   def RegisterSeedMenuEvents(self, frame):
-    EVT_MENU(frame, GUI.ID_DELETE_SEED_MENU, self.OnMenuEvent)
-    EVT_MENU(frame, GUI.ID_DELETEMOVEUP_SEED_MENU, self.OnMenuEvent)
-    EVT_MENU(frame, GUI.ID_INSERTMOVEDOWN_SEED_MENU, self.OnMenuEvent)
-    EVT_MENU(frame, GUI.ID_SWAPUP_SEED_MENU, self.OnMenuEvent)
-    EVT_MENU(frame, GUI.ID_SWAPDOWN_SEED_MENU, self.OnMenuEvent)
-    EVT_MENU(frame, GUI.ID_SWAPTO_SEED_MENU, self.OnMenuEvent)
-    EVT_MENU(frame, GUI.ID_SETLAST_SEED_MENU, self.OnMenuEvent)
+    wx.EVT_MENU(frame, GUI.ID_DELETE_SEED_MENU, self.OnMenuEvent)
+    wx.EVT_MENU(frame, GUI.ID_DELETEMOVEUP_SEED_MENU, self.OnMenuEvent)
+    wx.EVT_MENU(frame, GUI.ID_INSERTMOVEDOWN_SEED_MENU, self.OnMenuEvent)
+    wx.EVT_MENU(frame, GUI.ID_SWAPUP_SEED_MENU, self.OnMenuEvent)
+    wx.EVT_MENU(frame, GUI.ID_SWAPDOWN_SEED_MENU, self.OnMenuEvent)
+    wx.EVT_MENU(frame, GUI.ID_SWAPTO_SEED_MENU, self.OnMenuEvent)
+    wx.EVT_MENU(frame, GUI.ID_SETLAST_SEED_MENU, self.OnMenuEvent)
     
   def RegisterEventHandler(self, id, handler):
     '''Register an event handler to receive callbacks from user actions on the given control.'''    
@@ -120,47 +141,32 @@ class wnEventManager(wxEvtHandler):
     
   def OnMouseEvent(self, event):
     '''Dispatch to the proper object and function based on the event object and event type.'''
-    dispatch = {wxEVT_LEFT_DOWN : 'OnLeftDown', wxEVT_RIGHT_DOWN : 'OnRightDown',
-                wxEVT_LEFT_DCLICK : 'OnLeftDoubleClick', wxEVT_ENTER_WINDOW : 'OnMouseEnter',
-                wxEVT_LEAVE_WINDOW : 'OnMouseLeave', wxEVT_LEFT_UP : 'OnLeftUp',
-                wxEVT_RIGHT_UP : 'OnRightUp'}
-
     obj = event.GetEventObject()
     i = obj.GetId()
     handler = self.handlers.get(i)
     if handler is not None:
       e = wnEvent(Painter=self.painter, Position=event.GetPosition(), Control=obj)
-      func_name = dispatch[event.GetEventType()]
+      func_name = self.mouse_dispatch[event.GetEventType()]
       func = getattr(handler, func_name)
       func(e)
     event.Skip()
       
   def OnFocusEvent(self, event):
     '''Dispatch to the proper object and function based on the event object and event type.'''
-    dispatch = {wxEVT_SET_FOCUS : 'OnSetFocus', wxEVT_KILL_FOCUS : 'OnKillFocus'}
-    
     obj = event.GetEventObject()
     i = obj.GetId()
     handler = self.handlers.get(i)
     if handler is not None:
       e = wnEvent(Painter=self.painter, Control=obj)
-      func_name = dispatch[event.GetEventType()]
+      func_name = self.focus_dispatch[event.GetEventType()]
       func = getattr(handler, func_name)
       func(e)
     event.Skip()
     
   def OnMenuEvent(self, event):
     '''Dispatch to the proper object and function based on the event object id.'''
-    dispatch = {GUI.ID_DELETE_SEED_MENU : 'OnDelete', GUI.ID_DELETE_MATCH_MENU : 'OnDelete',
-                GUI.ID_DELETEALL_MATCH_MENU : 'OnDeleteAll', 
-                GUI.ID_DELETEMOVEUP_SEED_MENU : 'OnDeleteMoveUp',
-                GUI.ID_INSERTMOVEDOWN_SEED_MENU : 'OnInsertMoveDown',
-                GUI.ID_SETLAST_SEED_MENU : 'OnSetLastSeed', GUI.ID_SWAPDOWN_SEED_MENU : 'OnSwapDown',
-                GUI.ID_SWAPUP_SEED_MENU : 'OnSwapUp', GUI.ID_MOVEIN_MATCH_MENU : 'OnMoveIn',
-                GUI.ID_SWAPTO_SEED_MENU : 'OnSwapTo'}
-    
     obj = event.GetEventObject()
-    
+        
     # the object could be a menu or the control itself
     try:
       control = obj.Control
@@ -172,7 +178,7 @@ class wnEventManager(wxEvtHandler):
     handler = self.handlers.get(i)
     if handler is not None:
       e = wnEvent(Painter=self.painter, Control=control)
-      func_name = dispatch[event.GetId()]
+      func_name = self.menu_dispatch[event.GetId()]
       func = getattr(handler, func_name)
       func(e)
     event.Skip()

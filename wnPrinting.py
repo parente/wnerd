@@ -8,6 +8,8 @@ from wnRenderer import *
 import wnSettings
 import time, math
 
+# TODO: try to get headings to work on printouts that have scaling problem
+
 class wnPrintFactory(object):
   def PrintPreview(cls, parent, tournament, type, weights, rounds=None, bracket_size=None):
     # make the proper printout object
@@ -213,9 +215,9 @@ class wnScorePrintout(wxPrintout):
     i = 0
     while (i < wnSettings.print_scores_per_page and index < len(self.scores)):
       # get the team info      
-      p = str(i+1)
-      s = str(self.scores[i][0])
-      t = str(self.scores[i][1])
+      p = str(index+1)
+      s = str(self.scores[index][0])
+      t = str(self.scores[index][1])
       
       # print the team info
       text = p + ' '*(8-len(p)) + s + ' '*(8-len(s)) + t
@@ -267,12 +269,11 @@ class wnBracketPrintout(wxPrintout):
     
     return True
     
-    
-    # scale the drawing area to fit the page
-    #pw, ph = dc.GetSize()
-    #max_h = ph - wnSettings.print_margin_y*2
-    #max_w = pw - wnSettings.print_margin_x*2
-    #sx = float(pw)/float(max_w)
-    #sy = float(ph)/float(max_h)
-    #scale = min(sx, sy)
-    #dc.SetUserScale(scale, scale)
+# scale the drawing area to fit the page
+#pw, ph = dc.GetSize()
+#max_h = ph - wnSettings.print_margin_y*2
+#max_w = pw - wnSettings.print_margin_x*2
+#sx = float(pw)/float(max_w)
+#sy = float(ph)/float(max_h)
+#scale = min(sx, sy)
+#dc.SetUserScale(scale, scale)
