@@ -11,10 +11,16 @@ Data
 Printing
 - try to get headings to work on printouts that have scaling problem
 
+Installer
+- get wnerd icon working
+
 Refactoring
 - switch to renderer providing setting information instead of static values
 - move round CalcScores to a separate function/object
 - switch all calculations to a type of renderer (score, bouts, fast fall)
+
+Documentation
+- decide on format, location, layout
 
 Web page
 parente@shell.sourceforge.net:/home/groups/p/pr/projectname/htdocs

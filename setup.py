@@ -10,7 +10,7 @@ setup(name="WrestlingNerd",
       scripts=["WrestlingNerd.py"],
       data_files=[("WrestlingNerd_wdr",
                    ["WrestlingNerd_wdr/bout.png", "WrestlingNerd_wdr/LogoBitmaps_0.png", 
-                    "WrestlingNerd_wdr/nerd.ico", "WrestlingNerd_wdr/WrestlingNerd.exe.manifest"]),
+                    "WrestlingNerd_wdr/nerd16.ico"]),
                   ("",
                    ["LICENSE.txt"])]
 )
