@@ -1,0 +1,17 @@
+Todo
+
+UI
+- show current win value in data entry box
+- delete and move up in seeds
+- swapping wrestler seeds
+- insert and move down in seeds
+- support non-scoring wrestlers
+
+Data
+- scoring algorithm that includes proper Bye points
+- support non-scoring wrestlers
+
+Printing
+- learn how to print in wxPython
+- print brackets
+- print bouts
