@@ -16,28 +16,39 @@ class wnFrame(wxFrame):
   
     #set the menu bar
     mb = GUI.CreateMenuBar()
-    self.SetMenuBar(mb)  
+    self.SetMenuBar(mb)
     
     #correct the background color
     self.SetBackgroundColour(mb.GetBackgroundColour())
     
     #create a sizer to layout the window
-    sizer = wxFlexGridSizer(1,2,0,0)
+    sizer = wxFlexGridSizer(1,3,0,0)
     sizer.AddGrowableCol(0)
     sizer.AddGrowableRow(0)
   
-    #create an OpenGL canvas
+    #create a bracket canvas
     self.canvas = wnBracketCanvas(self)
     sizer.AddWindow(self.canvas, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM|wxTOP, 5)
+    
+    #draw a separator
+    line = wxStaticLine(self, -1, size=wxSize(1,-1), style=wxLI_VERTICAL)
+    sizer.AddWindow(line, 0, wxGROW, 5)
 
     #create a frame housing the layer components
     score_frame = GUI.ScoreFrame(self, False, False)
     sizer.AddSizer(score_frame, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM|wxTOP, 5)
     
     #add the sizer to the window
-    self.SetSizer(sizer)    
+    self.SetSizer(sizer)
     
+    #create class variables
     self.tournament = None
+    self.weights = wxPyTypeCast(self.FindWindowById(GUI.ID_WEIGHTS_CHOICE), 'wxChoice')
+    self.teams = wxPyTypeCast(self.FindWindowById(GUI.ID_TEAMS_LIST), 'wxListCtrl')
+    
+    #set up the list control
+    self.teams.InsertColumn(0, 'Team', width=-2)
+    self.teams.InsertColumn(1, 'Score', width=-2)
 
     #disable menu items
     mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(False)
@@ -48,6 +59,7 @@ class wnFrame(wxFrame):
     EVT_CLOSE(self, self.OnClose)
     EVT_MENU(self, GUI.ID_EXIT_MENU, self.OnClose)
     EVT_MENU(self, GUI.ID_NEW_MENU, self.OnNew)
+    EVT_CHOICE(self, GUI.ID_WEIGHTS_CHOICE, self.OnSelectWeight)
     
   def OnClose(self, event):
     '''Handle a window close event.'''
@@ -65,13 +77,45 @@ class wnFrame(wxFrame):
       weights = wiz.GetWeights()
       teams = wiz.GetTeams()
       layout = wiz.GetLayout()
-    
+        
+      #create the tournament
       self.tournament = factory.Create(layout, name, weights, teams)
+      
+      #add the weights to the weight drop-down
+      for w in weights:
+        self.weights.Append(w)
+      self.weights.SetSelection(0)
+      
+      #add the teams to the team list
+      self.RefreshScores()
+      
+      #draw the bracket
       self.canvas.Refresh()
+      
+  def OnSelectWeight(self, event):
+    '''Refresh the canvas to show the new weight.'''
+    self.canvas.Refresh()
     
   def GetTournament(self):
     return self.tournament
-
+  
+  def GetCurrentWeight(self):
+    if self.weights.GetSelection() == -1:
+      return None
+    else:
+      return self.weights.GetStringSelection()
+  def RefreshScores(self):
+    '''Refresh the team scores.'''
+    #scores = self.tournament.GetScores()
+    scores = {'Bristol Central' : 100.5, 'Bristol Eastern' : 0}
+    items = scores.items()
+    self.teams.DeleteAllItems()
+    for i in range(len(items)):
+      name, score = items[i]
+      print i, name, score
+      self.teams.InsertStringItem(i, name)
+      self.teams.SetStringItem(i, 1, str(score))
+    
 class wnBracketCanvas(wxScrolledWindow):
   def __init__(self, parent):
     wxScrolledWindow.__init__(self, parent, -1)
@@ -86,9 +130,10 @@ class wnBracketCanvas(wxScrolledWindow):
     dc.BeginDrawing()
 
     t = self.parent.GetTournament()
-    if t is not None:
+    w = self.parent.GetCurrentWeight()
+    if t is not None and w is not None:
       self.painter.SetDC(dc)
-      xmax, ymax = t.Paint(self.painter, '103')
+      xmax, ymax = t.Paint(self.painter, w)
       self.painter.SetDC(None)
       
       self.SetVirtualSize(wxSize(xmax, ymax))
@@ -102,7 +147,7 @@ class wnNewTournamentWizard(wxWizard):
   tournaments.'''
   
   def __init__(self, parent):
-    '''Initialize.
+    '''Initialize an instance of the wizard.
     
     Params:
     
@@ -138,7 +183,8 @@ class wnNewTournamentWizard(wxWizard):
     self.teams = wxPyTypeCast(self.FindWindowById(GUI.ID_TEAMS_COMBO), 'wxComboBox')
     self.weights = wxPyTypeCast(self.FindWindowById(GUI.ID_WEIGHTS_COMBO), 'wxComboBox')
     self.layouts = wxPyTypeCast(self.FindWindowById(GUI.ID_LAYOUT_LIST), 'wxListBox')
-    self.name = wxPyTypeCast(self.FindWindowById(GUI.ID_NAME_TEXT), 'wxTextCtrl')    
+    self.name = wxPyTypeCast(self.FindWindowById(GUI.ID_NAME_TEXT), 'wxTextCtrl')
+    self.description = wxPyTypeCast(self.FindWindowById(GUI.ID_LAYOUT_TEXT), 'wxTextCtrl')
         
     #set event handlers
     EVT_BUTTON(self, GUI.ID_ADD_TEAM, self.OnAddTeam)
@@ -147,6 +193,12 @@ class wnNewTournamentWizard(wxWizard):
     EVT_BUTTON(self, GUI.ID_REMOVE_WEIGHT, self.OnRemoveWeight)
     EVT_BUTTON(self, GUI.ID_ADD_STANDARD_WEIGHTS, self.OnAddStandardWeights)    
     EVT_WIZARD_PAGE_CHANGED(self, self.GetId(), self.OnPageChanged)
+    EVT_LISTBOX(self, GUI.ID_LAYOUT_LIST, self.OnSelectLayout)
+ 
+  def OnSelectLayout(self, event):
+    '''Show the description of the selected layout.'''
+    c = self.layouts.GetClientData(event.GetInt())
+    self.description.SetValue(c.Description)
     
   def OnPageChanged(self, event):
     '''Change the accelerator table appropriately.'''
@@ -225,6 +277,12 @@ class wnNewTournamentWizard(wxWizard):
   def GetLayout(self):
     i = self.layouts.GetSelection()
     return self.layouts.GetClientData(i)
+
+class wnScoreWindow(wxFrame):
+  '''Class the creates a standalone frame for displaying team scores. Teams scroll past at a regular
+  interval. Useful for multi-monitor setups with scores on public display.'''
+  def __init__(self, parent):
+    pass
     
 if __name__ == '__main__':
   app = wxPySimpleApp(0)

@@ -13,11 +13,10 @@ class wnPainter(wnRenderer):
     
   def DrawLine(self, x1, y1, x2, y2):
     if self.dc is None: return
-    
     self.dc.DrawLine(x1, y1, x2, y2)
   
-  def CreateTextBox(self, pt, handler):
+  def DrawText(self, pt, handler):
     wxStaticText(self.canvas, -1, 'Entry', point=wxPoint(pt[0], pt[1]), size=wxSize(100,20))
-  
+      
 class wnPrinter(wnRenderer):
   pass
