@@ -7,8 +7,8 @@
 ;Configuration
 
   ;General
-  Name "Wrestling Nerd 3.1"
-  OutFile "WrestlingNerd-3.1-win32.exe"
+  Name "Wrestling Nerd 3.1.1"
+  OutFile "WrestlingNerd-3.1.1-win32.exe"
   Icon "WrestlingNerd_wdr\nerd.ico"
 
   ;Folder selection page
