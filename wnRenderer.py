@@ -107,7 +107,7 @@ class wnPainter(wnRenderer):
   def DrawTeamScores(self, items):
     self.team_scores.DeleteAllItems()
     for i in range(len(items)):
-      name, score = items[i]
+      score, name = items[i]
       self.team_scores.InsertStringItem(i, name)
       self.team_scores.SetStringItem(i, 1, str(score))
       

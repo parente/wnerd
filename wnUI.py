@@ -154,7 +154,6 @@ class wnFrame(wxFrame):
     '''Refresh the team scores.'''
     print 'refreshing scores'
     self.tournament.CalcScores(self.painter, self.GetCurrentWeight())
-    #scores = {'Bristol Central' : 100.5, 'Bristol Eastern' : 0}
       
   def ResetAfterNew(self):
     '''Reset the GUI after a tournament has been created or opened.'''

@@ -71,10 +71,6 @@ class wnTournament(wnNode):
     except:
       return
     
-    # reset the team score for this weight class
-    #for t in self.teams.keys():
-    #  self.teams[t].ResetWeightScore(weight)
-    
     # tell the current weight class to compute its scores
     scores = wc.CalcScores()
     
@@ -82,7 +78,11 @@ class wnTournament(wnNode):
     score_table = []
     for t in self.teams.keys():
       self.teams[t].SetWeightScore(weight, scores.get(t) or 0.0)
-      score_table.append((t, self.teams[t].Score))
+      score_table.append((self.teams[t].Score, t))
+      
+    # sort the scores ascending to decending
+    score_table.sort()
+    score_table.reverse()
       
     painter.DrawTeamScores(score_table)
 
