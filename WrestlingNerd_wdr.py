@@ -485,10 +485,10 @@ def CreateAboutDialog( parent, call_fit = True, set_sizer = True ):
 
     item2 = wxStaticText( parent, ID_TEXT, 
         "Wrestling Nerd 3.0\n"
-        "Written by Peter Parente\n"
+        "Written by Peter Parente (parente@cs.unc.edu)\n"
         "\n"
-        "Dedicated to my father, my mother, and my brother, who all know the pain and glory of wrestling.\n"
-        "Thanks to Jakob Fischer for the face used in the Wrestling Nerd logo.\n"
+        "Dedicated to my father, my mother, and my brother, whom all know the glory and pain of wrestling.\n"
+        "Thanks to Chris Brown (cbrown@eon.net.au) for the face used in the Wrestling Nerd logo.\n"
         "\n"
         "Copyright 2003 Peter Parente under the MIT License\n"
         "See the included LICENSE.txt file for restrictions on the use and distribution of this software.",
