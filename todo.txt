@@ -1,23 +1,20 @@
 Todo
-
 UI
-- scrolling score window
+- make score window scrolling
 
 Data
 - test scoring algorithm in more than one weight class
 - export data to text file
 - export data to HTML page with bracket images
 - add/remove team from tournament
-- change wrestler
-- auto move in
+- change wrestler name
 
 Printing
-- print place winners
-- fix wrong scale for scores
+- fix wrong scale for scores and place winners
 
 Refactoring
 - switch to renderer providing setting information instead of static values
-- move round CalcScores to a separate function/object?
+- move round CalcScores to a separate function/object
 - switch all calculations to a type of renderer (score, bouts, fast fall)
 
 Web page

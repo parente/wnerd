@@ -5,6 +5,7 @@ objects are used to do all rendering operations.
 from wxPython.wx import *
 from wnEvents import *
 from wnControls import *
+from wnTempData import wnMatchData
 import wnSettings
 
 class wnRenderer(object):
@@ -40,6 +41,9 @@ class wnPainter(wnRenderer):
     self.control_cache = {}
     del self.event_man
     self.event_man = wnEventManager(self)
+    
+  def GetControl(self, id):
+    return self.controls.get(id)
       
   def SetDC(self, dc):
     if dc is not None:
@@ -157,7 +161,7 @@ class wnPainter(wnRenderer):
       result_value = dlg.GetResultValue()
       is_scoring = dlg.GetIsScoring()
       dlg.Destroy()
-      return winner, loser, result_type, result_value, is_scoring
+      return wnMatchData(winner, loser, result_type, result_value, is_scoring)
     else:
       dlg.Destroy()
       return None

@@ -69,7 +69,7 @@ class wnBuilder(object):
 
 class wnBCInvitationalConfig:
   Name = 'Bristol Central Invitational'
-  Description = 'The bracket format used in the Bristol Central Invitational tournaments. The outbracket has 32 seed slots, and double-elimination begins in the quarter finals.'
+  Description = 'The bracket format used in the Bristol Central Invitational tournaments. The outbracket has 32 seed slots, and double-elimination begins in the quarter finals. There are six places.'
   Seeds = [1, 32, 17, 16, 9, 24, 25, 8, 5, 28, 21, 12, 13, 20, 29, 4,
            3, 30, 19, 14, 11, 22, 27, 6, 7, 26, 23, 10, 15, 18, 31, 2]
   Rounds = [wnRoundSetup('Rat-Tails', wnPoints(0,0),
@@ -99,7 +99,7 @@ class wnBCInvitationalConfig:
 
 class wnCTChampionshipConfig:
   Name = 'Connecticut State Championships'
-  Description = 'The bracket format used in the Connecticut State Division Championship tournaments. The outbracket has 32 seed slots, and double-elimination begins in the round of sixteen.'
+  Description = 'The bracket format used in the Connecticut State Division Championship tournaments. The outbracket has 32 seed slots, and double-elimination begins in the round of sixteen. There are six places.'
   Seeds = [1, 32, 17, 16, 9, 24, 25, 8, 5, 28, 21, 12, 13, 20, 29, 4,
            3, 30, 19, 14, 11, 22, 27, 6, 7, 26, 23, 10, 15, 18, 31, 2]
   Rounds = [wnRoundSetup('Rat-Tails Champion', wnPoints(0,0),
@@ -134,7 +134,7 @@ class wnCTChampionshipConfig:
   
 class wnCTOpenConfig:
   Name = 'Connecticut State Open'  
-  Description = 'The bracket format used in the Connecticut State Open tournament. The outbracket has 16 seed slots, and double-elimination begins immediately.'
+  Description = 'The bracket format used in the Connecticut State Open tournament. The outbracket has 16 seed slots, and double-elimination begins immediately. There are six places.'
   Seeds = [1, 16, 9, 8, 5, 12, 13, 4, 3, 14, 11, 6, 7, 10, 15, 2]
   Rounds = [wnRoundSetup('Sixteen Champion', wnPoints(2,0),
                          [1, 16, 9, 8, 5, 12, 13, 4, 3, 14, 11, 6, 7, 10, 15, 2],

@@ -3,7 +3,8 @@ The temp data module defines classes that are instantiated temporarily for calcu
 fall and bouts.
 '''
 
-from wnScoreData import wnResultPin
+from wnScoreData import *
+from UserList import UserList
 
 class wnBout(object):
   '''The bout class defines a match between two wrestlers. An instance of this class is only useful
@@ -19,10 +20,10 @@ class wnBout(object):
 class wnFastFall(object):
   '''The fast fall class hold info about a wrestler's fast fall results. It also defines methods
   that make sorting easier.'''
-  def __init__(self, name, team, weight, pins, pin_time):
-    self.Name = name
-    self.Weight = weight
-    self.Team = team
+  def __init__(self, wrestler, pins, pin_time):
+    self.Name = wrestler.Name
+    self.Weight = wrestler.Weight
+    self.Team = wrestler.Team.Name
     self.Pins = pins
     self.TimeValue = pin_time
     self.TimeText = wnResultPin(self.TimeValue).TextValue
@@ -43,3 +44,30 @@ class wnFastFall(object):
         return 1
       else:
         return 0
+      
+class wnMatchData(object):
+  '''The match data class holds data about a match entered by a user that is used to
+  fill in a match entry.'''
+  def __init__(self, winner, loser, result_type, result_value, is_scoring):
+    self.Winner = winner
+    self.Loser = loser
+    self.Result = wnResultFactory.Create(result_type, result_value)
+    self.IsScoring = is_scoring
+      
+class wnPlaceWinner(object):
+  '''The place winner class holds information about wrestlers that are place winners and the results
+  of their last matches.'''
+  def __init__(self, wrestler, result):
+    if wrestler is None:
+      self.Name = 'None'
+      self.Team = 'None'
+    else:
+      self.Name = wrestler.Name
+      self.Team = wrestler.Team.Name
+    self.Result = str(result)
+    
+class wnPlaceWinners(UserList):
+  '''A collection of place winners by weight.'''
+  def __init__(self, weight):
+    UserList.__init__(self)
+    self.Weight = weight

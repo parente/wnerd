@@ -67,7 +67,13 @@ class wnSeedMenuReceivable:
 class wnMatchMenuReceivable:
   '''Defines an interface that must be implemented for an object to receive menu events from the
   match popup menu.'''
+  def OnMoveIn(self, event):
+    pass
+
   def OnDelete(self, event):
+    pass
+  
+  def OnDeleteAll(self, event):
     pass
   
 class wnEventManager(wxEvtHandler):
@@ -92,6 +98,8 @@ class wnEventManager(wxEvtHandler):
     
   def RegisterMatchMenuEvents(self, frame):
     EVT_MENU(frame, GUI.ID_DELETE_MATCH_MENU, self.OnMenuEvent)
+    EVT_MENU(frame, GUI.ID_DELETEALL_MATCH_MENU, self.OnMenuEvent)
+    EVT_MENU(frame, GUI.ID_MOVEIN_MATCH_MENU, self.OnMenuEvent)
     
   def RegisterSeedMenuEvents(self, frame):
     EVT_MENU(frame, GUI.ID_DELETE_SEED_MENU, self.OnMenuEvent)
@@ -140,10 +148,11 @@ class wnEventManager(wxEvtHandler):
   def OnMenuEvent(self, event):
     '''Dispatch to the proper object and function based on the event object id.'''
     dispatch = {GUI.ID_DELETE_SEED_MENU : 'OnDelete', GUI.ID_DELETE_MATCH_MENU : 'OnDelete',
+                GUI.ID_DELETEALL_MATCH_MENU : 'OnDeleteAll', 
                 GUI.ID_DELETEMOVEUP_SEED_MENU : 'OnDeleteMoveUp',
                 GUI.ID_INSERTMOVEDOWN_SEED_MENU : 'OnInsertMoveDown',
                 GUI.ID_SETLAST_SEED_MENU : 'OnSetLastSeed', GUI.ID_SWAPDOWN_SEED_MENU : 'OnSwapDown',
-                GUI.ID_SWAPUP_SEED_MENU : 'OnSwapUp'}
+                GUI.ID_SWAPUP_SEED_MENU : 'OnSwapUp', GUI.ID_MOVEIN_MATCH_MENU : 'OnMoveIn'}
     
     obj = event.GetEventObject()
     

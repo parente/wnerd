@@ -109,6 +109,20 @@ class wnTournament(wnNode):
       
     return bouts
   
+  def GetPlaceWinners(self, weights):
+    '''Return a list of all the place winners for the given weights.'''
+    places = []
+    
+    # ask each weight class to compute its placewinners
+    for w in weights:
+      try:
+        wc = self.weight_classes[w]
+      except:
+        continue
+      places.append(wc.GetPlaceWinners())
+      
+    return places
+    
   def CountBouts(self):
     '''Get a count of the total number of bouts.'''
     i = 0
@@ -218,6 +232,14 @@ class wnWeightClass(wnNode):
       bouts += round.GetBouts()
   
     return bouts
+  
+  def GetPlaceWinners(self):
+    '''Get all the place winners by seeking rounds that have no next win round.'''
+    places = wnPlaceWinners(self.name)
+    for r in self.order:
+      round = self.rounds[r]
+      places += round.GetPlaceWinners()
+    return places
   
   def CountBouts(self):
     '''Get a count of the total number of bouts.'''
@@ -379,14 +401,67 @@ class wnRound(wnNode):
         
     return bouts
 
+  def GetPlaceWinners(self):
+    '''Return a list of place winners if this round has no pointer to another win round.'''
+    if self.next_win is None:
+      # the sole entry must be the primary winner
+      w1 = wnPlaceWinner(self.entries[0].Wrestler, self.entries[0].Result)
+
+      # go back a round an get the loser, assume it's none to start
+      w2 = wnPlaceWinner(None, None)
+      for e in self.entries[0].Previous:
+        if e.Wrestler is not None and e.Wrestler.Name != w1.Name:
+          w2 = wnPlaceWinner(e.Wrestler, None)
+          
+      return [w1, w2]
+    else:
+      return []
+
   def CountBouts(self):
     '''Get a count of the total number of bouts.'''
     i = 0
     for e in self.entries:
       i += e.CountBouts()
      
-    return i          
-          
+    return i
+  
+  def OnMoveIn(self, event):
+    '''Go through all the entries in this round and see if any of the wrestlers can be moved in
+    automatically with byes or no matches.'''
+    results = []
+    count = 0
+    
+    # go through all the entries and see if any can be set automatically
+    for e in self.entries:
+      r = e.AutoMoveIn()
+      if r is not None: count += 1
+      results.append(r)
+      
+    # determine if the results should be none or byes
+    if count != len(self.entries):
+      result_obj = wnResultFactory.Create('Bye', None)
+    else:
+      result_obj = None
+      
+    # go through an set all the results
+    for i in range(len(results)):
+      # tell the corresponding entry to store this result, if there is a result
+      md = results[i]
+      try:
+        md.Result = result_obj
+        self.entries[i].StoreResult(md, event)
+      except:
+        pass
+      
+    # refresh scores
+    event.Control.RefreshScores()      
+      
+  def OnDeleteAll(self, event):
+    '''Delete all of the results in this round.'''
+    for e in self.entries:
+      e.DeleteResult(event)
+    event.Control.RefreshScores()
+      
   NumEntries = property(fget=GetNumberOfEntries)
   Entries = property(fget=GetEntries)
   RoundPoints = property(fget=GetRoundPoints)
@@ -404,6 +479,9 @@ class wnEntry(wnNode):
     
   def GetResult(self):
     return self.result
+  
+  def SetResult(self, result):
+    self.result = result
     
   def GetID(self):
     '''Return the ID of this entry. This ID must be exactly the same as the ID of similar entries
@@ -483,7 +561,7 @@ class wnEntry(wnNode):
   Teams = property(fget=GetTeams)
   Weight = property(fget=GetWeight)
   Wrestler = property(fget=GetWrestler, fset=SetWrestler)
-  Result = property(fget=GetResult)
+  Result = property(fget=GetResult, fset=SetResult)
   
 class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
   '''The match entry class hold individual match results.'''
@@ -533,43 +611,79 @@ class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnMatchMenuReceivable):
     opponents = [entry.Wrestler for entry in self.previous if entry.Wrestler is not None]
     result = event.Painter.ShowMatchDialog(opponents, self.result, self.is_scoring)
     
-    # remove any old result first
-    if self.wrestler is not None:
-      self.wrestler.DeleteResult(self.ID)
-    
-    # store the result here
+    # store the result
     if result is not None:
-      winner, loser, result_type, result_value, self.is_scoring = result
-    
-      #store the information in the entry
-      self.result = wnResultFactory.Create(result_type, result_value)
-      self.wrestler = winner
-      
-      #store the result for the wrestler
-      self.wrestler.StoreResult(self.ID, self.result)
-      
-      #show the new winner name
-      event.Control.SetLabel(self.wrestler.Name)
-      
-      #move the loser if he exists and isn't eliminated
-      if loser is not None:
-        for e in self.previous:
-          if e.Wrestler == loser and e.NextLose is not None:
-            e.NextLose.Wrestler = loser
-            e.NextLose.Paint(event.Painter, refresh_labels=True)
-            
+      self.StoreResult(result, event)
+      event.Control.RefreshScores()
+             
   def OnRightUp(self, event):
     '''Show the popup menu.'''
     event.Control.ShowMenu(event.Position)
     
   def OnDelete(self, event):
     '''Delete the wrestler in this entry.'''
-    self.wrestler.DeleteResult(self.ID)
-    self.wrestler = None
-    self.result = None
-    event.Control.SetLabel('')
+    self.DeleteResult(event)
     event.Control.HidePopup()
     event.Control.RefreshScores()
+    
+  def OnDeleteAll(self, event):
+    '''Delete all the events in the round this entry is in.'''
+    self.Parent.OnDeleteAll(event)
+    
+  def OnMoveIn(self, event):
+    '''See if wrestlers can be moved into this round automatically. Just call the function in the
+    parent round.'''
+    self.Parent.OnMoveIn(event)
+    
+  def AutoMoveIn(self):
+    '''See if a wrestler can be moved into this entry automatically.'''
+    entries = []
+    for e in self.previous:
+      if e.Wrestler is not None:
+        entries.append(e)
+    
+    # see if there is only one wrestler
+    if len(entries) == 1:
+      return wnMatchData(entries[0].Wrestler, None, None, None,
+                  entries[0].Wrestler.IsScoring)
+    # or if there are no wrestlers
+    elif len(entries) == 0:
+      return True
+    # or if there are two, non-scoring wrestlers
+    elif (not entries[0].Wrestler.IsScoring and not entries[1].Wrestler.IsScoring):
+      return True
+    else:
+      return None
+    
+  def StoreResult(self, result, event):
+    '''Store a result in this entry.'''
+    # remove any old result first
+    if self.wrestler is not None:
+      self.wrestler.DeleteResult(self.ID)
+    
+    #store the information in the entry
+    self.result = result.Result
+    self.wrestler = result.Winner
+    
+    #store the result for the wrestler
+    self.wrestler.StoreResult(self.ID, self.result)
+    
+    #show the new winner name
+    event.Painter.GetControl(self.ID).SetLabel(self.wrestler.Name)
+    
+    #move the loser if he exists and isn't eliminated
+    if result.Loser is not None:
+      for e in self.previous:
+        if e.Wrestler == result.Loser and e.NextLose is not None:
+          e.NextLose.Wrestler = result.Loser
+          e.NextLose.Paint(event.Painter, refresh_labels=True)
+          
+  def DeleteResult(self, event):
+    if self.result is not None:
+      self.wrestler.DeleteResult(self.ID)
+    self.wrestler = None
+    self.result = None
+    event.Painter.GetControl(self.ID).SetLabel('')
         
 class wnSeedEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable, wnSeedMenuReceivable):
   '''The seed entry class holds information about seeded wrestlers.'''

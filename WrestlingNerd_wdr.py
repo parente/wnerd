@@ -11,6 +11,8 @@ from wxPython.grid import *
 
 # Custom source
 ID_DELETE_MATCH_MENU = wxNewId()
+ID_DELETEALL_MATCH_MENU = wxNewId()
+ID_MOVEIN_MATCH_MENU = wxNewId()
 
 ID_DELETE_SEED_MENU = wxNewId()
 ID_DELETEMOVEUP_SEED_MENU = wxNewId()
@@ -19,12 +21,37 @@ ID_SETLAST_SEED_MENU = wxNewId()
 ID_SWAPUP_SEED_MENU = wxNewId()
 ID_SWAPDOWN_SEED_MENU = wxNewId()
 
+start_caption = '''Welcome to the new tournament wizard.
+
+Use the Next and Previous buttons below to move through the steps necessary to create a new tournament. Directions are given at the start of each step.
+
+Press the Next button to begin.
+'''
+name_caption = '''First, enter a name for the tournament.
+  
+Press the Next button when you are done.
+'''
+teams_caption = '''Enter the names of all the teams in the tournament in the box below. Type the name of the team and then press the Add button. Remove an incorrect team by selecting it and pressing Remove. Pressing Ctrl-Enter after typing a team name is a shortcut for clicking the Add button.
+
+Press the Next button when you are done.  
+'''
+
+weights_caption = '''Enter the weight classes in the tournament. Type the name and use the Add and Remove buttons as you did to enter the teams. Pressing the Add Standard buttons will enter all of the national standard weight classes for you.
+  
+Press the Next button when you are done.
+'''
+layout_caption = '''Select the layout for this tournament. Choose a layout name from the box on the left. A description of the layout appears to the right.
+  
+Press the Next button when you are done.
+'''
+finished_caption = '''You have finished creating a new tournament. Press the Previous button to go back and make changes. When you are satisfied, press the Finish button to complete this wizard.'''
+
 # Window functions
 
 ID_WEIGHTS_CHOICE = 10000
 ID_TEAMS_LIST = 10001
 
-def CreateScoreFrame( parent, call_fit = True, set_sizer = True ):
+def CreateSidePanel( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
     
     item2 = wxStaticBox( parent, -1, "Weight" )
@@ -35,11 +62,11 @@ def CreateScoreFrame( parent, call_fit = True, set_sizer = True ):
 
     item0.AddSizer( item1, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
-    item5 = wxStaticBox( parent, -1, "Teams" )
+    item5 = wxStaticBox( parent, -1, "Scores" )
     item4 = wxStaticBoxSizer( item5, wxVERTICAL )
     
     item6 = wxListCtrl( parent, ID_TEAMS_LIST, wxDefaultPosition, wxSize(180,300), wxLC_REPORT|wxSUNKEN_BORDER )
-    item4.AddWindow( item6, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
+    item4.AddWindow( item6, 0, wxGROW|wxALL, 5 )
 
     item0.AddSizer( item4, 0, wxALIGN_CENTER|wxALL, 5 )
 
@@ -63,7 +90,7 @@ def WizardStartPanel( parent, call_fit = True, set_sizer = True ):
     item1.SetFont( wxFont( 16, wxSWISS, wxNORMAL, wxBOLD ) )
     item0.AddWindow( item1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
-    item2 = wxStaticText( parent, ID_START_CAPTION, "", wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE )
+    item2 = wxStaticText( parent, ID_START_CAPTION, "", wxDefaultPosition, wxSize(-1,80), wxST_NO_AUTORESIZE )
     item0.AddWindow( item2, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     item3 = wxStaticLine( parent, ID_LINE, wxDefaultPosition, wxSize(20,-1), wxLI_HORIZONTAL )
@@ -121,7 +148,7 @@ def WizardTeamsPanel( parent, call_fit = True, set_sizer = True ):
     item1.SetFont( wxFont( 16, wxSWISS, wxNORMAL, wxBOLD ) )
     item0.AddWindow( item1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
-    item2 = wxStaticText( parent, ID_TEAMS_CAPTION, "", wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE )
+    item2 = wxStaticText( parent, ID_TEAMS_CAPTION, "", wxDefaultPosition, wxSize(-1,70), wxST_NO_AUTORESIZE )
     item0.AddWindow( item2, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     item3 = wxStaticLine( parent, ID_LINE, wxDefaultPosition, wxSize(20,-1), wxLI_HORIZONTAL )
@@ -135,10 +162,10 @@ def WizardTeamsPanel( parent, call_fit = True, set_sizer = True ):
     item6 = wxBoxSizer( wxVERTICAL )
     
     item7 = wxButton( parent, ID_ADD_TEAM, "Add", wxDefaultPosition, wxDefaultSize, 0 )
-    item6.AddWindow( item7, 0, wxALIGN_CENTER|wxALL, 5 )
+    item6.AddWindow( item7, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     item8 = wxButton( parent, ID_REMOVE_TEAM, "Remove", wxDefaultPosition, wxDefaultSize, 0 )
-    item6.AddWindow( item8, 0, wxALIGN_CENTER|wxALL, 5 )
+    item6.AddWindow( item8, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     item4.AddSizer( item6, 0, wxGROW|wxALIGN_CENTER_HORIZONTAL|wxALL, 5 )
 
@@ -166,7 +193,7 @@ def WizardWeightsPanel( parent, call_fit = True, set_sizer = True ):
     item1.SetFont( wxFont( 16, wxSWISS, wxNORMAL, wxBOLD ) )
     item0.AddWindow( item1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
-    item2 = wxStaticText( parent, ID_WEIGHTS_CAPTION, "", wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE )
+    item2 = wxStaticText( parent, ID_WEIGHTS_CAPTION, "", wxDefaultPosition, wxSize(-1,70), wxST_NO_AUTORESIZE )
     item0.AddWindow( item2, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     item3 = wxStaticLine( parent, ID_LINE, wxDefaultPosition, wxSize(20,-1), wxLI_HORIZONTAL )
@@ -212,7 +239,7 @@ def WizardLayoutPanel( parent, call_fit = True, set_sizer = True ):
     item1.SetFont( wxFont( 16, wxSWISS, wxNORMAL, wxBOLD ) )
     item0.AddWindow( item1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
-    item2 = wxStaticText( parent, ID_LAYOUT_CAPTION, "", wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE )
+    item2 = wxStaticText( parent, ID_LAYOUT_CAPTION, "", wxDefaultPosition, wxSize(-1,60), wxST_NO_AUTORESIZE )
     item0.AddWindow( item2, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     item3 = wxStaticLine( parent, ID_LINE, wxDefaultPosition, wxSize(20,-1), wxLI_HORIZONTAL )
@@ -256,7 +283,7 @@ def WizardFinishedPanel( parent, call_fit = True, set_sizer = True ):
     item1.SetFont( wxFont( 16, wxSWISS, wxNORMAL, wxBOLD ) )
     item0.AddWindow( item1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
-    item2 = wxStaticText( parent, ID_FINISHED_CAPTION, "", wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE )
+    item2 = wxStaticText( parent, ID_FINISHED_CAPTION, "", wxDefaultPosition, wxSize(-1,40), wxST_NO_AUTORESIZE )
     item0.AddWindow( item2, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     item3 = wxStaticLine( parent, ID_LINE, wxDefaultPosition, wxSize(20,-1), wxLI_HORIZONTAL )
@@ -331,7 +358,7 @@ def CreatePrintDialog( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
     
     item1 = wxRadioBox( parent, ID_TYPE_RADIOBOX, "Document", wxDefaultPosition, wxDefaultSize, 
-        ["Brackets","Bouts","Places","Scores"] , 1, wxRA_SPECIFY_ROWS )
+        ["&Brackets","B&outs","&Scores","&Places"] , 1, wxRA_SPECIFY_ROWS )
     item0.AddWindow( item1, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
 
     item2 = wxBoxSizer( wxHORIZONTAL )
@@ -460,7 +487,8 @@ def CreateAboutDialog( parent, call_fit = True, set_sizer = True ):
         "Wrestling Nerd 3.0\n"
         "Written by Peter Parente\n"
         "\n"
-        "Thanks to Jakob Fischer for the font used in the Wrestling Nerd logo.\n"
+        "Dedicated to my father, my mother, and my brother, who all know the pain and glory of wrestling.\n"
+        "Thanks to Jakob Fischer for the face used in the Wrestling Nerd logo.\n"
         "\n"
         "Copyright 2003 Peter Parente under the MIT License\n"
         "See the included LICENSE.txt file for restrictions on the use and distribution of this software.",
@@ -477,22 +505,42 @@ def CreateAboutDialog( parent, call_fit = True, set_sizer = True ):
     
     return item0
 
+ID_SCORES_LIST = 10032
+
+def CreateScoreFrame( parent, call_fit = True, set_sizer = True ):
+    item0 = wxFlexGridSizer( 0, 2, 0, 0 )
+    item0.AddGrowableCol( 0 )
+    item0.AddGrowableRow( 0 )
+    
+    item1 = wxListCtrl( parent, ID_SCORES_LIST, wxDefaultPosition, wxSize(160,120), wxLC_REPORT|wxSUNKEN_BORDER )
+    item1.SetFont( wxFont( 16, wxSWISS, wxNORMAL, wxNORMAL ) )
+    item0.AddWindow( item1, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5 )
+
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
+        parent.SetSizer( item0 )
+        if call_fit == True:
+            item0.Fit( parent )
+            item0.SetSizeHints( parent )
+    
+    return item0
+
 # Menubar functions
 
-ID_NEW_MENU = 10032
-ID_OPEN_MENU = 10033
-ID_MENU = 10034
-ID_SAVE_MENU = 10035
-ID_SAVEAS_MENU = 10036
-ID_PRINT_MENU = 10037
-ID_EXIT_MENU = 10038
-ID_FILE_MENU = 10039
-ID_FASTFALL_MENU = 10040
-ID_NUMBOUTS_MENU = 10041
-ID_SCOREWIN_MENU = 10042
-ID_QUERY_MENU = 10043
-ID_ABOUT_MENU = 10044
-ID_HELP_MENU = 10045
+ID_NEW_MENU = 10033
+ID_OPEN_MENU = 10034
+ID_MENU = 10035
+ID_SAVE_MENU = 10036
+ID_SAVEAS_MENU = 10037
+ID_PRINT_MENU = 10038
+ID_EXIT_MENU = 10039
+ID_FILE_MENU = 10040
+ID_FASTFALL_MENU = 10041
+ID_NUMBOUTS_MENU = 10042
+ID_SCOREWIN_MENU = 10043
+ID_QUERY_MENU = 10044
+ID_ABOUT_MENU = 10045
+ID_HELP_MENU = 10046
 
 def CreateMenuBar():
     item0 = wxMenuBar()
@@ -526,7 +574,7 @@ def CreateMenuBar():
 
 # Bitmap functions
 
-ID_LOGO = 10046
+ID_LOGO = 10047
 
 def LogoBitmaps( index ):
     if (index == 0) or (index == ID_LOGO):

@@ -134,7 +134,7 @@ class wnWrestler(object):
     if total[0] == 0:
       return None
     else:
-      return wnFastFall(self.name, self.team.Name, self.weight, total[0], total[1])
+      return wnFastFall(self, total[0], total[1])
     
   def GetFormattedName(self):
     n_fill = wnSettings.max_name_length - len(self.name)
@@ -153,7 +153,11 @@ class wnWrestler(object):
   def GetWeight(self):
     return self.weight
   
+  def GetIsScoring(self):
+    return (self.name.find(wnSettings.no_scoring_prefix) != 0)
+  
   Weight = property(fget=GetWeight)
   Team = property(fget=GetTeam)  
   Name = property(fget=GetName, fset=SetName)
   FormattedName = property(fget=GetFormattedName)
+  IsScoring = property(fget=GetIsScoring)

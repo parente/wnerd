@@ -38,8 +38,8 @@ class wnFrame(wxFrame):
     
     #create a frame housing the layer components
     panel = wxPanel(self, -1)
-    score_frame = GUI.CreateScoreFrame(panel)
-    sizer.AddSizer(panel, 0, 5)
+    score_frame = GUI.CreateSidePanel(panel)
+    sizer.AddWindow(panel, 0, wxGROW, 5)
     
     #add the sizer to the window
     self.SetSizer(sizer)
@@ -69,6 +69,7 @@ class wnFrame(wxFrame):
     EVT_MENU(self, GUI.ID_PRINT_MENU, self.OnPrint)
     EVT_MENU(self, GUI.ID_NUMBOUTS_MENU, self.OnCountBouts)
     EVT_MENU(self, GUI.ID_FASTFALL_MENU, self.OnFastFall)
+    EVT_MENU(self, GUI.ID_SCOREWIN_MENU, self.OnScoreWindow)
     EVT_MENU(self, GUI.ID_ABOUT_MENU, self.OnAbout)
     EVT_CHOICE(self, GUI.ID_WEIGHTS_CHOICE, self.OnSelectWeight)
     EVT_LIST_ITEM_ACTIVATED(self, GUI.ID_TEAMS_LIST, self.OnSelectTeam)
@@ -157,7 +158,7 @@ class wnFrame(wxFrame):
     else:
       msg = 'There are ' + str(i) + ' bouts in the tournament.'
     
-    dlg = wxMessageDialog(self, msg, 'Bout count')
+    dlg = wxMessageDialog(self, msg, 'Bout count', style=wxOK)
     dlg.ShowModal()
     dlg.Destroy()
     
@@ -167,6 +168,11 @@ class wnFrame(wxFrame):
     dlg.CentreOnScreen()
     dlg.ShowModal()
     dlg.Destroy()
+    
+  def OnScoreWindow(self, event):
+    '''Show the score window.'''
+    score_win = wnScoreWindow(self)
+    score_win.Show(True)
     
   def OnAbout(self, event):
     '''Show the about window.'''
@@ -242,6 +248,7 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_SAVE_MENU).Enable(False)
       mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(False)
       mb.FindItemById(GUI.ID_PRINT_MENU).Enable(False)
+      mb.FindItemById(GUI.ID_SCOREWIN_MENU).Enable(False)
     
     elif action == 'on new':
       mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(True)
@@ -249,6 +256,7 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_SAVE_MENU).Enable(True)      
       mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(False)
       mb.FindItemById(GUI.ID_PRINT_MENU).Enable(True)
+      mb.FindItemById(GUI.ID_SCOREWIN_MENU).Enable(True)
       
     elif action == 'on open':
       mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(True)
@@ -256,10 +264,10 @@ class wnFrame(wxFrame):
       mb.FindItemById(GUI.ID_SAVE_MENU).Enable(True)      
       mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(True)
       mb.FindItemById(GUI.ID_PRINT_MENU).Enable(True)
+      mb.FindItemById(GUI.ID_SCOREWIN_MENU).Enable(True)
 
     elif action == 'on save':
       mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(True)
-
     
   def GetPainter(self):
     '''Return a reference to the painter object.'''
@@ -309,8 +317,7 @@ class wnBracketCanvas(wxScrolledWindow):
     return self.bracket_size
     
 class wnNewTournamentWizard(wxWizard):
-  '''Class that creates a wizard that assists users in setting up new tournaments.'''
-  
+  '''Class that creates a wizard that assists users in setting up new tournaments.'''  
   def __init__(self, parent):
     '''Initialize an instance of the wizard.
     
@@ -350,7 +357,21 @@ class wnNewTournamentWizard(wxWizard):
     self.layouts = wxPyTypeCast(self.FindWindowById(GUI.ID_LAYOUT_LIST), 'wxListBox')
     self.name = wxPyTypeCast(self.FindWindowById(GUI.ID_NAME_TEXT), 'wxTextCtrl')
     self.description = wxPyTypeCast(self.FindWindowById(GUI.ID_LAYOUT_TEXT), 'wxTextCtrl')
-        
+    
+    #set the captions
+    cap = wxPyTypeCast(self.FindWindowById(GUI.ID_START_CAPTION), 'wxStaticText')
+    cap.SetLabel(GUI.start_caption)
+    cap = wxPyTypeCast(self.FindWindowById(GUI.ID_NAME_CAPTION), 'wxStaticText')
+    cap.SetLabel(GUI.name_caption)
+    cap = wxPyTypeCast(self.FindWindowById(GUI.ID_TEAMS_CAPTION), 'wxStaticText')
+    cap.SetLabel(GUI.teams_caption)
+    cap = wxPyTypeCast(self.FindWindowById(GUI.ID_WEIGHTS_CAPTION), 'wxStaticText')
+    cap.SetLabel(GUI.weights_caption)    
+    cap = wxPyTypeCast(self.FindWindowById(GUI.ID_LAYOUT_CAPTION), 'wxStaticText')
+    cap.SetLabel(GUI.layout_caption)
+    cap = wxPyTypeCast(self.FindWindowById(GUI.ID_FINISHED_CAPTION), 'wxStaticText')
+    cap.SetLabel(GUI.finished_caption)
+    
     #set event handlers
     EVT_BUTTON(self, GUI.ID_ADD_TEAM, self.OnAddTeam)
     EVT_BUTTON(self, GUI.ID_REMOVE_TEAM, self.OnRemoveTeam)
@@ -488,7 +509,7 @@ class wnPrintDialog(wxDialog):
     if len(self.weights.GetSelections()) == 0:
       wxMessageDialog(self, 'You must select at least one weight class.', 'Select a weight class', wxOK).ShowModal()
       return False
-    if self.type.GetStringSelection() == 'Bouts' and len(self.rounds.GetSelections()) == 0:
+    if self.type.GetStringSelection() == 'B&outs' and len(self.rounds.GetSelections()) == 0:
       wxMessageDialog(self, 'You must select at least one round to print bouts.', 'Select a round', wxOK).ShowModal()
       return False
     
@@ -496,8 +517,8 @@ class wnPrintDialog(wxDialog):
   
   def OnTypeChange(self, event):
     '''Enable or disable the rounds box based on what's selected.'''
-    self.rounds.Enable(self.type.GetStringSelection() == 'Bouts')
-    self.weights.Enable(self.type.GetStringSelection() != 'Scores')
+    self.rounds.Enable(self.type.GetStringSelection() == 'B&outs')
+    self.weights.Enable(self.type.GetStringSelection() != '&Scores')
   
   def GetWeights(self):
     weights = []
@@ -512,7 +533,9 @@ class wnPrintDialog(wxDialog):
     return rounds
   
   def GetType(self):
-    return self.type.GetStringSelection()
+    strings = {'&Brackets' : 'Brackets', 'B&outs' : 'Bouts', '&Scores' : 'Scores',
+               '&Places' : 'Places'}
+    return strings[self.type.GetStringSelection()]
   
 class wnTeamDialog(wxDialog):
   '''Class that creates a dialog box that shows team info.'''
@@ -556,6 +579,7 @@ class wnTeamDialog(wxDialog):
     self.pa_text.SetValue(str(float(self.pa_text.GetValue()) - 0.5))
     
 class wnFastFallDialog(wxDialog):
+  '''Class that creates a dialog showing the fastest fall times in descending order.'''
   def __init__(self, parent, table):
     wxDialog.__init__(self, parent, -1, 'Fast fall results')
     GUI.CreateFastFallDialog(self)
@@ -583,7 +607,41 @@ class wnScoreWindow(wxFrame):
   '''Class the creates a standalone frame for displaying team scores. Teams scroll past at a regular
   interval. Useful for multi-monitor setups with scores on public display.'''
   def __init__(self, parent):
-    pass
+    wxFrame.__init__(self, parent, -1, 'Team Scores', size=wxSize(640, 480),
+                     style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN)
+    GUI.CreateScoreFrame(self, False, False)
+    
+    # get a reference to the list control
+    self.scores = wxPyTypeCast(self.FindWindowById(GUI.ID_SCORES_LIST), 'wxListCtrl')
+    
+    # set up the list control
+    self.scores.InsertColumn(0, 'Place', width=120)
+    self.scores.InsertColumn(1, 'Team', width=300)
+    self.scores.InsertColumn(2, 'Score', width=140)
+    
+    # create object variables
+    self.index = 0
+    self.parent = parent
+    
+    # show the scores
+    self.OnDrawScores(None)
+    
+    # make a timer to refresh the scores at a set interval
+    self.timer = wxTimer(self, 0)
+    self.timer.Start(wnSettings.scores_timer_refresh_interval)
+    EVT_TIMER(self, 0, self.OnDrawScores)
+    
+  def OnDrawScores(self, event):
+    # get the current scores
+    scores = self.parent.GetTournament().CalcScores()
+    
+    # fill the list box with the current scores
+    self.scores.DeleteAllItems()
+    for i in range(len(scores)):
+      score, name = scores[i]
+      self.scores.InsertStringItem(i, str(i+1))
+      self.scores.SetStringItem(i, 1, name)
+      self.scores.SetStringItem(i, 2, str(score))
     
 if __name__ == '__main__':
   app = wxPySimpleApp(0)

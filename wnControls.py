@@ -122,7 +122,10 @@ class wnPopup(wxPopupWindow):
 class wnMatchMenu(wxMenu):
   def __init__(self, ctrl):
     wxMenu.__init__(self)
+    self.Append(GUI.ID_MOVEIN_MATCH_MENU, 'Move in')
+    self.AppendSeparator()
     self.Append(GUI.ID_DELETE_MATCH_MENU, 'Delete')
+    self.Append(GUI.ID_DELETEALL_MATCH_MENU, 'Delete all')
     self.Control = ctrl
 
 class wnSeedMenu(wxMenu):
@@ -175,8 +178,9 @@ class wnMatchDialog(wxDialog):
           pass
         self.result_value.SetFocus()
     
-    #select the first wrestler
+    #select the first wrestler and is scoring check appropriately
     self.winner.SetSelection(0)
+    self.OnChooseWinner(None)
     
     EVT_RADIOBOX(self, GUI.ID_RESULT_TYPE_RADIO, self.OnChooseResult)
     EVT_CHOICE(self, GUI.ID_WINNER_CHOICE, self.OnChooseWinner) 
@@ -196,7 +200,7 @@ class wnMatchDialog(wxDialog):
   def OnChooseWinner(self, event):
     '''Set if the match is scoring or not based on the winner name. If it contains the non-scoring
     prefix, then don't score the match by default.'''
-    if self.GetWinner().Name.find(wnSettings.no_scoring_prefix) == 0:
+    if self.GetWinner().IsScoring:
       self.scoring_check.SetValue(False)
     else:
       self.scoring_check.SetValue(True)

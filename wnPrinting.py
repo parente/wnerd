@@ -20,6 +20,9 @@ class wnPrintFactory(object):
     elif type == 'Bouts':
       p1 = wnBoutPrintout(tournament, weights, rounds)
       p2 = wnBoutPrintout(tournament, weights, rounds)
+    elif type == 'Places':
+      p1 = wnPlacesPrintout(tournament, weights)
+      p2 = wnPlacesPrintout(tournament, weights)
     else:
       return
 
@@ -68,7 +71,6 @@ class wnBoutPrintout(wxPrintout):
   def OnPrintPage(self, page):
     # get the  drawing context
     dc = self.GetDC()
-    dc.SetFont(self.normal_font)
     
     # add the margin to the bracket size
     max_w = self.bmp.GetWidth() + 2*wnSettings.print_margin_x
@@ -80,10 +82,12 @@ class wnBoutPrintout(wxPrintout):
     sy = float(ph)/float(max_h)
     scale = min(sx, sy)
     dc.SetUserScale(scale, scale)
+    print scale
     
     # start the origin at the top and draw a line dividing the page
     dc.SetDeviceOrigin(wnSettings.print_margin_x, wnSettings.print_margin_y)    
     dc.DrawLine(0, self.bmp.GetHeight(), self.bmp.GetWidth(), self.bmp.GetHeight())
+    dc.SetFont(self.normal_font)
     
     # draw two bouts per page
     i = 0
@@ -112,7 +116,76 @@ class wnBoutPrintout(wxPrintout):
       
     
 class wnPlacesPrintout(wxPrintout):
-  pass
+  def __init__(self, tournament, weights):
+    wxPrintout.__init__(self)
+    
+    # store references
+    self.tournament = tournament
+    
+    # get the place winners for the selected weights
+    self.places = self.tournament.GetPlaceWinners(weights)
+    
+    # compute the number of pages
+    self.pages = int(math.ceil(float(len(self.places))/wnSettings.print_place_weights_per_page))
+    
+    # store reusable fonts
+    self.normal_font = wxFont(wnSettings.print_font_size, wxMODERN, wxNORMAL, wxNORMAL)
+    self.heading_font = wxFont(wnSettings.print_heading_size, wxMODERN, wxNORMAL, wxBOLD)
+
+  def HasPage(self, page):
+    return (page <= self.pages)
+  
+  def GetPageInfo(self):
+    return (1,self.pages,1,self.pages)
+  
+  def OnPrintPage(self, page):
+    # get the  drawing context
+    dc = self.GetDC()
+    
+    # scale the drawing area to fit the page
+    #pw, ph = dc.GetSize()
+    #max_h = ph - wnSettings.print_margin_y*2
+    #max_w = pw - wnSettings.print_margin_x*2
+    #sx = float(pw)/float(max_w)
+    #sy = float(ph)/float(max_h)
+    #scale = min(sx, sy)
+    #dc.SetUserScale(scale, scale)
+    #print scale
+    print dc.GetUserScale()
+    
+    # set the origin to incorporate the margin
+    dc.SetDeviceOrigin(wnSettings.print_margin_x, wnSettings.print_margin_y)
+    
+    # print a header on each page
+    dc.SetFont(self.heading_font)
+    title = self.tournament.Name + ' Place Winners'
+    w, h = dc.GetTextExtent(title)
+    dc.DrawText(title, 0, 0)
+    dc.SetFont(self.normal_font)
+    
+    # print the place winners for this page
+    index = wnSettings.print_place_weights_per_page * (page-1)
+    i = 0
+    while (i < wnSettings.print_place_weights_per_page and index < len(self.places)):
+      # print the weight info
+      text = self.places[index].Weight
+      dc.DrawText(text, 0, h)
+      space = dc.GetTextExtent(text)
+      h += space[1]
+      
+      # loop through the winners and print the results
+      for j in range(len(self.places[index])):
+        pw = self.places[index][j]
+        text = str(j) + ' ' + pw.Name + ', ' + pw.Team + ', ' + str(pw.Result)
+        dc.DrawText(text, 0, h)
+        h += space[1]
+      
+      # increment position on the page, index, and counter
+      h += space[1]
+      index += 1
+      i += 1
+    
+    return True
 
 class wnScorePrintout(wxPrintout):
   def __init__(self, tournament):
@@ -132,7 +205,7 @@ class wnScorePrintout(wxPrintout):
     self.heading_font = wxFont(wnSettings.print_heading_size, wxMODERN, wxNORMAL, wxBOLD)
   
   def HasPage(self, page):
-    return (self.index != (len(self.scores)-1))
+    return (page <= self.pages)
   
   def GetPageInfo(self):
     return (1,self.pages,1,self.pages)
@@ -142,13 +215,15 @@ class wnScorePrintout(wxPrintout):
     dc = self.GetDC()
     
     # scale the drawing area to fit the page
-    pw, ph = dc.GetSize()
-    max_h = ph - wnSettings.print_margin_y*2
-    max_w = pw - wnSettings.print_margin_x*2
-    sx = float(pw)/float(max_w)
-    sy = float(ph)/float(max_h)
-    scale = min(sx, sy)
-    dc.SetUserScale(scale, scale)
+    #pw, ph = dc.GetSize()
+    #max_h = ph - wnSettings.print_margin_y*2
+    #max_w = pw - wnSettings.print_margin_x*2
+    #sx = float(pw)/float(max_w)
+    #sy = float(ph)/float(max_h)
+    #scale = min(sx, sy)
+    #dc.SetUserScale(scale, scale)
+    #print scale
+    print dc.GetUserScale()    
     
     # set the origin to incorporate the margin
     dc.SetDeviceOrigin(wnSettings.print_margin_x, wnSettings.print_margin_y)
