@@ -8,15 +8,21 @@ class wnTeam(object):
     self.name = name    
     self.wrestlers = {}
     self.point_adjust = 0
-    
-    self.tournament = None
-    
+   
   def GetName(self):
     return self.name
   
   Name = property(fget=GetName)
   
-  def NewWrestler(self, name, weight):
+  def NewWrestler(self, name, weight, old=None):
+    '''Add a new wrestler to the team. Make the wrestler scoring if he is the first to be added.
+    Remove the old wrestler object if it exists.'''
+    
+    #just change the old wrestler if he exists
+
+
+    #otherwise, add the new wrestler 
+
     w = wnWrestler(str(name), str(weight))
     w.team = self
     self.wrestlers[str(weight)] = w
@@ -25,10 +31,10 @@ class wnTeam(object):
       
 class wnWrestler(object):
   '''The wrestler class holds information about individuals in a tournament.'''
-  def __init__(self):
-    self.name = ''
-    self.weight = ''
-    self.is_scoring = True
+  def __init__(self, name, weight, is_scoring=True):
+    self.name = name
+    self.weight = weight
+    self.is_scoring = is_scoring
     
     self.team = None
     

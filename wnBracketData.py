@@ -24,7 +24,7 @@ class wnTournament(wnNode):
     wnNode.__init__(self, None)
     self.name = name
     self.seeds = seeds
-    self.teams = []
+    self.teams = {}
     self.weight_classes = {}
         
   def NewWeightClass(self, name):
@@ -34,9 +34,9 @@ class wnTournament(wnNode):
     return wc
   
   def NewTeam(self, name):
-    t = wnTeam(name)
+    t = wnTeam(str(name))
     t.tournament = self
-    self.teams.append(t)
+    self.teams[str(name)] = t
     
     return t
 
@@ -63,8 +63,8 @@ class wnTournament(wnNode):
     '''Calculate all the scores across this tournament.'''
     #for now, just return zero always
     scores = []
-    for t in self.teams:
-      scores.append((t.Name, 0.0))
+    for k in self.teams.keys():
+      scores.append((k, 0.0))
         
     painter.DrawTeamScores(scores)
 
@@ -266,16 +266,27 @@ class wnEntry(wnNode):
   def SetNextWin(self, entry):
     self.next_win = entry
   
+  def GetTeams(self):
+    '''Get the available teams from the tournament. Encapsulate how we get this data using
+    properties.'''
+    return self.Parent.Parent.Parent.Teams
+  
+  def GetWeightClass(self):
+    '''Get the weight class of this entry. Encapsulate how we get this data using properties.'''
+    return self.Parent.Parent.Name
+  
   ID = property(fget=GetID)
   NextLose = property(fget=GetNextLose, fset=SetNextLose)
   NextWin = property(fget=GetNextWin, fset=SetNextWin)
-    
+  Teams = property(fget=GetTeams)
+  WeightClass = property(fget=GetWeightClass)
+  
 class wnMatchEntry(wnEntry, wnMouseEventReceivable, wnFocusEventReceivable):
   '''The match entry class hold individual match results.'''
   def __init__(self, name, parent):
     wnEntry.__init__(self, name, parent)
     self.result = None
-
+    
   def Paint(self, painter, pos, length, refresh_labels):
     '''Paint all of the text controls.'''
     if self.wrestler is None: text = ''
@@ -317,23 +328,38 @@ class wnSeedEntry(wnEntry, wnFocusEventReceivable):
     #draw the text control
     if refresh_labels:
       #get the available teams from the round->weight->tournament
-      teams = [t.Name for t in self.Parent.Parent.Parent.Teams]
+      teams = self.Teams.keys()
       painter.DrawSeedTextControl(text,
                                   pos[0]+wnSettings.seed_offset, pos[1]-wnSettings.seed_height,
                                   wnSettings.seed_length, wnSettings.seed_height,
                                   teams, self.ID, self)
     
   def OnKillFocus(self, event):
-    '''Don't let a match entry steal the focus. Immediately set it back to the first available
-    seed entry on the bracket.'''
+    '''Store the entered value if it is valid. Give the next seed the focus, wrapping around at
+    the first and last seeds.'''
+    self.updateData(event)
+    self.updateFocus(event)
+      
+  def updateData(self, event):
+    '''Figure out what needs to be done to store the wrestler properly.'''
+    if event.Control.IsValid() and not event.Control.IsEmpty():
+      #get the strings from the control
+      w_name, t_name = event.Control.GetValue().split(' | ')
+      w_name = w_name.strip()
+      t_name = t_name.strip()
+      print 'Name:',w_name, 'Team:', t_name
+      
+  def updateFocus(self, event):
+    '''Figure out where the focus should go next.'''
+    #give the focus only to seeds, not to match entries
     next_id = event.Painter.GetFocus()
-    if next_id is None: return
-
-    if next_id[1] != self.ID[1]:
-      if self.name == 1:
-        event.Painter.SetFocus(self.Parent.Entries[1].ID)
-      elif self.name == self.Parent.NumEntries:
-        event.Painter.SetFocus(self.Parent.Entries[0].ID)        
+    if next_id is not None:
+      #focus on the next entry
+      if next_id[1] != self.ID[1]:
+        if self.name == 1:
+          event.Painter.SetFocus(self.Parent.Entries[1].ID)
+        elif self.name == self.Parent.NumEntries:
+          event.Painter.SetFocus(self.Parent.Entries[0].ID)
 
 
 if __name__ == '__main__':
