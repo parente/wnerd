@@ -1,7 +1,6 @@
 class wnTournament(object):
-  def __init__(self, name, description):
+  def __init__(self, name):
     self.name = name
-    self.description = description
     self.teams = {}
     self.weight_classes = {}
         
@@ -66,47 +65,29 @@ class wnRound(object):
     for i in range(number):
       self.entries.append(wnEntry())
       
-  def SetNextWinRound(self, next, to_map):
+  def SetNextWinRound(self, round, to_map):
     if len(to_map) != self.NumEntries:
       raise IndexError('The to_map must contain a link for every entry in this round. This round has %d entries and the to_map has %d links.' % (self.NumEntries, len(to_map)))
 
     #store the next win round
-    self.next_win = next
+    self.next_win = round
+     
+    #link the entries between rounds
+    for i in range(self.NumEntries):
+      #link the entry in this round to the proper entry in the next round
+      self.entries[i].next_win = round.Entries[to_map[i]]
+      
+  def SetNextLoseRound(self, round, to_map):
+    if len(to_map) != self.NumEntries:
+      raise IndexError('The to_map must contain a link for every entry in this round. This round has %d entries and the to_map has %d links.' % (self.NumEntries, len(to_map)))
+
+    #store the next win round
+    self.next_lose = round
     
     #link the entries between rounds
-    for i in range(to_map):
+    for i in range(self.NumEntries):
       #link the entry in this round to the proper entry in the next round
-      self.entries[i].next_win = self.next_win.entries[to_map[i]]
-      
-  #def SetNextWinRound(self, next, bottom=False, flip=False):
-  #  #see how many entries the next round has
-  #  #if the next round has half as many, then every two entries in this round link to one entry
-  #  #  in the next round
-  #  if next.NumEntries == self.NumEntries/2:
-  #    for i in range(0,self.NumEntries,2):
-  #      self.entries[i].next_win = next.entries[i]
-  #      self.entries[i+1].next_win = next.entries[i]
-  #      
-  #  #if the next round has just as many entries, then alternate the winners top/bottom
-  #  #  and decide if they should flip
-  #  else:
-  #    for i in range(bottom,self.NumEntries,2):
-  #      self.entries[i].next_win = next.entries[i]
-  #      
-  #def SetNextLoseRound(self, next, bottom=False, flip=False):
-  #  #see how many entries the next round has
-  #  #if the next round has half as many, then every two entries in this round link to one entry
-  #  #  in the next round
-  #  if next.NumEntries == self.NumEntries/2:
-  #    for i in range(0,self.NumEntries,2):
-  #      self.entries[i].next_lose = next.entries[i]
-  #      self.entries[i+1].next_lose = next.entries[i]
-  #      
-  #  #if the next round has just as many entries, then alternate the winners top/bottom
-  #  #  and decide if they should flip
-  #  else:
-  #    for i in range(bottom,self.NumEntries,2):
-  #      self.entries[i].next_lose = next.entries[i]
+      self.entries[i].next_lose = round.Entries[to_map[i]]
       
 class wnEntry(object):
   def __init__(self):
