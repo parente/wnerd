@@ -3,6 +3,7 @@ The data module defines the classes that store tournament data. These objects ar
 for rendering themselves using a draw object and a print object.
 '''
 from wnEvents import wnEventReceivable
+import wnSettings
 
 class wnTournament(object):
   '''The tournament class is responsible for holding weight classes and teams.'''
@@ -50,17 +51,17 @@ class wnTournament(object):
       painter.DrawText(str(num), 0, y)
       y += step
       
-    return wc.Paint(painter, (0, 20), step)
+    return wc.Paint(painter, (0, wnSettings.initial_step), step)
   
   
-  def GetScores(self):
+  def CalcScores(self, painter):
     '''Calculate all the scores across this tournament.'''
     #for now, just return zero always
-    d = {}
+    scores = []
     for name in self.teams.keys():
-      d[name] = 0.0
-      
-    return d
+      scores.append((name, 0.0))
+        
+    painter.DrawTeamScores(scores)
 
   def GetWeights(self):
     '''Return a list of all the weight classes in ascending order.'''
@@ -97,9 +98,6 @@ class wnWeightClass(object):
   def Paint(self, painter, start, initial_step):
     '''Go through all of the rounds and draw their bracket lines.'''
 
-    length_l = 350
-    length_s = 120
-
     step = initial_step
     max_x = 0
     max_y = 0
@@ -127,10 +125,10 @@ class wnWeightClass(object):
         
       #make the outermost lines long to fit a full name and team name
       if i == 0:
-        length = length_l
+        length = wnSettings.seed_length
         type = 'dynamic'
       else:
-        length = length_s
+        length = wnSettings.entry_length
         type = 'static'
 
       start, mx, my = curr.Paint(painter, start, length, step, type)
@@ -203,7 +201,7 @@ class wnRound(object):
     x,y = start
     for i in range(self.NumEntries):
       painter.DrawLine(x,y,x+length,y)
-      self.entries[i].Paint(painter, (x,y-20), length, type)
+      self.entries[i].Paint(painter, (x,y-wnSettings.entry_height), length, type)
       y += step
 
     #store the maximum positions so the scrollbars can be set properly
@@ -238,10 +236,29 @@ class wnEntry(object, wnEventReceivable):
       if self.wrestler is None: text = str(self.name)
       else: text = self.wrestler.Name
       
-      painter.DrawStaticTextControl(text, pos[0]+3, pos[1], length-6, self.ID, self)
+      painter.DrawStaticTextControl(text, pos[0]+wnSettings.entry_offset, pos[1],
+                                    length-wnSettings.entry_offset*2, wnSettings.entry_height,
+                                    self.ID, self)
       
     elif type == 'dynamic':
       pass
+    
+  def OnMouseEnter(self, event):
+    '''Highlight the text control under the cursor.'''
+    event.Control.Highlight()
+    event.Control.ShowPopup('Peter Parente\nBristol Central\nMajor\n15-5')
+    event.Control.Refresh()
+    
+  def OnMouseLeave(self, event):
+    '''Unhighlight the control under the cursor.'''
+    event.Control.Unhighlight()
+    event.Control.HidePopup()
+    event.Control.Refresh()
+    
+  def OnLeftDoubleClick(self, event):
+    '''Display the dialog box that allows a user to enter result information, if there is at least
+    one wrestler in the preceeding entries.'''
+    
     
   def GetID(self):
     '''Return the ID of this entry. This ID must be exactly the same as the ID of similar entries
