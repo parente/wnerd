@@ -2,19 +2,8 @@
 <!-- Komodo Project File - DO NOT EDIT -->
 <project kpf_version="2" name="WrestlingNerd">
 <preference-set id="">
+  <string id="import_dirname">C:\Documents and Settings\Pete\My Documents\work\WrestlingNerd\website</string>
 </preference-set>
-<folder name="help">
-<file name="index.shtml" url="help/index.shtml">
-</file>
-<file name="introduction.shtml" url="help/introduction.shtml">
-</file>
-<file name="tutorial.shtml" url="help/tutorial.shtml">
-</file>
-<file name="customizing.shtml" url="help/customizing.shtml">
-</file>
-<file name="appendix.shtml" url="help/appendix.shtml">
-</file>
-</folder>
 <folder name="installer">
 <file name="setup.py" url="setup.py">
 </file>
@@ -55,6 +44,28 @@
 <file name="wnUI.py" url="wnUI.py">
 </file>
 <file name="WrestlingNerd.py" url="WrestlingNerd.py">
+</file>
+</folder>
+<folder name="website">
+<folder name="help" url="website/help">
+<file name="appendix.shtml" url="website/help/appendix.shtml">
+</file>
+<file name="customizing.shtml" url="website/help/customizing.shtml">
+</file>
+<file name="index.shtml" url="website/help/index.shtml">
+</file>
+<file name="introduction.shtml" url="website/help/introduction.shtml">
+</file>
+<file name="tutorial.shtml" url="website/help/tutorial.shtml">
+</file>
+</folder>
+<file name="index.shtml" url="website/index.shtml">
+</file>
+<file name="license.html" url="website/license.html">
+</file>
+<file name="logo.png" url="website/logo.png">
+</file>
+<file name="main.css" url="website/main.css">
 </file>
 </folder>
 </project>

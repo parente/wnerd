@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <title>Tutorial: Running a Tournament - Wrestling Nerd Documentation</title>
-    <link rel="stylesheet" href="../main.css" />
+    <link rel="stylesheet" type="text/css" href="../main.css" />
   </head>
 
   <body>
@@ -52,7 +52,7 @@
     <p>Click the Next button when you are done. On the final screen, click the Finish button to
     complete the wizard. You may press the Previous button to go back and make changes.</p>
     
-    <h2><a name="navigating"</a>Navigating the interface</h2>
+    <h2><a name="navigating"></a>Navigating the interface</h2>
     <p>The main interface consists of three primary views: the bracket window, the team scores, and
     the current weight class indicator.
     
@@ -92,7 +92,7 @@
     wrestlers will not score team points by default. This behavior can be changed on a per match
     basis, however, as explained later.</p>
     
-    <h3><a name="swapping"></a>Swapping wrestlers</h3>
+    <h3><a name="flipfloping"></a>Flip-flopping wrestlers</h3>
     <p>During seeding, wrestlers often need to be swapped up or down in seeding order (a move often
     called flip-flopping). To perform a swap, right click the wrestler you wish to move. Then choose
     Swap Up or Swap Down from the popup menu to move the wrestler ahead or back a seed. If another
@@ -101,6 +101,15 @@
     
     <p>Alternatively, you may press Ctrl-Page Up or Ctrl-Page Down to swap the currently selected
     wrestler one seed location up or down respectively.</p>
+    
+    <h3><a name="swapping"></a>Swapping wrestlers</h3>
+    <p>In rare occassions, wrestlers need to be swapped to seed positions beyond the immediate
+    neighbors. In this situation, right click the wrestler you wish to move and choose Swap to from
+    the popup menu. The Swap to dialog box appears. Enter the seed number to which you wish to move
+    the selected wrestler and click OK. The selected wrestler is swapped with the wrestler at the
+    seed number entered.</p>
+    
+    <p>You may press Ctrl-T to access the swap to dialog without using the popup menu.</p>
 
     <h3><a name="scratching"></a>Scratching wrestlers</h3>
     <p>Seeded wrestlers may be quickly deleted. To scratch a seed, right click the wrestler you wish

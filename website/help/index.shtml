@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <title>Wrestling Nerd Documentation</title>
-    <link rel="stylesheet" href="../main.css" />
+    <link rel="stylesheet" type="text/css" href="../main.css" />
   </head>
 
   <body>
@@ -47,7 +47,8 @@
         <ol>
           <li><a href="tutorial.shtml#entering">Entering wrestler names and teams</a></li>
           <li><a href="tutorial.shtml#non-scoring">Entering non-scoring wrestlers</a></li>
-          <li><a href="tutorial.shtml#scratching">Scratching wrestlers</a></li>          
+          <li><a href="tutorial.shtml#scratching">Scratching wrestlers</a></li>
+          <li><a href="tutorial.shtml#flipfloping">Flip-flopping wrestlers</a></li>
           <li><a href="tutorial.shtml#swapping">Swapping wrestlers</a></li>
           <li><a href="tutorial.shtml#last">Selecting the last seed</a></li>
           <li><a href="tutorial.shtml#moveup">Scratching seeds and moving the rest up</a></li>
