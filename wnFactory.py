@@ -1,5 +1,4 @@
 from wnData import *
-import new
 
 class wnRoundSetup(object):
   def __init__(self, name, points, num_entries, next_win = None, next_lose = None,
@@ -15,10 +14,17 @@ class wnRoundSetup(object):
 class wnFactory(object):
   def GetTournaments(self):
     '''Return the tournaments currently supported.'''
-    names =  ['wnBCInvitationalConfig']
+    configs =  [wnBCInvitationalConfig]
+    
+    return configs
   
-  def Create(self, config, name, weights, team):
+  def Create(self, config, name, weights, teams):
     '''Determine the type of tournament to create and then build it.'''
+    #make sure the config is valid
+    if config not in self.GetTournaments():
+      raise TypeError('The tournament configuration is invalid.')
+    
+    #create the new tournament
     tourn = wnTournament(name)
     
     #add the teams
@@ -37,7 +43,7 @@ class wnFactory(object):
         r.NewEntries(round.NumEntries)
 
       #connect the rounds
-      self.connectRounds(w, config.rounds)
+      self.connectRounds(w, config.Rounds)
     
     return tourn
   
@@ -47,24 +53,28 @@ class wnFactory(object):
       #get the round
       this_round = weight.GetRound(round.Name)
       
-      #get the win round
-      win_round = weight.GetRound(round.NextWin)
-      #and connect it
-      this_round.SetNextWinRound(win_round, round.WinMap)
-      
-      #get the lose round
-      lose_round = weight.GetRound(round.NextLose)
-      #and connect it
-      this_round.SetNextLoseRound(lose_round, round.LoseMap)    
+      if round.WinMap is not None:
+        #get the win round
+        win_round = weight.GetRound(round.NextWin)
+        #and connect it
+        this_round.SetNextWinRound(win_round, round.WinMap)
+
+      if round.LoseMap is not None:
+        #get the lose round
+        lose_round = weight.GetRound(round.NextLose)
+        #and connect it
+        this_round.SetNextLoseRound(lose_round, round.LoseMap)    
 
 class wnBCInvitationalConfig:
   Name = 'Bristol Central Invitational'
   Description = 'The bracket format used in the Bristol Central Invitational tournaments. The outbracket has 32 seed slots, and double-elimination begins in the quarter finals.'
-  Rounds = [wnRoundSetup('Rat-Tails', wnPoints(0,0), 32, 'Sixteen Champion', range(32)),
+  Rounds = [wnRoundSetup('Rat-Tails', wnPoints(0,0), 32, 'Sixteen Champion',
+                         [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,
+                          14,14,15,15]),
             wnRoundSetup('Sixteen Champion', wnPoints(2,0), 16, 'Quarter-Finals Champion',
-                        range(16)),
+                         [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7]),
             wnRoundSetup('Quarter-Finals Champion', wnPoints(2,0), 8, 'Semi-Finals Champion',
-                        'Semi-Finals Consolation', range(4), range(4)),
+                         'Semi-Finals Consolation', [0,0,1,1,2,2,3,3], [0,0,1,1,2,2,3,3]),
             wnRoundSetup('Semi-Finals Champion', wnPoints(2,0), 4, 'Finals Champion',
                         'Semi-Finals Consolation', [0,0,1,1], [3,3,0,0]),
             wnRoundSetup('Finals Champion', wnPoints(2,0), 2, 'First Place', [0, 0]),
@@ -80,7 +90,10 @@ class wnBCInvitationalConfig:
 
 if __name__ == '__main__':
   f = wnFactory()
-  #factory = wnFactoryBCInvite()
-  #t = factory.Create(['95', '103', '112'],
-              #                 ['Bristol Central', 'Bristol Eastern', 'Southington'])
-  
+  print f.GetTournaments()
+  t = f.Create(wnBCInvitationalConfig, 'Bristol Central Invitational 2003', ['95', '103', '112'],
+           ['Bristol Central', 'Bristol Eastern', 'Southington'])
+  for k, v in t.weight_classes.items():
+    print k
+    for rk in v.order:
+      print v.rounds[rk].name  

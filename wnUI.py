@@ -1,6 +1,8 @@
 from wxPython.wx import *
 from wxPython.wizard import *
-from wxPython.lib.scrolledpanel import wxScrolledPanel
+#from wxPython.lib.scrolledpanel import wxScrolledPanel
+from wnFactory import *
+from wnRenderer import *
 import WrestlingNerd_wdr as GUI
 
 class wnFrame(wxFrame):
@@ -20,6 +22,8 @@ class wnFrame(wxFrame):
     
     #create the components of the main frame
     GUI.CreateMainFrame(self)
+    
+    self.canvas = wxPyTypeCast()
 
     #disable menu items
     mb.FindItemById(GUI.ID_FASTFALL_MENU).Enable(False)
@@ -27,8 +31,11 @@ class wnFrame(wxFrame):
     mb.FindItemById(GUI.ID_SAVE_MENU).Enable(False)
     mb.FindItemById(GUI.ID_SAVEAS_MENU).Enable(False)
     
+    self.painter = wnPainter(self)
+    
     EVT_MENU(self, GUI.ID_EXIT_MENU, self.OnClose)
     EVT_MENU(self, GUI.ID_NEW_MENU, self.OnNew)
+    EVT_PAINT(self.canvas, self.OnPaint)
     
   def OnClose(self, event):
     '''Handle a window close event.'''
@@ -38,6 +45,17 @@ class wnFrame(wxFrame):
     '''Show the new tournament wizard.'''
     #wiz = wnNewTournamentWizard(self)
     #wiz.RunWizard()
+    factory = wnFactory()
+    options = factory.GetTournaments()
+    self.tournament = factory.Create(options[0], 'Test Tournament',
+                                     [95,103,112], ['BC', 'BE', 'WI'])
+    
+  def OnPaint(self, event):
+    dc = wxCreateDC(self)
+    dc.BeginDrawing()
+    self.painter.SetDC(dc)
+    self.tournament.Paint(self.painter)
+    dc.EndDrawing()
 
 class wnNewTournamentWizard(wxWizard):
   '''Class that creates a wizard that assists users in setting up new
