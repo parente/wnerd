@@ -1,2 +1,0 @@
-Web page
-parente@shell.sourceforge.net:/home/groups/p/pr/projectname/htdocs
