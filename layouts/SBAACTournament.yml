@@ -1,0 +1,53 @@
+---
+Name: SBAAC League Tournament
+Description: The bracket format used in the SBAAC Wrestling tournament. The outbracket has 8 seed slots and double-elimination begins immediately. There are four places. (Contributed by Ed Ratcliff)
+Seeds: &seeds [1, 8, 5, 4, 3, 6, 7, 2]
+Rounds:
+  - Name: Eight Champion
+    Adv Points: 0
+    Place Points: 0
+    Entries: *seeds
+    Win Round: Semi-Finals Champion
+    Win Order: [0, 0, 1, 1, 2, 2, 3, 3]
+    Lose Round: Quarter-Finals Consolation
+    Lose Order: [0, 0, 1, 1, 2, 2, 3, 3]
+  - Name: Semi-Finals Champion
+    Adv Points: 0
+    Place Points: 0
+    Entries: 4
+    Win Round: Finals Champion
+    Win Order: [0, 0, 1, 1]
+    Lose Round: Semi-Finals Consolation
+    Lose Order: [3, 3, 1, 1]
+  - Name: Finals Champion
+    Adv Points: 2
+    Place Points: 10
+    Entries: 2
+    Win Round: First Place
+    Win Order: [0, 0]
+  - Name: First Place
+    Adv Points: 0
+    Place Points: 4
+    Entries: 1
+  - Name: Quarter-Finals Consolation
+    Adv Points: 1
+    Place Points: 0
+    Entries: 4
+    Win Round: Semi-Finals Consolation
+    Win Order: [0, 0, 2, 2]
+  - Name: Semi-Finals Consolation
+    Adv Points: 1
+    Place Points: 0
+    Entries: 4
+    Win Round: Finals Consolation
+    Win Order: [0, 0, 1, 1]
+  - Name: Finals Consolation
+    Adv Points: 1
+    Place Points: 4
+    Entries: 2
+    Win Round: Third Place
+    Win Order: [0, 0]
+  - Name: Third Place
+    Adv Points: 0
+    Place Points: 3
+    Entries: 1
