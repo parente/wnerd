@@ -1,7 +1,7 @@
 from wnBracketData import *
 from wnScoreData import *
 from wnTeamData import *
-import wnSettings, syck, glob
+import wnSettings, yaml, glob
 
 class wnRoundSetup(object):
   def __init__(self, name, points, num_entries, next_win = None, win_map = None, next_lose = None,
@@ -17,7 +17,7 @@ class wnRoundSetup(object):
 class wnConfig(object):
   def __init__(self, fn):
     f = file(fn)
-    data = syck.load(f.read())
+    data = yaml.load(f.read())
     f.close()
     
     self.Name = data['Name']
