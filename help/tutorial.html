@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Tutorial: Running a Tournament - Wrestling Nerd Documentation</title>
+    <link rel="stylesheet" type="text/css" href="../main.css" />
+  </head>
+
+  <body>
+    <div class="nav">
+      <a href="introduction.html">&lt; Back: Introduction</a> |
+      <a href="index.html">Up: Table of Contents</a> |
+      <a href="customizing.html">Next: Customizing Wrestling Nerd &gt;</a>
+    </div>
+    
+    <h1>Tutorial: Running a Tournament</h1>
+    <p>The following tutorial describes how to use Wrestling Nerd to run a tournament. To get
+    started run Wrestling Nerd by clicking its icon in the Start Menu or on the Desktop in Windows
+    or running it using a Python intepreter on other platforms.</p>
+    
+    <h2><a name="creating"></a>Creating a new tournament</h2>
+    <p>To start a new tournament, select New from the File menu. The new tournament wizard will
+    appear and walk you through the steps of creating a new tournament.</p>
+    
+    <h3><a name="naming"></a>Naming the tournament</h3>
+    <p>On the first screen of the wizard, enter a name of the tournament. This name will appear on
+    printouts of tournament results.</p>
+    
+    <p>Click the Next button when you are done.</p>
+    
+    <h3><a name="teams"></a>Entering teams</h3>
+    <p>On the second screen, enter the names of all teams that will participate in the tournament.
+    Type the team names one at a time in the text box above the large list box. Click the Add button
+    or press Ctrl-Enter to add a new team to the list. Select a team from the list and click the
+    Remove button to remove it from the tournament.</p>
+    
+    <p>Click the Next button when you are done.</p>
+    
+    <h3><a name="weights"></a>Entering weight classes</h3>
+    <p>On the third screen, enter the weight classes for the tournament. Type the weight classes one
+    at a time in the text box above the large list box. Click the Add button or press Ctrl-Enter to
+    add a new weight to the list. Select a weight from the list a click the Remove button to remove
+    it from the tournament.</p>
+    
+    <p>Click the Next button when you are done.</p>
+    
+    <h3><a name="layout"></a>Selecting a tournament layout</h3>
+    <p>On the fourth screen, select a bracket layout for the tournament. The names of the available
+    layouts appear in the left list box. Selecting a name causes a detailed description of the
+    selected layout to appear in the right list box.</p>
+    
+    <p>Click the Next button when you are done. On the final screen, click the Finish button to
+    complete the wizard. You may press the Previous button to go back and make changes.</p>
+    
+    <h2><a name="navigating"></a>Navigating the interface</h2>
+    <p>The main interface consists of three primary views: the bracket window, the team scores, and
+    the current weight class indicator.</p>
+    
+    <h3><a name="bracket_window">Viewing the bracket</a></h3>
+    <p>The bracket for the currently selected weight class fills most of the screen. Use the scroll
+    bars at the edges of the bracket window to view different parts of the bracket. Any consolation
+    rounds appear below the championship rounds.</p>
+    
+    <h3><a name="weight_list">Selecting a weight class</a></h3>
+    <p>The drop-down list in the top right corner of the screen controls the weight class shown in
+    the bracket window. Select a new weight from the drop-down list to change the weight class
+    displayed in the bracket window.</p>
+    
+    <h3><a name="scores_list">Viewing team scores</a></h3>
+    <p>The current team scores are visible in a list just below the weight drop-down box.
+    Double-clicking a team name gives more information about the team, including the names of its
+    wrestlers and its adjusted score.</p>
+    
+    <h2><a name="seeding"></a>Seeding wrestlers</h2>
+    <p>Once the tournament has been created, wrestlers may be seeded. Seeding wrestlers is as easy
+    as typing their names and teams, although more advanced options are available for swapping and
+    scratching seeds.</p>
+    
+    <h3><a name="entering"></a>Entering wrestler names and teams</h3>
+    <p>Wrestlers are seeded on the numbered lines in the bracket. Click on a seed location to select
+    it. Type the full wrestler name to the left of the vertical bar. Type the team name to the right
+    of the vertical bar. If the seed information is invalid (i.e the team doesn't exist or is
+    spelled wrong) the seed will be highlighted in yellow. If the seed information is valid, it will
+    not be highlighted.</p>
+    
+    <p>You can navigate quickly ahead through seed locations in order by pressing the Tab key.
+    Pressing Shift-Tab will navigate backwards through seed locations in order.</p>
+    
+    <h3><a name="non-scoring"></a>Entering non-scoring wrestlers</h3>
+    <p>If your tournament has junior varsity wrestlers or other wrestlers that should not score
+    team points by default, simply prefix their names with the letters JV. Any matches won by JV
+    wrestlers will not score team points by default. This behavior can be changed on a per match
+    basis, however, as explained later.</p>
+    
+    <h3><a name="flipfloping"></a>Flip-flopping wrestlers</h3>
+    <p>During seeding, wrestlers often need to be swapped up or down in seeding order (a move often
+    called flip-flopping). To perform a swap, right click the wrestler you wish to move. Then choose
+    Swap Up or Swap Down from the popup menu to move the wrestler ahead or back a seed. If another
+    wrestler is already seeded ahead or behind the chosen wrestler, it will be swapped to the
+    selected location.</p>
+    
+    <p>Alternatively, you may press Ctrl-Page Up or Ctrl-Page Down to swap the currently selected
+    wrestler one seed location up or down respectively.</p>
+    
+    <h3><a name="swapping"></a>Swapping wrestlers</h3>
+    <p>In rare occassions, wrestlers need to be swapped to seed positions beyond the immediate
+    neighbors. In this situation, right click the wrestler you wish to move and choose Swap to from
+    the popup menu. The Swap to dialog box appears. Enter the seed number to which you wish to move
+    the selected wrestler and click OK. The selected wrestler is swapped with the wrestler at the
+    seed number entered.</p>
+    
+    <p>You may press Ctrl-T to access the swap to dialog without using the popup menu.</p>
+
+    <h3><a name="scratching"></a>Scratching wrestlers</h3>
+    <p>Seeded wrestlers may be quickly deleted. To scratch a seed, right click the wrestler you wish
+    to delete and choose Delete from the popup menu.</p>
+    
+    <h3><a name="last"></a>Selecting the last seed</h3>
+    <p>Sometimes only some of the wrestlers in the bracket are considered seeded while others (e.g.
+    JV wrestlers) are not. Selecting the last seeded wrestler is useful in distinguishing the break
+    between seeded and unseeded wrestlers. You can mark the last seeded wrestler by right clicking
+    his name and choosing Set last seed from the popup menu.</p>
+    
+    <p>The last seeded wrestler must be marked properly for the next two features to work properly
+    when there are seeded <u>and</u> unseeded wrestlers in a bracket. If all wrestlers are
+    considered seeded, then the last seed need not be marked.</p>
+        
+    <h3><a name="moveup"></a>Scratching seeds and moving the rest up</h3>
+    <p>Occasionally, it is necessary to scratch a wrestler and move all the wrestlers seeded below
+    him up to fill the empty space. To perform this operation, right click the wrestler to scratch
+    and choose Scratch - Move up from the popup menu. The selected wrestler will be removed from the
+    tournament. All wrestlers seeded below him, up to and including the last seeded wrestler, are
+    moved up a seed to fill the empty spot. If the last seeded wrestler is not set, all wrestlers up
+    to the first blank seed spot are moved up.</p>
+    
+    <h3><a name="movedown"></a>Inserting seeds and moving the rest down</h3>
+    <p>Sometimes a wrestler needs to be inserted into an already seeded bracket, pushing all of the
+    seeded wrestlers down one spot. To perform this action quickly, right click the seed location
+    where you'd like to insert the wrestler and select Insert - Move down from the popup menu. All
+    wrestlers, up to the first blank seed, will be moved down one spot to make room for a new
+    wrestler a the location you clicked. If the bracket is full when a new spot is inserted, all of
+    the wrestlers are moved down one spot and the last seed is pushed off the bracket and lost.</p>
+    
+    <h2><a name="advancing"></a>Advancing wrestlers</h2>
+    <p>As results for matches are reported, they must be entered into Wrestling Nerd. Winners
+    advance and losers are either eliminated or drop down to consolation rounds.</p>
+    
+    <h3><a name="winners"></a>Selecting winners</h3>
+    <p>The winning wrestler of a pair of matched wrestlers advances to the next round on the bracket.
+    To advance a winning wrestler, left click on the spot in the bracket to which the wrestler
+    should advance. Spots that can be filled by winning wrestlers are highlighted when the mouse
+    passes over them. Spots that cannot be filled are not highlighted.</p>
+    
+    <h3><a name="results"></a>Entering and changing results</h3>
+    <p>When a spot on the bracket is clicked to advance a wrestler, the result dialog appears. If
+    results have already been entered, you may change them. Otherwise, select the winning wrestler's
+    name from the drop-down box at the top of the dialog. Check or uncheck the box indicating if the
+    results of the match should count towards the team scores or not. Choose how the match was won,
+    or leave the setting at None to indicate that the wrestler advances without a match. If the
+    match was won by a pin, enter the pin time in the box that appears after selecting Pin as the
+    win type. If the match was won by a decision, enter the final score. The pin or score box will
+    be highlighted if an invalid value has been entered.</p>
+    
+    <p>Click OK to accept the match results or Cancel to cancel any changes. The team scores are
+    automatically updated to reflect the new results after you click OK. If the losing wrestler is
+    eliminated, he simply does not advance on the bracket. If the losing wrestler is not eliminated,
+    he automatically drops to the proper place in the consolation bracket.</p>
+    
+    <h3><a name="popups"></a>Viewing results</h3>
+    <p>The results of matches can be viewed without opening the results dialog. To quickly view
+    match results, hover the mouse cursor over a spot on the bracket that has a wrestler name in it.
+    A popup will appear that shows the results of the match. The popup disappears when you move the
+    cursor off of the spot on the bracket.</p>
+    
+    <h3><a name="deleting"></a>Deleting results</h3>
+    <p>Incorrect matches sometimes need to be deleted altogether instead of just changed. To delete
+    a match entirely, right click it on the bracket and choose Delete from the popup menu.</p>
+    
+    <p>Alternatively, to delete all matches from an entire round, right click any entry in the round
+    and choose Delete all from the popup menu.</p>
+    
+    <h3><a name="unpaired"></a>Advancing unpaired wrestlers</h3>
+    <p>Many times, initial rounds have few matches, and most wrestlers may advance automatically
+    without a result or with a bye. The standard method of using the result dialog to advance all of
+    these wrestlers may be time consuming. You may alternatively right click any spot in a round and
+    choose Move in to automatically advance appropriate wrestlers to this round.</p>
+    
+    <p>Wrestling Nerd will try to detect if the wrestlers should advance with no results or with
+    byes. However, you should double-check especially if your tournament has both scoring and
+    non-scoring wrestlers.</p>
+    
+    <h2><a name="querying"></a>Querying for special results</h2>
+    <p>Besides match and team scores, Wrestling Nerd automatically computes a few other types of
+    results.</p>
+    
+    <h3><a name="fastfall"></a>Showing fast fall stats</h3>
+    <p>The wrestler with the most pins in the shortest amount of total time is considered the
+    fastest fall winner. To see fast fall results, choose Fast Fall from the Query menu. The fast
+    fall dialog appears showing the fast fall results in descending order. Click OK to dismiss the
+    dialog.</p>
+    
+    <p>The fast fall dialog can be displayed by pressing Ctrl-F instead of using the menus.</p>
+    
+    <h3><a name="boutcount"></a>Showing the bout count</h3>
+    <p>Referees for tournaments are usually paid based on the total number of matches. To determine
+    how many matches have been officiated in a tournament, choose Bout count from the Query menu.
+    A dialog appears showing the total number of bouts in the tournament.</p>
+    
+    <p>The bout count can be displayed by pressing Ctrl-B instead of using the menus.</p>
+    
+    <h3><a name="scores"></a>Showing team scores in a separate window</h3>
+    <p>Fans always want to see the up-to-date scores during a tournament. If you are fortunate
+    enough to have a computer that supports a second, large screen display, you can show the current
+    team scores to the public. To open the team scores in a separate window, choose Score window
+    from the Query menu. The score window will refresh to show the most current scores every 30
+    seconds. You may continue to work with Wrestling Nerd while the score window is open.</p>
+    
+    <p>The separate score window can be displayed by pressing Ctrl-W instead of using the menus.</p>
+    
+    <h2><a name="changing"></a>Changing tournament data</h2>
+    <p>Sometimes, mistakes are made when creating the tournament and seeding wrestlers. The options in
+    the Tools menu allows you to correct these mistakes while running the tournament.</p>
+    
+    <h3><a name="add_missing"></a>Adding missing teams</h3>
+    <p>In large tournaments, it is often the case that you forget to enter a team name in the new
+    tournament wizard. To add a new team to an existing tournament, select Add a team from the Tools
+    menu. Enter the new team name and click the OK button. If the team you entered already exists 
+    in the tournament, no changes will occur. Otherwise, the new team will appear in the team scores list.</p>
+    
+    <h3><a name="remove_absent"></a>Removing absent teams</h3>
+    <p>When teams fail to show up for a tournament or have no wrestlers that make wait, you may wish to
+    remove them from the tournament. To remove a team, select Remove a team from the Tools menu. Choose 
+    the team you wish to remove and then click the OK button. The team will be deleted from the team score
+    list. However, any wrestlers on that team who appear on the brackets will not be removed.</p>
+    
+    <p>Be careful! Deleting a team destroys the association between that team name and any wrestlers from
+    that team who appear on the brackets. Simply re-adding the team after deleting it will not re-associate
+    those wrestlers, and they will not score team points.</p>
+    
+    <h3><a name="correct_team"></a>Correcting team names</h3>
+    <p>If you mispell a team name, you can correct it without removing and then re-adding the team. To fix
+    the spelling of a team name, select Change team spelling from the Tools menu. Choose the current team
+    name you wish to fix from the drop down box. Then enter the new team name in the text box. Click OK
+    to confirm the name change. The new name will appear in the team scores list and on all brackets.</p>
+    
+    <h3><a name="correct_wrestler"></a>Correcting wrestler names</h3>
+    <p>Misspelling a wrestler name is a very common mistake, one that fans will bug you about constantly.
+    To correct a wrestler's name, select Change wrestler spelling from the Tools menu. Choose the wrestler's
+    team and current name from the first two drop down boxes. Then enter the new wrestler name in the text
+    box. Click OK to confirm the name change. The new name will appear on all brackets.</p>
+    
+    <h3><a name="change_tournament"></a>Changing the tournament name</h3>
+    <p>You may wish to rename the tournament after creating it. To rename the tournament, select Change 
+    tournament name from the Tools menu. The existing tournament name appears in the text box. Replace it
+    with the new name for the tournament, and click OK to confirm the change. The new name appears in the
+    titlebar of the Wrestling Nerd window and on all bracket printouts.</p>
+    
+    <h2><a name="printing"></a>Printing results</h2>
+    <p>Paper copies of bout sheets, brackets, team scores, and place winners are needed by score
+    keepers, the press, and fans. Wrestling Nerd is capable of printing tournament results for you.</p>
+    
+    <h3><a name="print_bouts"></a>Printing bouts</h3>
+    <p>Bouts sheets are structured forms that scorekeepers used to keep track of points in
+    individual matches and report results. To print bout sheets for certain rounds and weight
+    classes, choose Print from the File menu. The print dialog appears. Select Bouts as the type of
+    printout you wish to make. Select the weights for which you wish to print bouts by holding the
+    Ctrl key and left clicking on the weight class names. Select the rounds in the same manner.
+    Holding shift and left clicking selects a contiguous range of items in either list.</p>
+    
+    <p>Once you have selected the desired weights and rounds, click the OK button. The options
+    dialog for your printer appears. Choose any additional printing options and press OK or Print to
+    begin printing. The bout sheets will print two to a page.</p>
+    
+    <h3><a name="print_brackets"></a>Printing brackets</h3>
+    <p>Printed brackets resemble the bracket shown on the screen, except that the results of each
+    match are printed directly below the wrestler name. To print brackets for certain weight classes,
+    choose Print from the File menu. The print dialog appears. Select Brackets as the type of
+    printout. Select the weights for which you wish to print brackets by holding the Ctrl key and
+    left clicking on the weight class names. Holding shift and left clicking selects a contiguous
+    range weights.</p>
+    
+    <p>Once you have selected the desired weights, click the OK button. The options dialog for your
+    printer appears. Choose any additional printing options and press OK or Print to begin printing.
+    The brackets will print one to a page.</p>
+    
+    <h3><a name="print_scores"></a>Printing team scores</h3>
+    <p>Team scores are a current ranking of teams by their scores in descending order. To print team
+    scores, choose Print from the File menu. The print dialog appears. Select Scores as the type of
+    printout.</p>
+    
+    <p>Click the OK button when you are ready. The options dialog for your printer appears. Choose
+    any additional printing options and press OK or Print to begin printing. The scores will print
+    with about fifty teams per page.</p>
+    
+    <h3><a name="print_places"></a>Printing place winners</h3>
+    <p>Place winners are medalists for each weight class. To print brackets for certain weight
+    classes, choose Print from the File menu. Select Places as the type of printout. Select the
+    weights for which you wish to print place winners by holding the Ctrl key and left clicking on
+    the weight class names. Holding shift and left clicking selects a contiguous range weights.</p>
+
+    <p>Once you have selected the desired weights, click the OK button. The options dialog for your
+    printer appears. Choose any additional printing options and press OK or Print to begin printing.
+    The place winners will print with six weight classes per page.</p>
+    
+    <h3><a name="print_preview">Viewing a print preview</a></h3>
+    <p>You may wish to see what a printout will look like on the screen before sending it to the printer.
+    To see a preview of what will be printed, select Print preview from the File menu. Choose the results
+    you want to print by following the instructions in the sections above, and then click the OK button.</p>
+
+    <p>The print preview window will appear showing what will be printed. Use the controls at the top of the
+    window to navigate through the pages to be printed or to zoom in on the current page. Press the Close 
+    button to dismiss the print preview window. Press the Print button to send the pages to the printer.</p>
+    
+    <h2><a name="storing"></a>Storing results</h2>
+    <p>Tournament data can be stored on disk for later use in Wrestling Nerd or in other programs.</p>
+    
+    <h3><a name="saving"></a>Saving a tournament</h3>
+    <p>To save a tournament to disk for the first time, choose Save as from the File menu and enter
+    a filename in the file dialog. To quickly save a previously saved tournament, choose Save from
+    the File menu. The data will be saved under the last filename used to store this tournament.</p>
+       
+    <p>The Save and Save as options may be accessed by pressing Ctrl-S and Shift-Ctrl-S respectively
+    instead of through the menus.</p>
+    
+    <h3><a name="backup"></a>Backing up a tournament</h3>
+    <p>To backup a tournament without changing the current filename, choose Backup from the File menu
+    and enter a filename in the file dialog. The next time you choose Save, the tournament will be saved
+    under the previous file name, not the one entered in the backup dialog.</p>
+    
+    <h3><a name="opening"></a>Opening a saved tournament</h3>
+    <p>To open a previously saved tournament from disk, choose Open from the File menu and select
+    the file to open.</p>
+    
+    <p>The open dialog may be opened by pressing Ctrl-O instead of using the menus.</p>
+    
+    <h3><a name="exporting"></a>Exporting plain text results</h3>
+    <p>The final scores, place winners, and fast fall leader of a tournament can be saved to a plain
+    text file that can be opened in a simple text editor. To export these results, choose Export
+    from the File menu. Enter a filename for the text document in the file dialog box that appears.</p>
+    
+  </body>
+</html>
